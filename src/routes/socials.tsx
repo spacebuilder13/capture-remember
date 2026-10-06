@@ -84,9 +84,24 @@ function SocialsPage() {
   const channel = CHANNELS[active];
 
   const copyCaption = async () => {
-    await navigator.clipboard.writeText(channel.caption);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+    try {
+      await navigator.clipboard.writeText(channel.caption);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = channel.caption;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      const didCopy = document.execCommand("copy");
+      textArea.remove();
+      if (didCopy) {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1800);
+      }
+    }
   };
 
   return (
