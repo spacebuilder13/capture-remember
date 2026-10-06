@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, Lock, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import incompletePhotograph from "@/assets/incomplete-photograph-preview.jpg";
+import incompletePhotograph from "@/assets/incomplete-photograph-clean.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -128,11 +128,11 @@ function Index() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <header className="absolute inset-x-0 top-0 z-20 mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
-        <a href="https://memreel.io/" className="font-display text-2xl text-foreground" aria-label="MemReel home">
-          Mem<span className="text-primary">Reel</span>
+      <header className="absolute inset-x-0 top-0 z-20 mx-auto flex max-w-7xl items-center justify-between px-5 py-5 text-primary-foreground sm:px-8 lg:px-12">
+        <a href="https://memreel.io/" className="font-display text-2xl drop-shadow-sm" aria-label="MemReel home">
+          Mem<span className="font-sans text-base font-semibold">Reel</span>
         </a>
-        <span className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className="flex items-center gap-2 text-xs font-medium drop-shadow-sm">
           <Lock className="size-3.5" /> Private to you
         </span>
       </header>
@@ -141,18 +141,18 @@ function Index() {
         <img
           src={incompletePhotograph}
           alt="Illustrative parent and child building a blanket fort, with part of the photograph left intentionally blank"
-          className="absolute inset-0 h-full w-full object-cover object-[63%_center] opacity-90"
+          className="absolute inset-0 h-full w-full object-cover object-[63%_center]"
           width={1280}
           height={720}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_15%,oklch(0.19_0.01_30/.15)_44%,oklch(0.19_0.01_30/.88)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.01_30/.38)_0%,transparent_24%,oklch(0.19_0.01_30/.18)_46%,oklch(0.19_0.01_30/.9)_100%)]" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12">
           <div className="max-w-xl">
-            <p className="mb-4 text-sm font-medium text-primary-foreground/75">The incomplete photograph</p>
+            <p className="mb-4 text-sm font-medium text-primary-foreground/90">The incomplete photograph</p>
             <h1 className="font-display text-5xl leading-[1.02] text-primary-foreground sm:text-7xl">
               A photo can’t remember for you.
             </h1>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-primary-foreground/80 sm:text-lg">
+            <p className="mt-5 max-w-md text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
               It kept the light, the faces, the room. What did it leave out?
             </p>
             <Button size="lg" onClick={begin} className="mt-7 h-12 rounded-sm px-6 text-base shadow-none">
