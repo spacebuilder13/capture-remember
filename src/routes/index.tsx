@@ -2,8 +2,9 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, Lock, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import incompletePhotograph from "@/assets/incomplete-photograph-preview.jpg";
 import incompletePhotographClean from "@/assets/incomplete-photograph-clean.jpg";
+import incompletePhotographDesktop from "@/assets/incomplete-photograph-title-only.png";
+import incompletePhotographMobile from "@/assets/incomplete-photograph-title-only-mobile.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -138,22 +139,23 @@ function Index() {
         </span>
       </header>
 
-      <section className="relative flex min-h-[min(92svh,calc(56.25vw+12rem))] items-end bg-foreground">
-        <img
-          src={incompletePhotograph}
-          alt="Illustrative parent and child building a blanket fort, with part of the photograph left intentionally blank"
-          className="absolute inset-x-0 top-0 h-auto w-full object-contain"
-          width={1280}
-          height={720}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.01_30/.38)_0%,transparent_24%,oklch(0.19_0.01_30/.18)_46%,oklch(0.19_0.01_30/.9)_100%)]" />
+      <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground">
+        <picture className="absolute inset-0">
+          <source media="(orientation: portrait)" srcSet={incompletePhotographMobile} />
+          <img
+            src={incompletePhotographDesktop}
+            alt="Illustrative parent and child building a blanket fort beside torn paper reading, A photo can’t remember for you"
+            className="h-full w-full object-cover object-center"
+            width={1280}
+            height={720}
+          />
+        </picture>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-52 bg-linear-to-t from-foreground/70 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12">
-          <div className="max-w-xl">
+          <div>
             <h1 className="sr-only">A photo can’t remember for you.</h1>
-            <p className="max-w-md text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
-              It kept the light, the faces, the room. What did it leave out?
-            </p>
-            <Button size="lg" onClick={begin} className="mt-7 h-12 rounded-sm px-6 text-base shadow-none">
+            <Button size="lg" onClick={begin} className="h-12 rounded-sm px-6 text-base shadow-none">
               Preserve one memory <ArrowRight />
             </Button>
           </div>
