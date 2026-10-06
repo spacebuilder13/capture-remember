@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, Lock, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import incompletePhotograph from "@/assets/incomplete-photograph-clean.jpg";
+import incompletePhotograph from "@/assets/incomplete-photograph-preview.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -148,13 +148,9 @@ function Index() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.19_0.01_30/.38)_0%,transparent_24%,oklch(0.19_0.01_30/.18)_46%,oklch(0.19_0.01_30/.9)_100%)]" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12">
           <div className="max-w-xl">
-            <p className="mb-4 text-sm font-medium text-primary-foreground/90">The incomplete photograph</p>
-            <h1 className="font-display text-5xl leading-[1.02] text-primary-foreground sm:text-7xl">
-              A photo can’t remember for you.
-            </h1>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-primary-foreground/90 sm:text-lg">
+            <h1 className="max-w-md text-base font-normal leading-relaxed text-primary-foreground/90 sm:text-lg">
               It kept the light, the faces, the room. What did it leave out?
-            </p>
+            </h1>
             <Button size="lg" onClick={begin} className="mt-7 h-12 rounded-sm px-6 text-base shadow-none">
               Preserve one memory <ArrowRight />
             </Button>
