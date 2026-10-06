@@ -5,5 +5,5 @@
 - [x] Build the example-first single-page experience
 - [x] Add private photo and memory submission
 - [ ] Add staged result email delivery (blocked until the MemReel sending domain is connected)
-- [ ] Verify desktop and mobile experience
-- [ ] Prepare channel-native campaign assets and copy
+- [x] Verify desktop and mobile experience
+- [x] Prepare channel-native campaign assets and copy
