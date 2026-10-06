@@ -1,11 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, ImagePlus, Lock, Sparkles } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import incompletePhotograph from "@/assets/incomplete-photograph-preview.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
@@ -29,13 +28,14 @@ export const Route = createFileRoute("/")({
 });
 
 type MemoryDraft = {
-  happened: string;
   remembers: string;
   missing: string;
   email: string;
 };
 
-const EMPTY_DRAFT: MemoryDraft = { happened: "", remembers: "", missing: "", email: "" };
+const EMPTY_DRAFT: MemoryDraft = { remembers: "", missing: "", email: "" };
+const REMEMBER_PROMPTS = ["I can still hear…", "The funny part was…", "We always called it…", "Write my own"];
+const UNSEEN_PROMPTS = ["What happened just before…", "The words they used…", "How the room felt…", "Write my own"];
 
 function Index() {
   const [started, setStarted] = useState(false);
@@ -60,9 +60,10 @@ function Index() {
 
   const canContinue = useMemo(() => {
     if (step === 0) return photo !== null;
-    if (step === 4) return /^\S+@\S+\.\S+$/.test(draft.email);
+    if (step === 1) return draft.remembers.trim().length > 0;
+    if (step === 2) return /^\S+@\S+\.\S+$/.test(draft.email);
     return true;
-  }, [draft.email, photo, step]);
+  }, [draft.email, draft.remembers, photo, step]);
 
   const begin = () => {
     setStarted(true);
@@ -107,7 +108,7 @@ function Index() {
 
     const insert = await supabase.from("memory_contributions").insert({
       photo_path: photoPath,
-      happened: draft.happened.trim() || null,
+      happened: null,
       remembers: draft.remembers.trim() || null,
       missing: draft.missing.trim() || null,
       email: draft.email.trim(),
@@ -207,11 +208,11 @@ function Index() {
               <div className="mb-10 flex items-center justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase text-primary">Your memory</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Step {step + 1} of 5</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Step {step + 1} of 3</p>
                 </div>
-                <div className="flex gap-1.5" aria-label={`Step ${step + 1} of 5`}>
-                  {[0, 1, 2, 3, 4].map((item) => (
-                    <span key={item} className={`h-1.5 w-8 ${item <= step ? "bg-primary" : "bg-border"}`} />
+                <div className="flex gap-1.5" aria-label={`Step ${step + 1} of 3`}>
+                  {[0, 1, 2].map((item) => (
+                    <span key={item} className={`h-1.5 w-12 ${item <= step ? "bg-primary" : "bg-border"}`} />
                   ))}
                 </div>
               </div>
@@ -244,53 +245,42 @@ function Index() {
               )}
 
               {step === 1 && (
-                <PromptStep
-                  title="What was happening?"
-                  hint="A few words are enough."
-                  value={draft.happened}
-                  placeholder="We had just finished breakfast…"
-                  onChange={(value) => updateDraft("happened", value)}
-                />
-              )}
-              {step === 2 && (
-                <PromptStep
+                <PromptCardStep
                   title="What do you still remember?"
-                  hint="A phrase, a feeling, a small detail."
+                  hint="Choose a beginning. Finish it with one small detail."
+                  prompts={REMEMBER_PROMPTS}
                   value={draft.remembers}
-                  placeholder="She kept calling the blanket fort…"
+                  placeholder="Add a few words…"
                   onChange={(value) => updateDraft("remembers", value)}
                 />
               )}
-              {step === 3 && (
-                <PromptStep
-                  title="What can’t the photo show?"
-                  hint="If you cannot remember, you can leave this blank."
-                  value={draft.missing}
-                  placeholder="The words she used, the reason we were laughing…"
-                  onChange={(value) => updateDraft("missing", value)}
-                />
-              )}
-              {step === 4 && (
+              {step === 2 && (
                 <div>
-                  <p className="text-xs font-semibold uppercase text-primary">One last detail</p>
-                  <h2 className="mt-3 font-display text-4xl">Where should we send your memory?</h2>
-                  <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">
-                    Your photo and words stay private. This early experience prepares your memory for the MemReel team to deliver.
-                  </p>
-                  <label className="mt-7 block text-sm font-medium" htmlFor="email">Email address</label>
-                  <Input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    value={draft.email}
-                    onChange={(event) => updateDraft("email", event.target.value)}
-                    placeholder="you@example.com"
-                    className="mt-2 h-12 rounded-sm bg-background text-base"
+                  <PromptCardStep
+                    title="What can’t the photo show?"
+                    hint="Choose a beginning, or leave this one open."
+                    prompts={UNSEEN_PROMPTS}
+                    value={draft.missing}
+                    placeholder="Add a few words…"
+                    onChange={(value) => updateDraft("missing", value)}
                   />
+                  <div className="mt-10 border-t border-border pt-7">
+                    <p className="text-xs font-semibold uppercase text-primary">Where should we send it?</p>
+                    <p className="mt-2 text-sm text-muted-foreground">Your photo and words stay private.</p>
+                    <label className="mt-5 block text-sm font-medium" htmlFor="email">Email address</label>
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      value={draft.email}
+                      onChange={(event) => updateDraft("email", event.target.value)}
+                      placeholder="you@example.com"
+                      className="mt-2 h-12 rounded-sm bg-background text-base"
+                    />
+                  </div>
                   <div className="mt-8 grid gap-6 border-y border-border py-6 sm:grid-cols-[9rem_1fr]">
                     {previewUrl && <img src={previewUrl} alt="Memory preview" className="aspect-square w-full object-cover" />}
                     <div className="space-y-3 text-sm">
-                      <PreviewLine label="What happened" value={draft.happened} />
                       <PreviewLine label="What you remember" value={draft.remembers} />
                       <PreviewLine label="What is missing" value={draft.missing} />
                     </div>
@@ -306,13 +296,13 @@ function Index() {
                 >
                   <ArrowLeft /> Back
                 </Button>
-                {step < 4 ? (
+                {step < 2 ? (
                   <Button
                     onClick={() => setStep((current) => current + 1)}
                     disabled={!canContinue}
                     className="rounded-sm shadow-none"
                   >
-                    {step > 0 && !draft[["happened", "remembers", "missing"][step - 1] as keyof MemoryDraft] ? "Skip" : "Continue"}
+                    Continue
                     <ArrowRight />
                   </Button>
                 ) : (
@@ -329,37 +319,68 @@ function Index() {
 
       <footer className="border-t border-border bg-background px-5 py-8 text-center text-xs text-muted-foreground">
         <p>MemReel · Private family memories, with the story still attached.</p>
+        <Link to="/socials" className="mt-3 inline-block text-foreground underline decoration-border underline-offset-4 hover:text-primary">
+          Review social assets
+        </Link>
       </footer>
     </main>
   );
 }
 
-function PromptStep({
+function PromptCardStep({
   title,
   hint,
+  prompts,
   value,
   placeholder,
   onChange,
 }: {
   title: string;
   hint: string;
+  prompts: string[];
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
 }) {
+  const [selectedPrompt, setSelectedPrompt] = useState("");
+
+  const selectPrompt = (prompt: string) => {
+    setSelectedPrompt(prompt);
+    onChange(prompt === "Write my own" ? "" : prompt.replace("…", " "));
+  };
+
   return (
     <div>
       <h2 className="font-display text-4xl">{title}</h2>
       <p className="mt-3 text-muted-foreground">{hint}</p>
-      <Textarea
-        autoFocus
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        maxLength={800}
-        className="mt-7 min-h-44 resize-none rounded-sm bg-background p-4 text-base leading-relaxed"
-      />
-      <p className="mt-2 text-right text-xs text-muted-foreground">{value.length}/800</p>
+      <div className="mt-7 grid gap-2 sm:grid-cols-2">
+        {prompts.map((prompt) => (
+          <Button
+            key={prompt}
+            type="button"
+            variant={selectedPrompt === prompt ? "secondary" : "outline"}
+            onClick={() => selectPrompt(prompt)}
+            className="h-auto min-h-12 justify-start whitespace-normal rounded-sm px-4 py-3 text-left text-base shadow-none"
+          >
+            {prompt}
+          </Button>
+        ))}
+      </div>
+      {(selectedPrompt || value) && (
+        <div className="mt-5">
+          <label className="sr-only" htmlFor={`${title}-answer`}>{title}</label>
+          <Input
+            id={`${title}-answer`}
+            autoFocus
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            placeholder={placeholder}
+            maxLength={180}
+            className="h-14 rounded-sm bg-background px-4 text-base"
+          />
+          <p className="mt-2 text-right text-xs text-muted-foreground">{value.length}/180</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -384,7 +405,7 @@ function Completion({ photoUrl, draft }: { photoUrl: string | null; draft: Memor
       <div className="mx-auto mt-10 grid max-w-2xl gap-0 bg-secondary text-left sm:grid-cols-2">
         {photoUrl && <img src={photoUrl} alt="Your preserved memory" className="aspect-square h-full w-full object-cover" />}
         <div className="flex flex-col justify-center p-7 sm:p-9">
-          <p className="font-display text-2xl leading-snug">{draft.remembers || draft.happened || "One moment, held with more than a photograph."}</p>
+          <p className="font-display text-2xl leading-snug">{draft.remembers || "One moment, held with more than a photograph."}</p>
           {draft.missing && <p className="mt-5 border-l-2 border-primary pl-4 text-sm leading-relaxed text-muted-foreground">The photo could not show: {draft.missing}</p>}
         </div>
       </div>
