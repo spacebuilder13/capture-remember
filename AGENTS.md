@@ -11,3 +11,4 @@
 
 - Keep the MemReel experiment as one three-step, example-first contribution journey on `/`; `/socials` is an internal campaign review surface, not part of that public journey.
 - Store contributed photos in the private `memory-contributions` bucket and metadata in `memory_contributions`; private media must never use public URLs.
+- Use art-directed landscape and portrait first-screen photography selected by viewport orientation so the embedded title and family remain visible without letterboxing.
