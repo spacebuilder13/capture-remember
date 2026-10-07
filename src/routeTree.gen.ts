@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SocialsRouteImport } from './routes/socials'
 import { Route as CapturedRememberedIndexRouteImport } from './routes/captured-remembered/index'
 import { Route as CapturedRememberedSocialsRouteImport } from './routes/captured-remembered/socials'
+import { Route as FarAwayMomentsIndexRouteImport } from './routes/far-away-moments/index'
 import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalAppRouteImport } from './routes/journal/app'
 import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
@@ -38,6 +39,11 @@ const CapturedRememberedSocialsRoute =
     path: '/captured-remembered/socials',
     getParentRoute: () => rootRouteImport,
   } as any)
+const FarAwayMomentsIndexRoute = FarAwayMomentsIndexRouteImport.update({
+  id: '/far-away-moments/',
+  path: '/far-away-moments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JournalIndexRoute = JournalIndexRouteImport.update({
   id: '/journal/',
   path: '/journal/',
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
+  '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
+  '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
 }
 export interface FileRoutesById {
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
+  '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
 export interface FileRouteTypes {
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered/'
+    | '/far-away-moments/'
     | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered'
+    | '/far-away-moments'
     | '/journal'
   id:
     | '__root__'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered/'
+    | '/far-away-moments/'
     | '/journal/'
   fileRoutesById: FileRoutesById
 }
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   JournalAppRoute: typeof JournalAppRoute
   JournalSocialsRoute: typeof JournalSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
+  FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
 }
 
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CapturedRememberedSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/far-away-moments/': {
+      id: '/far-away-moments/'
+      path: '/far-away-moments'
+      fullPath: '/far-away-moments/'
+      preLoaderRoute: typeof FarAwayMomentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journal/': {
       id: '/journal/'
       path: '/journal'
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   JournalAppRoute: JournalAppRoute,
   JournalSocialsRoute: JournalSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
+  FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
 }
 export const routeTree = rootRouteImport
