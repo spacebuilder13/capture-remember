@@ -15,6 +15,13 @@
       "when": 1791364867948,
       "tag": "0001_journal_context",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791380746035,
+      "tag": "0002_far_away_moments",
+      "breakpoints": true
     }
   ]
 }
