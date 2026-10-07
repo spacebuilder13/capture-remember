@@ -139,6 +139,60 @@ export type Database = {
           },
         ]
       }
+      moment_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      moment_shares: {
+        Row: {
+          created_at: string
+          delivery: string
+          grandparent_name: string | null
+          id: string
+          note: string
+          photo_path: string
+          rewritten: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          delivery: string
+          grandparent_name?: string | null
+          id?: string
+          note: string
+          photo_path: string
+          rewritten: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          delivery?: string
+          grandparent_name?: string | null
+          id?: string
+          note?: string
+          photo_path?: string
+          rewritten?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
