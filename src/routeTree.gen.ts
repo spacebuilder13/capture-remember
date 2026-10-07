@@ -15,6 +15,7 @@ import { Route as CapturedRememberedIndexRouteImport } from './routes/captured-r
 import { Route as CapturedRememberedSocialsRouteImport } from './routes/captured-remembered/socials'
 import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalAppRouteImport } from './routes/journal/app'
+import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -47,12 +48,18 @@ const JournalAppRoute = JournalAppRouteImport.update({
   path: '/journal/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalSocialsRoute = JournalSocialsRouteImport.update({
+  id: '/journal/socials',
+  path: '/journal/socials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
   '/journal/app': typeof JournalAppRoute
+  '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
   '/journal/app': typeof JournalAppRoute
+  '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
   '/journal': typeof JournalIndexRoute
 }
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
   '/journal/app': typeof JournalAppRoute
+  '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/socials'
     | '/captured-remembered/socials'
     | '/journal/app'
+    | '/journal/socials'
     | '/captured-remembered/'
     | '/journal/'
   fileRoutesByTo: FileRoutesByTo
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/socials'
     | '/captured-remembered/socials'
     | '/journal/app'
+    | '/journal/socials'
     | '/captured-remembered'
     | '/journal'
   id:
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/socials'
     | '/captured-remembered/socials'
     | '/journal/app'
+    | '/journal/socials'
     | '/captured-remembered/'
     | '/journal/'
   fileRoutesById: FileRoutesById
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   SocialsRoute: typeof SocialsRoute
   CapturedRememberedSocialsRoute: typeof CapturedRememberedSocialsRoute
   JournalAppRoute: typeof JournalAppRoute
+  JournalSocialsRoute: typeof JournalSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
 }
@@ -153,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalAppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/socials': {
+      id: '/journal/socials'
+      path: '/journal/socials'
+      fullPath: '/journal/socials'
+      preLoaderRoute: typeof JournalSocialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   SocialsRoute: SocialsRoute,
   CapturedRememberedSocialsRoute: CapturedRememberedSocialsRoute,
   JournalAppRoute: JournalAppRoute,
+  JournalSocialsRoute: JournalSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
 }
