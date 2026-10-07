@@ -6,7 +6,7 @@ import portraitArtwork from "@/assets/memreel-social-portrait.jpg";
 import squareArtwork from "@/assets/memreel-social-square.jpg";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/socials")({
+export const Route = createFileRoute("/captured-remembered/socials")({
   head: () => ({
     meta: [
       { title: "Social campaign assets | MemReel" },
@@ -108,7 +108,7 @@ function SocialsPage() {
     <main className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
-          <Link to="/" className="font-display text-2xl" aria-label="MemReel experiment">
+          <Link to="/" className="font-display text-2xl" aria-label="MemReel experiments">
             Mem<span className="text-primary">Reel</span>
           </Link>
           <span className="flex items-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" /> Internal review</span>

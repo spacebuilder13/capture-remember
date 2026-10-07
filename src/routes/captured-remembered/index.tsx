@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/captured-remembered/")({
   head: () => ({
     meta: [
       { title: "Preserve one memory | MemReel" },
@@ -319,7 +319,7 @@ function Index() {
 
       <footer className="border-t border-border bg-background px-5 py-8 text-center text-xs text-muted-foreground">
         <p>MemReel · Private family memories, with the story still attached.</p>
-        <Link to="/socials" className="mt-3 inline-block text-foreground underline decoration-border underline-offset-4 hover:text-primary">
+        <Link to="/captured-remembered/socials" className="mt-3 inline-block text-foreground underline decoration-border underline-offset-4 hover:text-primary">
           Review social assets
         </Link>
       </footer>
