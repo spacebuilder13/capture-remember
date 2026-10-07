@@ -8,6 +8,13 @@
       "when": 1791292909289,
       "tag": "0000_create_memory_contributions",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791364867948,
+      "tag": "0001_journal_context",
+      "breakpoints": true
     }
   ]
 }

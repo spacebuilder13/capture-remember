@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      journal_entries: {
+        Row: {
+          created_at: string
+          id: string
+          media_path: string | null
+          source: string
+          transcript: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          media_path?: string | null
+          source: string
+          transcript: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          media_path?: string | null
+          source?: string
+          transcript?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_photos: {
+        Row: {
+          ai_caption: string | null
+          created_at: string
+          id: string
+          photo_path: string
+          user_id: string
+        }
+        Insert: {
+          ai_caption?: string | null
+          created_at?: string
+          id?: string
+          photo_path: string
+          user_id: string
+        }
+        Update: {
+          ai_caption?: string | null
+          created_at?: string
+          id?: string
+          photo_path?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       memory_contributions: {
         Row: {
           consented_at: string
@@ -49,6 +100,44 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      memory_surfacings: {
+        Row: {
+          created_at: string
+          feedback: string | null
+          id: string
+          photo_id: string | null
+          reason: string | null
+          themes: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          photo_id?: string | null
+          reason?: string | null
+          themes?: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: string | null
+          id?: string
+          photo_id?: string | null
+          reason?: string | null
+          themes?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memory_surfacings_photo_id_fkey"
+            columns: ["photo_id"]
+            isOneToOne: false
+            referencedRelation: "journal_photos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

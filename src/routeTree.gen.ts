@@ -9,68 +9,69 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SocialsRouteImport } from './routes/socials'
+import { Route as CapturedRememberedIndexRouteImport } from './routes/captured-remembered/index'
+import { Route as CapturedRememberedSocialsRouteImport } from './routes/captured-remembered/socials'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const CapturedRememberedIndexRoute = CapturedRememberedIndexRouteImport.update({
+  id: '/captured-remembered/',
+  path: '/captured-remembered/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SocialsRoute = SocialsRouteImport.update({
-  id: '/socials',
-  path: '/socials',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const CapturedRememberedSocialsRoute =
+  CapturedRememberedSocialsRouteImport.update({
+    id: '/captured-remembered/socials',
+    path: '/captured-remembered/socials',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/socials': typeof SocialsRoute
+  '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/captured-remembered/': typeof CapturedRememberedIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/socials': typeof SocialsRoute
+  '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/captured-remembered': typeof CapturedRememberedIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/socials': typeof SocialsRoute
+  '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/captured-remembered/': typeof CapturedRememberedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/socials'
+  fullPaths: '/captured-remembered/socials' | '/captured-remembered/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/socials'
-  id: '__root__' | '/' | '/socials'
+  to: '/captured-remembered/socials' | '/captured-remembered'
+  id: '__root__' | '/captured-remembered/socials' | '/captured-remembered/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SocialsRoute: typeof SocialsRoute
+  CapturedRememberedSocialsRoute: typeof CapturedRememberedSocialsRoute
+  CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/captured-remembered/': {
+      id: '/captured-remembered/'
+      path: '/captured-remembered'
+      fullPath: '/captured-remembered/'
+      preLoaderRoute: typeof CapturedRememberedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/socials': {
-      id: '/socials'
-      path: '/socials'
-      fullPath: '/socials'
-      preLoaderRoute: typeof SocialsRouteImport
+    '/captured-remembered/socials': {
+      id: '/captured-remembered/socials'
+      path: '/captured-remembered/socials'
+      fullPath: '/captured-remembered/socials'
+      preLoaderRoute: typeof CapturedRememberedSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SocialsRoute: SocialsRoute,
+  CapturedRememberedSocialsRoute: CapturedRememberedSocialsRoute,
+  CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
