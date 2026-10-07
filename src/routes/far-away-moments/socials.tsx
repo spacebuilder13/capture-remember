@@ -121,7 +121,7 @@ function SocialsPage() {
           <div>
             <p className="text-xs font-semibold uppercase text-primary">Far-Away Moments</p>
             <h1 className="mt-3 font-display text-5xl leading-tight sm:text-6xl">Social campaign assets</h1>
-            <p className="mt-4 max-w-2xl text-muted-foreground">Draft wording for your review. Read the captions, then download what you need, then download what you need.</p>
+            <p className="mt-4 max-w-2xl text-muted-foreground">Draft wording for your review. Read the captions, then download what you need.</p>
           </div>
           <Button asChild className="h-11 rounded-sm shadow-none">
             <a href="/downloads/memreel-far-away-social-assets.zip" download>
