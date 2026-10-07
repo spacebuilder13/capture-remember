@@ -26,7 +26,7 @@ export const Route = createFileRoute("/journal/app")({
 });
 
 type Entry = Database["public"]["Tables"]["journal_entries"]["Row"];
-type Photo = Database["public"]["Tables"]["journal_photos"]["Row"] & { url?: string };
+type Photo = Database["public"]["Tables"]["journal_photos"]["Row"] & { url?: string | undefined };
 type Surfacing = Database["public"]["Tables"]["memory_surfacings"]["Row"];
 const BUCKET = "journal-media";
 const TABS = ["Today", "Memory", "Photos", "Journal"] as const;
@@ -55,7 +55,7 @@ function JournalApp() {
     const ph = p.data ?? [];
     if (ph.length) {
       const signed = await supabase.storage.from(BUCKET).createSignedUrls(ph.map((x) => x.photo_path), 3600);
-      ph.forEach((x, i) => ((x as Photo).url = signed.data?.[i]?.signedUrl));
+      ph.forEach((x, i) => ((x as Photo).url = signed.data?.[i]?.signedUrl ?? undefined));
     }
     setEntries(e.data ?? []);
     setPhotos(ph);

@@ -127,7 +127,7 @@ export const surfaceMemory = createServerFn({ method: "POST" })
         schema: { name: "memory_surfacing", schema: SURFACE_SCHEMA },
       });
       const parsed = JSON.parse(text) as { themes: string[]; photo_id: string; reason: string };
-      const photoId = photos.data.find((p) => p.id === parsed.photo_id)?.id ?? photos.data[0].id;
+      const photoId = photos.data.find((p) => p.id === parsed.photo_id)?.id ?? photos.data[0]!.id;
       const ins = await context.supabase
         .from("memory_surfacings")
         .insert({ user_id: context.userId, themes: parsed.themes.slice(0, 4), photo_id: photoId, reason: parsed.reason })

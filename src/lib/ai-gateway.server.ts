@@ -63,7 +63,7 @@ export type ResponseInput = Array<{ role: "user" | "system"; content: Array<Reco
 export async function respond(
   input: ResponseInput,
   opts: { instructions?: string; schema?: { name: string; schema: Record<string, unknown> }; runId?: string } = {},
-): Promise<{ text: string; runId?: string }> {
+): Promise<{ text: string; runId: string | undefined }> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "Lovable-API-Key": apiKey(),
