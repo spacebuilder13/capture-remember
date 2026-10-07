@@ -8,3 +8,7 @@
 - [x] Verify desktop and mobile experience
 - [x] Prepare channel-native campaign assets and copy
 - [x] Add the social asset review, copy, and download route
+- [x] Turn `/` into an experiments registry
+- [x] Build the Journal Context prototype (voice, paste, notebook → themes → surfaced memory)
+- [x] Journal Context socials page and assets
+- [ ] Approve Journal Context social wording
