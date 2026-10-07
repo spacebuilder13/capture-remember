@@ -38,6 +38,16 @@ const EXPERIMENTS = [
     experience: "/journal",
     socials: "/journal/socials",
   },
+  {
+    number: "03",
+    name: "Far-Away Moments",
+    hypothesis:
+      "Parents with family far away will share more of a moment when MemReel turns a photo and a quick note into the story behind it.",
+    signal: "A real photo saved with a message the parent marked “This is right”",
+    status: "Prototype",
+    experience: "/far-away-moments",
+    socials: "/far-away-moments/socials",
+  },
 ] as const;
 
 function Registry() {

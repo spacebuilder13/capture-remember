@@ -14,6 +14,7 @@ import { Route as SocialsRouteImport } from './routes/socials'
 import { Route as CapturedRememberedIndexRouteImport } from './routes/captured-remembered/index'
 import { Route as CapturedRememberedSocialsRouteImport } from './routes/captured-remembered/socials'
 import { Route as FarAwayMomentsIndexRouteImport } from './routes/far-away-moments/index'
+import { Route as FarAwayMomentsSocialsRouteImport } from './routes/far-away-moments/socials'
 import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalAppRouteImport } from './routes/journal/app'
 import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
@@ -44,6 +45,11 @@ const FarAwayMomentsIndexRoute = FarAwayMomentsIndexRouteImport.update({
   path: '/far-away-moments/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FarAwayMomentsSocialsRoute = FarAwayMomentsSocialsRouteImport.update({
+  id: '/far-away-moments/socials',
+  path: '/far-away-moments/socials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JournalIndexRoute = JournalIndexRouteImport.update({
   id: '/journal/',
   path: '/journal/',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/socials': typeof SocialsRoute
   '/captured-remembered/socials': typeof CapturedRememberedSocialsRoute
+  '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/socials'
     | '/captured-remembered/socials'
+    | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/'
     | '/socials'
     | '/captured-remembered/socials'
+    | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/socials'
     | '/captured-remembered/socials'
+    | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
     | '/captured-remembered/'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SocialsRoute: typeof SocialsRoute
   CapturedRememberedSocialsRoute: typeof CapturedRememberedSocialsRoute
+  FarAwayMomentsSocialsRoute: typeof FarAwayMomentsSocialsRoute
   JournalAppRoute: typeof JournalAppRoute
   JournalSocialsRoute: typeof JournalSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FarAwayMomentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/far-away-moments/socials': {
+      id: '/far-away-moments/socials'
+      path: '/far-away-moments/socials'
+      fullPath: '/far-away-moments/socials'
+      preLoaderRoute: typeof FarAwayMomentsSocialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journal/': {
       id: '/journal/'
       path: '/journal'
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SocialsRoute: SocialsRoute,
   CapturedRememberedSocialsRoute: CapturedRememberedSocialsRoute,
+  FarAwayMomentsSocialsRoute: FarAwayMomentsSocialsRoute,
   JournalAppRoute: JournalAppRoute,
   JournalSocialsRoute: JournalSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
