@@ -3,16 +3,16 @@
 ## What changes
 - The Journal page keeps its headline, short intro, the three ways to journal, and the made-up example.
 - The sign-in box is replaced with one simple ask:
-  - Heading: "Want to try it first?"
-  - Line: "Leave your email. We'll send you an invite when it's ready."
-  - One email field and one button: "Send me an invite"
-  - After sending: "Thanks. We'll email you when it's ready."
+  - Heading: "Get your invite"
+  - Line: "Enter your email and we'll send you your invite to start."
+  - One email field and one button: "Send my invite"
+  - After sending: "You're in! Your invite is on its way to you@email.com." with a small coral check mark.
 - No passwords, no Google button, no account.
 - The signed-in part (Photos, Today, Memory, Journal tabs) is removed. Anyone visiting that old address is sent back to the Journal page.
 - Home page card and socials page stay as they are.
 
-## Check before done
-Screenshots at phone, tablet and desktop of the Journal page before and after sending an email, checked by eye.
+## Visual check (must pass before I share it)
+Screenshots at phone, tablet and desktop of the Journal page before and after sending an email, each checked by eye: no cropped or overlapping text, readable contrast, no empty bands, button and thank-you message fully visible.
 
 ## Technical details
 - New table `journal_waitlist` (email, created_at), RLS on, anon INSERT only with an email length check, no reads. Zod validation on the client.
