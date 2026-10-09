@@ -65,6 +65,24 @@ export type Database = {
         }
         Relationships: []
       }
+      journal_waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       memory_contributions: {
         Row: {
           consented_at: string
