@@ -1,11 +1,10 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, ClipboardPaste, Lock, Mic } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { ArrowRight, BookOpen, Check, ClipboardPaste, Lock, Mic } from "lucide-react";
+import { useState, type FormEvent } from "react";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSession } from "@/hooks/use-session";
-import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/journal/")({
@@ -22,34 +21,25 @@ export const Route = createFileRoute("/journal/")({
   component: JournalLanding,
 });
 
+const emailSchema = z.string().trim().email().max(320);
+
 function JournalLanding() {
-  const { session } = useSession();
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
 
-  useEffect(() => {
-    if (session) navigate({ to: "/journal/app" });
-  }, [session, navigate]);
-
-  const emailAuth = async () => {
+  const join = async (e: FormEvent) => {
+    e.preventDefault();
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) return setMsg("Please enter a valid email.");
     setBusy(true);
     setMsg("");
-    const res =
-      mode === "signup"
-        ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/journal/app` } })
-        : await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.from("journal_waitlist").insert({ email: parsed.data });
     setBusy(false);
-    if (res.error) return setMsg(res.error.message);
-    if (mode === "signup" && !res.data.session) setMsg("Check your inbox to confirm your email, then sign in.");
-  };
-
-  const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/journal` });
-    if (r.error) setMsg("Google sign-in didn't work. Please try again.");
+    if (error) return setMsg("That didn’t go through. Please try again.");
+    setEmail(parsed.data);
+    setDone(true);
   };
 
   return (
@@ -94,21 +84,24 @@ function JournalLanding() {
 
       <section className="border-t border-border bg-secondary/50">
         <div className="mx-auto max-w-md px-5 py-14 sm:px-8">
-          <h2 className="font-display text-4xl">Start your private journal</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Only you can see your entries and photos.</p>
-          <Button onClick={google} variant="outline" className="mt-6 h-12 w-full rounded-sm bg-background shadow-none">Continue with Google</Button>
-          <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" /></div>
-          <label className="text-sm font-medium" htmlFor="j-email">Email</label>
-          <Input id="j-email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 h-12 rounded-sm bg-background" />
-          <label className="mt-4 block text-sm font-medium" htmlFor="j-pass">Password</label>
-          <Input id="j-pass" type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 h-12 rounded-sm bg-background" />
-          {msg && <p role="alert" className="mt-4 text-sm text-foreground">{msg}</p>}
-          <Button onClick={emailAuth} disabled={busy || !email || password.length < 6} className="mt-6 h-12 w-full rounded-sm shadow-none">
-            {mode === "signup" ? "Create my journal" : "Sign in"} <ArrowRight />
-          </Button>
-          <button type="button" onClick={() => setMode(mode === "signup" ? "signin" : "signup")} className="mt-4 w-full text-center text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
-            {mode === "signup" ? "I already have a journal" : "Create a new journal"}
-          </button>
+          {done ? (
+            <div role="status" className="text-center">
+              <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground"><Check className="size-7" /></span>
+              <h2 className="mt-5 font-display text-4xl">You’re in!</h2>
+              <p className="mt-3 break-words text-base text-muted-foreground">Your invite is on its way to <span className="font-medium text-foreground">{email}</span>.</p>
+            </div>
+          ) : (
+            <form onSubmit={join}>
+              <h2 className="font-display text-4xl">Get your invite</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Enter your email and we’ll send you your invite to start.</p>
+              <label className="mt-6 block text-sm font-medium" htmlFor="j-email">Email</label>
+              <Input id="j-email" type="email" autoComplete="email" required maxLength={320} value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 h-12 rounded-sm bg-background" />
+              {msg && <p role="alert" className="mt-3 text-sm text-foreground">{msg}</p>}
+              <Button type="submit" disabled={busy || !email} className="mt-5 h-12 w-full rounded-sm shadow-none">
+                Send my invite <ArrowRight />
+              </Button>
+            </form>
+          )}
         </div>
       </section>
 
