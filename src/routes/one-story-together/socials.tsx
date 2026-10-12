@@ -56,7 +56,7 @@ function CampaignReview() {
           </div>
         </div>
 
-        <div className="mt-8 flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Campaign review">
+        <div className="mt-8 flex flex-wrap gap-2 pb-2" role="tablist" aria-label="Campaign review">
           {(["vertical", "square", "instagram", "linkedin"] as Format[]).map((key) => (
             <Button key={key} type="button" role="tab" aria-selected={active === key} variant={active === key ? "default" : "outline"} className="shrink-0 rounded-sm shadow-none" onClick={() => { setActive(key); setCopied(false); }}>
               {key === "vertical" ? "Vertical motion" : key === "square" ? "Square motion" : key === "instagram" ? "Instagram copy" : "LinkedIn copy"}

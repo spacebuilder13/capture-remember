@@ -158,7 +158,7 @@ function OneStoryTogether() {
   const moveTo = (next: Stage, event?: string) => {
     if (event) log(event);
     setStage(next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   const startRecording = async () => {
@@ -705,7 +705,7 @@ function StoryWorld({ theme, mode }: { theme: StoryTheme; mode: string }) {
 
 function ResearchPanel({ events, onDownload, onReset }: { events: LogEvent[]; onDownload: () => void; onReset: () => void }) {
   return (
-    <details className="fixed bottom-3 right-3 z-40 w-[min(22rem,calc(100vw-1.5rem))] border border-story-ink/15 bg-story-paper text-story-ink shadow-lg">
+    <details className="mx-auto w-full max-w-5xl border-x border-b border-story-ink/15 bg-story-paper text-story-ink">
       <summary className="cursor-pointer px-4 py-3 text-xs font-semibold">Research tools · {events.length} events</summary>
       <div className="border-t border-story-ink/10 p-4">
         <div className="max-h-40 overflow-y-auto text-xs text-story-ink/60">
