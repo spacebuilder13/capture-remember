@@ -52,9 +52,9 @@ const EXPERIMENTS = [
     number: "04",
     name: "One Story, Together",
     hypothesis:
-      "A family will complete a shared story when each person has one small part.",
-    signal: "The parent, grandparent, and child complete one story in one session",
-    status: "Prototype",
+      "Far-away grandparents can become part of a child’s everyday life when their voice turns story time into a shared moment.",
+    signal: "A grandparent tells it, and a child listens, chooses, and takes part",
+    status: "Live",
     experience: "/one-story-together",
     socials: "/one-story-together/socials",
   },
