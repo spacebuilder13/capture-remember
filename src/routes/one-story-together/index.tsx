@@ -361,7 +361,7 @@ function SetupForm({ onDone }: { onDone: (label: string, child: string) => void 
 function StoryWorld({ theme }: { theme: StoryTheme }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-      <div className="absolute -bottom-24 -right-32 size-72 rounded-full bg-story-coral sm:-bottom-32 sm:-right-24 sm:size-[26rem]" />
+      <div className="absolute -bottom-32 -right-32 size-56 rounded-full bg-story-coral sm:-bottom-32 sm:-right-24 sm:size-[26rem]" />
       <div className="absolute bottom-[-18rem] right-[30%] hidden size-[32rem] rotate-12 bg-story-blue lg:block" />
       <div className="absolute bottom-24 right-[6%] hidden story-float lg:block"><StoryToken theme={theme} /></div>
       <div className="absolute right-[6%] top-[6%] font-display text-7xl text-story-yellow">✦</div>
