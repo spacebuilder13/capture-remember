@@ -1,6 +1,5 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowLeft,
   Check,
   ChevronRight,
   Download,
@@ -262,11 +261,9 @@ function OneStoryTogether() {
     <main className="min-h-screen bg-story-ink text-story-paper">
       <header className="relative z-20 border-b border-story-paper/15">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-          <Link to="/" className="flex items-center gap-2 text-sm font-semibold text-story-paper/80">
-            <ArrowLeft className="size-4" /> Experiments
-          </Link>
+          <span className="text-sm font-semibold text-story-paper/80">MemReel</span>
           <span className="font-display text-2xl">MemReel</span>
-          <span className="text-xs text-story-paper/60">04</span>
+          <span className="text-xs text-story-paper/60">One Story, Together</span>
         </div>
       </header>
 
@@ -571,9 +568,6 @@ function OneStoryTogether() {
         </section>
       )}
 
-      {stage !== "welcome" && stage !== "complete" && (
-        <FacilitatorPanel events={events} onDownload={downloadLog} onReset={reset} />
-      )}
     </main>
   );
 }
@@ -706,19 +700,3 @@ function StoryWorld({ theme, mode }: { theme: StoryTheme; mode: string }) {
   );
 }
 
-function FacilitatorPanel({ events, onDownload, onReset }: { events: LogEvent[]; onDownload: () => void; onReset: () => void }) {
-  return (
-    <details className="mx-auto w-full max-w-5xl border-x border-b border-story-ink/15 bg-story-paper text-story-ink">
-      <summary className="cursor-pointer px-4 py-3 text-xs font-semibold">Facilitator tools · {events.length} actions</summary>
-      <div className="border-t border-story-ink/10 p-4">
-        <div className="max-h-40 overflow-y-auto text-xs text-story-ink/60">
-          {events.length ? events.slice().reverse().map((item) => <p key={`${item.event}-${item.time}`} className="border-b border-story-ink/10 py-2">{item.event.replaceAll("_", " ")}</p>) : <p>No actions yet.</p>}
-        </div>
-        <div className="mt-4 flex gap-2">
-          <Button size="sm" className="rounded-sm" onClick={onDownload}><Download /> Log</Button>
-          <Button size="sm" variant="outline" className="rounded-sm" onClick={onReset}><RotateCcw /> Reset</Button>
-        </div>
-      </div>
-    </details>
-  );
-}
