@@ -20,12 +20,12 @@ export const Route = createFileRoute("/one-story-together/")({
       { title: "One Story, Together | MemReel" },
       {
         name: "description",
-        content: "A MemReel participation prototype where a parent, grandparent, and child complete one story.",
+        content: "Bring a far-away grandparent into story time with a story told in their own voice.",
       },
       { property: "og:title", content: "One Story, Together | MemReel" },
       {
         property: "og:description",
-        content: "A parent starts the story. A grandparent gives it a voice. A child completes it.",
+        content: "Childhood will not wait for the next visit. Bring Daadi into story time with MemReel.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -221,7 +221,7 @@ function OneStoryTogether() {
 
   const downloadLog = () => {
     const payload = {
-      prototype: "One Story, Together",
+      experience: "One Story, Together",
       exported_at: new Date().toISOString(),
       setup: { age, theme: themeKey, personal_detail_used: Boolean(selectedDetail) },
       completion: {
@@ -279,23 +279,26 @@ function OneStoryTogether() {
           <StoryWorld theme={theme} mode="welcome" />
           <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-between">
             <div className="max-w-3xl pt-8 sm:pt-16">
-              <p className="text-sm font-semibold uppercase text-story-yellow">A participation test</p>
+              <p className="text-sm font-semibold uppercase text-story-yellow">One Story, Together</p>
               <h1 className="mt-5 font-display text-6xl leading-[0.96] sm:text-8xl lg:text-9xl">
-                One story.<br />Three parts.
+                Bring Daadi into<br />story time.
               </h1>
-              <p className="mt-6 max-w-lg text-lg text-story-paper/75 sm:text-xl">
-                A parent starts it. A grandparent gives it a voice. A child completes it.
-              </p>
+              <div className="mt-7 max-w-xl border-l border-story-paper/25 pl-5 text-lg text-story-paper/78 sm:text-xl">
+                <p className="story-memory-line story-memory-line-one">Your child is three.</p>
+                <p className="story-memory-line story-memory-line-two mt-2">You remember Daadi’s Panchatantra stories at bedtime.</p>
+                <p className="story-memory-line story-memory-line-three mt-2">Now, an ocean separates them.</p>
+                <p className="story-memory-line story-memory-line-four mt-2 font-semibold text-story-paper">Childhood will not wait for the next visit.</p>
+              </div>
             </div>
             <div className="flex flex-col items-start gap-4 pb-6 sm:flex-row sm:items-center">
               <Button
                 size="lg"
                 className="h-14 rounded-sm bg-story-coral px-8 text-base text-story-ink shadow-none hover:bg-story-coral/90"
-                onClick={() => moveTo("parent", "session_started")}
+                onClick={() => moveTo("parent", "story_started")}
               >
-                Start the story <ChevronRight />
+                Start their story <ChevronRight />
               </Button>
-              <p className="max-w-xs text-sm text-story-paper/60">Use one device. Pass it to each person when the screen asks you.</p>
+              <p className="max-w-xs text-sm text-story-paper/60">Daadi tells it. Your child helps finish it.</p>
             </div>
           </div>
         </section>
@@ -541,8 +544,8 @@ function OneStoryTogether() {
       {stage === "complete" && (
         <section className="min-h-[calc(100svh-4rem)] bg-story-lime px-5 py-12 text-story-ink sm:px-8 sm:py-20">
           <div className="mx-auto max-w-5xl">
-            <p className="text-sm font-semibold uppercase">Story complete</p>
-            <h1 className="mt-4 max-w-3xl font-display text-6xl leading-none sm:text-8xl">Three people finished one story.</h1>
+            <p className="text-sm font-semibold uppercase">One Story, Together</p>
+            <h1 className="mt-4 max-w-3xl font-display text-6xl leading-none sm:text-8xl">Daadi was here for story time.</h1>
             <div className="mt-12 grid gap-px bg-story-ink/20 sm:grid-cols-3">
               {[
                 ["1", "Parent", `Started with ${theme.label.toLowerCase()}.`],
@@ -558,10 +561,10 @@ function OneStoryTogether() {
             </div>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Button size="lg" className="h-12 rounded-sm bg-story-ink text-story-paper hover:bg-story-ink/90" onClick={downloadLog}>
-                <Download /> Download activity log
+                <Download /> Download activity
               </Button>
               <Button size="lg" variant="outline" className="h-12 rounded-sm border-story-ink bg-transparent hover:bg-story-paper/50" onClick={reset}>
-                <RotateCcw /> Reset the prototype
+                <RotateCcw /> Start over
               </Button>
             </div>
           </div>
@@ -706,10 +709,10 @@ function StoryWorld({ theme, mode }: { theme: StoryTheme; mode: string }) {
 function ResearchPanel({ events, onDownload, onReset }: { events: LogEvent[]; onDownload: () => void; onReset: () => void }) {
   return (
     <details className="mx-auto w-full max-w-5xl border-x border-b border-story-ink/15 bg-story-paper text-story-ink">
-      <summary className="cursor-pointer px-4 py-3 text-xs font-semibold">Research tools · {events.length} events</summary>
+      <summary className="cursor-pointer px-4 py-3 text-xs font-semibold">Facilitator tools · {events.length} actions</summary>
       <div className="border-t border-story-ink/10 p-4">
         <div className="max-h-40 overflow-y-auto text-xs text-story-ink/60">
-          {events.length ? events.slice().reverse().map((item) => <p key={`${item.event}-${item.time}`} className="border-b border-story-ink/10 py-2">{item.event.replaceAll("_", " ")}</p>) : <p>No activity yet.</p>}
+          {events.length ? events.slice().reverse().map((item) => <p key={`${item.event}-${item.time}`} className="border-b border-story-ink/10 py-2">{item.event.replaceAll("_", " ")}</p>) : <p>No actions yet.</p>}
         </div>
         <div className="mt-4 flex gap-2">
           <Button size="sm" className="rounded-sm" onClick={onDownload}><Download /> Log</Button>

@@ -26,8 +26,8 @@ export const Route = createFileRoute("/one-story-together/socials")({
 type Format = "vertical" | "square" | "instagram" | "linkedin";
 
 const COPY: Record<"instagram" | "linkedin", string> = {
-  instagram: `A parent starts the story.\nA grandparent gives it a voice.\nA child chooses what happens next.\n\nThree people finish one story.\n\nTry One Story, Together by MemReel.`,
-  linkedin: `Can one small story bring three people into the same moment?\n\nWe built a MemReel prototype to test this. A parent chooses what the child likes. A grandparent records a prepared story. The child listens, chooses, and plays a part.\n\nThe signal is simple: does the family complete the story together?`,
+  instagram: `Your child is three.\n\nAt bedtime, you remember how Daadi told you Panchatantra stories until you fell asleep.\n\nNow, an ocean separates them. Childhood will not wait for the next visit.\n\nWith MemReel, Daadi can tell those stories in her own voice. Your child can listen, choose, and become part of them.\n\nOne Story, Together. Bring Daadi into story time.`,
+  linkedin: `Your child is three. At bedtime, you remember the Panchatantra stories Daadi told you until you fell asleep.\n\nNow, Daadi and your child live an ocean apart. Calls help. Visits matter. But childhood keeps moving between them.\n\nMemReel brings Daadi into story time now. She tells a story in her own voice. Your child listens, makes a choice, and becomes part of it.\n\nOne Story, Together. Bring far-away grandparents into story time.`,
 };
 
 function CampaignReview() {
@@ -58,7 +58,7 @@ function CampaignReview() {
         <div className="border-b border-border pb-10">
           <p className="text-xs font-semibold uppercase text-primary">Campaign 04 · One Story, Together</p>
           <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Campaign creatives</h1>
-          <p className="mt-4 max-w-2xl text-muted-foreground">Final motion pieces, covers, and campaign copy. No AI images are used.</p>
+          <p className="mt-4 max-w-2xl text-muted-foreground">A distance-led story about bringing Daadi into story time now. No AI images are used.</p>
           <div className="mt-6 inline-flex items-center gap-2 border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
             <Film className="size-4 text-primary" /> Two final 18-second videos with captions and sound.
           </div>
@@ -96,7 +96,7 @@ function CampaignReview() {
 
           <aside className="lg:sticky lg:top-8">
             <p className="text-xs font-semibold uppercase text-primary">{isCopy ? "Campaign copy" : "Final motion asset"}</p>
-            <h2 className="mt-2 font-display text-4xl">{isCopy ? (active === "instagram" ? "Instagram" : "LinkedIn") : "Three people finish one story."}</h2>
+            <h2 className="mt-2 font-display text-4xl">{isCopy ? (active === "instagram" ? "Instagram" : "LinkedIn") : "Childhood will not wait."}</h2>
             {isCopy ? (
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button variant="outline" className="rounded-sm shadow-none" onClick={copyText}>{copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy text"}</Button>
