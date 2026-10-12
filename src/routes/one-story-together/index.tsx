@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/one-story-together")({
+export const Route = createFileRoute("/one-story-together/")({
   head: () => ({
     meta: [
       { title: "One Story, Together | MemReel" },

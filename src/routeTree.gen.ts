@@ -18,6 +18,8 @@ import { Route as FarAwayMomentsSocialsRouteImport } from './routes/far-away-mom
 import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalAppRouteImport } from './routes/journal/app'
 import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
+import { Route as OneStoryTogetherIndexRouteImport } from './routes/one-story-together/index'
+import { Route as OneStoryTogetherSocialsRouteImport } from './routes/one-story-together/socials'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -65,6 +67,16 @@ const JournalSocialsRoute = JournalSocialsRouteImport.update({
   path: '/journal/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OneStoryTogetherIndexRoute = OneStoryTogetherIndexRouteImport.update({
+  id: '/one-story-together/',
+  path: '/one-story-together/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OneStoryTogetherSocialsRoute = OneStoryTogetherSocialsRouteImport.update({
+  id: '/one-story-together/socials',
+  path: '/one-story-together/socials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,9 +85,11 @@ export interface FileRoutesByFullPath {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/one-story-together/': typeof OneStoryTogetherIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,9 +98,11 @@ export interface FileRoutesByTo {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
   '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
+  '/one-story-together': typeof OneStoryTogetherIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,9 +112,11 @@ export interface FileRoutesById {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
+  '/one-story-together/': typeof OneStoryTogetherIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,9 +127,11 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
+    | '/one-story-together/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -120,9 +140,11 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/socials'
     | '/captured-remembered'
     | '/far-away-moments'
     | '/journal'
+    | '/one-story-together'
   id:
     | '__root__'
     | '/'
@@ -131,9 +153,11 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
+    | '/one-story-together/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,9 +167,11 @@ export interface RootRouteChildren {
   FarAwayMomentsSocialsRoute: typeof FarAwayMomentsSocialsRoute
   JournalAppRoute: typeof JournalAppRoute
   JournalSocialsRoute: typeof JournalSocialsRoute
+  OneStoryTogetherSocialsRoute: typeof OneStoryTogetherSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
   FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
+  OneStoryTogetherIndexRoute: typeof OneStoryTogetherIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -213,6 +239,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/one-story-together/': {
+      id: '/one-story-together/'
+      path: '/one-story-together'
+      fullPath: '/one-story-together/'
+      preLoaderRoute: typeof OneStoryTogetherIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/one-story-together/socials': {
+      id: '/one-story-together/socials'
+      path: '/one-story-together/socials'
+      fullPath: '/one-story-together/socials'
+      preLoaderRoute: typeof OneStoryTogetherSocialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -223,9 +263,11 @@ const rootRouteChildren: RootRouteChildren = {
   FarAwayMomentsSocialsRoute: FarAwayMomentsSocialsRoute,
   JournalAppRoute: JournalAppRoute,
   JournalSocialsRoute: JournalSocialsRoute,
+  OneStoryTogetherSocialsRoute: OneStoryTogetherSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
   FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
+  OneStoryTogetherIndexRoute: OneStoryTogetherIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
