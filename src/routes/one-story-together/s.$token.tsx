@@ -473,7 +473,7 @@ function ChildFlow({ token, story, reload }: { token: string; story: StoryData; 
   );
 }
 
-function StoryPlayer({ urls, theme, onPlay }: { urls: string[]; theme: StoryData extends never ? never : (typeof THEMES)[keyof typeof THEMES]; onPlay: () => void }) {
+function StoryPlayer({ urls, theme, onPlay }: { urls: string[]; theme: (typeof THEMES)[keyof typeof THEMES]; onPlay: () => void }) {
   const ref = useRef<HTMLAudioElement | null>(null);
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
