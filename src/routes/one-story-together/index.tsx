@@ -572,7 +572,7 @@ function OneStoryTogether() {
       )}
 
       {stage !== "welcome" && stage !== "complete" && (
-        <ResearchPanel events={events} onDownload={downloadLog} onReset={reset} />
+        <FacilitatorPanel events={events} onDownload={downloadLog} onReset={reset} />
       )}
     </main>
   );
@@ -706,7 +706,7 @@ function StoryWorld({ theme, mode }: { theme: StoryTheme; mode: string }) {
   );
 }
 
-function ResearchPanel({ events, onDownload, onReset }: { events: LogEvent[]; onDownload: () => void; onReset: () => void }) {
+function FacilitatorPanel({ events, onDownload, onReset }: { events: LogEvent[]; onDownload: () => void; onReset: () => void }) {
   return (
     <details className="mx-auto w-full max-w-5xl border-x border-b border-story-ink/15 bg-story-paper text-story-ink">
       <summary className="cursor-pointer px-4 py-3 text-xs font-semibold">Facilitator tools · {events.length} actions</summary>
