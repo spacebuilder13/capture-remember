@@ -119,7 +119,7 @@ function useUpload(token: string) {
 
 function useTrack(token: string) {
   const track = useServerFn(trackStep);
-  return (step: Parameters<typeof trackStep>[0]["data"]["step"]) => {
+  return (step: "grandparent_opened" | "child_played" | "child_chose" | "return_sent" | "reply_opened") => {
     void track({ data: { token, step, device: deviceType() } }).catch(() => undefined);
   };
 }
@@ -265,7 +265,7 @@ function RecordLayout({ text, rec, idle, maxSeconds, large = false }: { text: st
         <p className={`whitespace-pre-line font-display leading-relaxed ${large ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"}`}>{text}</p>
       </div>
       <div className="flex min-h-64 flex-col items-center justify-center bg-story-blue p-6 text-story-paper">
-        <RecorderPanel rec={rec} idleLabel={idle} maxSeconds={maxSeconds} />
+        <RecorderPanel rec={rec} idleLabel={idle} {...(maxSeconds ? { maxSeconds } : {})} />
       </div>
     </div>
   );

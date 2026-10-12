@@ -93,7 +93,7 @@ export const getStory = createServerFn({ method: "POST" })
     const urls: Partial<Record<Kind, string>> = {};
     for (const r of recs ?? []) {
       const k = r.kind as Kind;
-      if (urls[k] || !visible[role].includes(k)) continue;
+      if (urls[k] || !(visible[role] ?? []).includes(k)) continue;
       const { data: s } = await db.storage.from("story-audio").createSignedUrl(r.path, 3600);
       if (s?.signedUrl) urls[k] = s.signedUrl;
     }
@@ -108,7 +108,7 @@ export const getStory = createServerFn({ method: "POST" })
       choice: story.choice,
       recordings: urls,
       returnSent: story.return_sent,
-      replyHeard: Boolean(steps.reply_opened),
+      replyHeard: Boolean(steps['reply_opened']),
       // only the parent-controlled child link can pass on the other links
       links: role === "c" ? { reply: story.reply_token } : role === "g" ? { child: story.child_token } : {},
     };
@@ -145,7 +145,7 @@ export const uploadRecording = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data }) => {
-    const role = data.token[0];
+    const role = data.token[0] ?? "";
     if (!ROLE_KINDS[role]?.includes(data.kind)) return { error: "This link cannot add that recording." };
     if (data.seconds > MAX_SECONDS[data.kind] + 2) return { error: "That recording is too long." };
     const story = await findStory(data.token);
@@ -155,7 +155,7 @@ export const uploadRecording = createServerFn({ method: "POST" })
     if ((count ?? 0) >= 30) return { error: "This story has too many recordings." };
     const bytes = Uint8Array.from(atob(data.audioBase64), (c) => c.charCodeAt(0));
     if (bytes.byteLength > 7 * 1024 * 1024) return { error: "That recording is too large." };
-    const mime = data.mime.split(";")[0];
+    const mime = data.mime.split(";")[0] ?? "audio/webm";
     const ext = mime.includes("mp4") ? "m4a" : mime.includes("ogg") ? "ogg" : "webm";
     const path = `${story.id}/${data.kind}-${crypto.randomUUID()}.${ext}`;
     const up = await db.storage.from("story-audio").upload(path, bytes, { contentType: mime });
@@ -166,14 +166,14 @@ export const uploadRecording = createServerFn({ method: "POST" })
     await db.from("story_recordings").insert({ story_id: story.id, kind: data.kind, path, duration_seconds: data.seconds });
     const steps = { ...(story.steps as Record<string, string>) };
     const now = new Date().toISOString();
-    const patch: Record<string, unknown> = {};
-    if (data.kind === "story" && !steps.grandparent_recorded) steps.grandparent_recorded = now;
+    const patch: { own_line_added?: boolean; own_line_seconds?: number; second_exchange?: boolean; second_exchange_by?: string } = {};
+    if (data.kind === "story" && !steps['grandparent_recorded']) steps['grandparent_recorded'] = now;
     if (data.kind === "own_line") {
       patch.own_line_added = true;
       patch.own_line_seconds = Math.round(data.seconds * 10) / 10;
     }
     if (data.kind === "reply") {
-      if (!steps.reply_recorded) steps.reply_recorded = now;
+      if (!steps['reply_recorded']) steps['reply_recorded'] = now;
       patch.second_exchange = true;
       patch.second_exchange_by = "grandparent";
     }
