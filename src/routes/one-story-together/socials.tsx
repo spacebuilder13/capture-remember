@@ -1,8 +1,13 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Check, Copy, Film, Lock } from "lucide-react";
+import { Check, Copy, Download, Film, Lock } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import campaignPackage from "@/assets/one-story-together/campaign-package.zip.asset.json";
+import squareCover from "@/assets/one-story-together/square-cover.png.asset.json";
+import squareVideo from "@/assets/one-story-together/square-video.mp4.asset.json";
+import verticalCover from "@/assets/one-story-together/vertical-cover.png.asset.json";
+import verticalVideo from "@/assets/one-story-together/vertical-video.mp4.asset.json";
 
 export const Route = createFileRoute("/one-story-together/socials")({
   head: () => ({
@@ -29,6 +34,9 @@ function CampaignReview() {
   const [active, setActive] = useState<Format>("vertical");
   const [copied, setCopied] = useState(false);
   const isCopy = active === "instagram" || active === "linkedin";
+  const isSquare = active === "square";
+  const activeVideo = isSquare ? squareVideo : verticalVideo;
+  const activeCover = isSquare ? squareCover : verticalCover;
 
   const copyText = async () => {
     if (!isCopy) return;
@@ -49,11 +57,14 @@ function CampaignReview() {
       <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
         <div className="border-b border-border pb-10">
           <p className="text-xs font-semibold uppercase text-primary">Campaign 04 · One Story, Together</p>
-          <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Motion campaign direction</h1>
-          <p className="mt-4 max-w-2xl text-muted-foreground">Draft wording and motion studies for review. No AI images are used.</p>
+          <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Campaign creatives</h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">Final motion pieces, covers, and campaign copy. No AI images are used.</p>
           <div className="mt-6 inline-flex items-center gap-2 border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
-            <Film className="size-4 text-primary" /> Final videos will be rendered after the wording is approved.
+            <Film className="size-4 text-primary" /> Two final 18-second videos with captions and sound.
           </div>
+          <Button asChild className="mt-6 rounded-sm shadow-none sm:ml-3 sm:mt-0">
+            <a href={campaignPackage.url} download><Download /> Download all assets</a>
+          </Button>
         </div>
 
         <div className="mt-8 flex flex-wrap gap-2 pb-2" role="tablist" aria-label="Campaign review">
@@ -69,54 +80,45 @@ function CampaignReview() {
             {isCopy ? (
               <div className="w-full max-w-xl border border-border bg-card p-6 text-sm leading-relaxed whitespace-pre-line sm:p-8">{COPY[active]}</div>
             ) : (
-              <MotionStudy square={active === "square"} />
+              <video
+                key={active}
+                className={`block h-auto w-full bg-story-ink shadow-xl ${isSquare ? "max-w-[34rem]" : "max-w-[21rem]"}`}
+                controls
+                playsInline
+                preload="metadata"
+                poster={activeCover.url}
+              >
+                <source src={activeVideo.url} type="video/mp4" />
+                Your browser cannot play this video.
+              </video>
             )}
           </div>
 
           <aside className="lg:sticky lg:top-8">
-            <p className="text-xs font-semibold uppercase text-primary">{isCopy ? "Draft copy" : "Animated storyboard"}</p>
+            <p className="text-xs font-semibold uppercase text-primary">{isCopy ? "Campaign copy" : "Final motion asset"}</p>
             <h2 className="mt-2 font-display text-4xl">{isCopy ? (active === "instagram" ? "Instagram" : "LinkedIn") : "Three people finish one story."}</h2>
             {isCopy ? (
-              <Button variant="outline" className="mt-6 rounded-sm shadow-none" onClick={copyText}>{copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy text"}</Button>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button variant="outline" className="rounded-sm shadow-none" onClick={copyText}>{copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy text"}</Button>
+                <Button asChild variant="outline" className="rounded-sm shadow-none">
+                  <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(COPY[active])}`} download={`one-story-together-${active}.txt`}><Download /> Download text</a>
+                </Button>
+              </div>
             ) : (
-              <div className="mt-6 space-y-5 border-t border-border pt-6 text-sm text-muted-foreground">
-                <Beat number="01" title="The parent starts it." body="A story token appears when the parent chooses a theme." />
-                <Beat number="02" title="The grandparent gives it a voice." body="Sound waves carry the token into the next scene." />
-                <Beat number="03" title="The child completes it." body="The child makes a choice. All three parts join." />
-                <p className="border-t border-border pt-5">Music: light rhythmic track. Sound: taps, a record cue, a page turn, and one playful finish.</p>
+              <div className="mt-6 space-y-6 border-t border-border pt-6 text-sm text-muted-foreground">
+                <div className="overflow-hidden border border-border bg-card">
+                  <img src={activeCover.url} alt={`${isSquare ? "Square" : "Vertical"} campaign cover with the line Three people finish one story.`} className="h-auto w-full" />
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild className="rounded-sm shadow-none"><a href={activeVideo.url} download><Download /> Download video</a></Button>
+                  <Button asChild variant="outline" className="rounded-sm shadow-none"><a href={activeCover.url} download><Download /> Download cover</a></Button>
+                </div>
+                <p className="border-t border-border pt-5">Captions carry the full message without sound. Music and effects are included.</p>
               </div>
             )}
           </aside>
         </div>
       </section>
     </main>
-  );
-}
-
-function Beat({ number, title, body }: { number: string; title: string; body: string }) {
-  return <div className="grid grid-cols-[2rem_1fr] gap-3"><span className="font-display text-xl text-primary">{number}</span><div><p className="font-medium text-foreground">{title}</p><p className="mt-1">{body}</p></div></div>;
-}
-
-function MotionStudy({ square }: { square: boolean }) {
-  return (
-    <div className={`story-ad relative overflow-hidden bg-story-ink text-story-paper shadow-xl ${square ? "aspect-square w-full max-w-[34rem]" : "aspect-[9/16] w-full max-w-[21rem]"}`} aria-label="Animated campaign storyboard">
-      <div className="story-ad-beat story-ad-beat-one absolute inset-0 flex flex-col justify-between p-[9%]">
-        <p className="text-xs font-semibold uppercase text-story-yellow">One story, together</p>
-        <div><p className="font-display text-[clamp(2rem,7vw,4.5rem)] leading-none">A parent<br />starts it.</p><div className="story-ad-token mt-8 size-24 rounded-full border-4 border-story-ink bg-story-lime" /></div>
-      </div>
-      <div className="story-ad-beat story-ad-beat-two absolute inset-0 flex flex-col justify-end bg-story-blue p-[9%]">
-        <div className="story-wave mb-10 flex items-center gap-2" aria-hidden>{[1,2,3,4,5,6,7].map((x) => <span key={x} className="w-2 bg-story-coral" style={{ height: `${18 + (x % 4) * 12}px` }} />)}</div>
-        <p className="font-display text-[clamp(2rem,7vw,4.5rem)] leading-none">A grandparent<br />gives it a voice.</p>
-      </div>
-      <div className="story-ad-beat story-ad-beat-three absolute inset-0 flex flex-col justify-between bg-story-coral p-[9%] text-story-ink">
-        <div className="grid grid-cols-2 gap-3"><div className="aspect-square bg-story-yellow" /><div className="aspect-square bg-story-lime" /></div>
-        <p className="font-display text-[clamp(2rem,7vw,4.5rem)] leading-none">A child<br />completes it.</p>
-      </div>
-      <div className="story-ad-beat story-ad-beat-four absolute inset-0 flex flex-col items-center justify-center bg-story-lime p-[9%] text-center text-story-ink">
-        <div className="mb-8 flex -space-x-4"><span className="size-20 rounded-full bg-story-coral" /><span className="size-20 rounded-full bg-story-blue" /><span className="size-20 rounded-full bg-story-yellow" /></div>
-        <p className="font-display text-[clamp(2.2rem,8vw,5rem)] leading-none">Three people finish one story.</p>
-        <p className="mt-7 text-sm font-semibold uppercase">MemReel</p>
-      </div>
-    </div>
   );
 }
