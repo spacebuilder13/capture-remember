@@ -48,6 +48,16 @@ const EXPERIMENTS = [
     experience: "/far-away-moments",
     socials: "/far-away-moments/socials",
   },
+  {
+    number: "04",
+    name: "One Story, Together",
+    hypothesis:
+      "A family will complete a shared story when each person has one small part.",
+    signal: "The parent, grandparent, and child complete one story in one session",
+    status: "Prototype",
+    experience: "/one-story-together",
+    socials: "/one-story-together/socials",
+  },
 ] as const;
 
 function Registry() {
