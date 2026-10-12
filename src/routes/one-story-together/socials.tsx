@@ -49,7 +49,7 @@ function Socials() {
     <main className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
-          <Link to="/" className="font-display text-2xl">Mem<span className="text-primary">Reel</span></Link>
+          <Link to="/one-story-together" className="font-display text-2xl">Mem<span className="text-primary">Reel</span></Link>
           <Link to="/one-story-together" className="text-xs text-muted-foreground hover:text-foreground">One Story, Together</Link>
         </div>
       </header>

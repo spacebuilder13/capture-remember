@@ -1,6 +1,5 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowLeft,
   Check,
   ChevronRight,
   Download,
@@ -262,9 +261,7 @@ function OneStoryTogether() {
     <main className="min-h-screen bg-story-ink text-story-paper">
       <header className="relative z-20 border-b border-story-paper/15">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-          <Link to="/" className="flex items-center gap-2 text-sm font-semibold text-story-paper/80">
-            <ArrowLeft className="size-4" /> MemReel
-          </Link>
+          <span className="text-sm font-semibold text-story-paper/80">MemReel</span>
           <span className="font-display text-2xl">MemReel</span>
           <span className="text-xs text-story-paper/60">One Story, Together</span>
         </div>
