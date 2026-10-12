@@ -699,7 +699,7 @@ function StoryWorld({ theme, mode }: { theme: StoryTheme; mode: string }) {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden data-mode={mode}>
       <div className="absolute -right-20 top-12 size-72 rounded-full bg-story-coral sm:size-[28rem]" />
-      <div className="absolute bottom-[-14rem] right-[18%] size-[32rem] rotate-12 bg-story-blue sm:size-[42rem]" />
+      <div className="absolute bottom-[-14rem] right-[18%] size-[32rem] rotate-12 bg-story-blue sm:bottom-[-28rem] sm:size-[42rem] lg:bottom-[-14rem]" />
       <div className="absolute bottom-20 right-[8%] story-float"><StoryToken theme={theme} /></div>
       <div className="absolute left-[50%] top-[20%] font-display text-8xl text-story-yellow">✦</div>
     </div>
