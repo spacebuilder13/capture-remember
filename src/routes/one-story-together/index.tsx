@@ -9,7 +9,6 @@ import {
   Play,
   RotateCcw,
   Square,
-  Volume2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -332,7 +331,7 @@ function OneStoryTogether() {
                       selected={themeKey === key}
                       onClick={() => {
                         setThemeKey(key);
-                        setDetail(THEMES[key].detailChoices[0]);
+                        setDetail(THEMES[key].detailChoices[0] ?? "");
                         setCustomDetail("");
                       }}
                       className="min-h-28 flex-col text-left"
