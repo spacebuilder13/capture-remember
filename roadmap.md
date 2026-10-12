@@ -17,4 +17,4 @@
 - [x] Add One Story, Together as campaign 04 with a three-person family story flow
 - [x] Add the campaign 04 motion direction and copy review page
 - [x] Build final campaign 04 videos, covers, copy downloads, and asset package
-- [ ] Replace campaign 04 creative set with the distance-led Daadi story
+- [x] Replace campaign 04 creative set with the distance-led Daadi story
