@@ -3,11 +3,11 @@ import { Check, Copy, Download, Film, Lock } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import campaignPackage from "@/assets/one-story-together/campaign-package.zip.asset.json";
-import squareCover from "@/assets/one-story-together/square-cover.png.asset.json";
-import squareVideo from "@/assets/one-story-together/square-video.mp4.asset.json";
-import verticalCover from "@/assets/one-story-together/vertical-cover.png.asset.json";
-import verticalVideo from "@/assets/one-story-together/vertical-video.mp4.asset.json";
+import campaignPackage from "@/assets/one-story-together/distance-campaign-package.zip.asset.json";
+import squareCover from "@/assets/one-story-together/distance-square-cover.png.asset.json";
+import squareVideo from "@/assets/one-story-together/distance-square-video.mp4.asset.json";
+import verticalCover from "@/assets/one-story-together/distance-vertical-cover.png.asset.json";
+import verticalVideo from "@/assets/one-story-together/distance-vertical-video.mp4.asset.json";
 
 export const Route = createFileRoute("/one-story-together/socials")({
   head: () => ({
@@ -60,7 +60,7 @@ function CampaignReview() {
           <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Campaign creatives</h1>
           <p className="mt-4 max-w-2xl text-muted-foreground">A distance-led story about bringing Daadi into story time now. No AI images are used.</p>
           <div className="mt-6 inline-flex items-center gap-2 border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
-            <Film className="size-4 text-primary" /> Two final 18-second videos with captions and sound.
+            <Film className="size-4 text-primary" /> Two final 21-second videos with captions and sound.
           </div>
           <Button asChild className="mt-6 rounded-sm shadow-none sm:ml-3 sm:mt-0">
             <a href={campaignPackage.url} download><Download /> Download all assets</a>
@@ -107,7 +107,7 @@ function CampaignReview() {
             ) : (
               <div className="mt-6 space-y-6 border-t border-border pt-6 text-sm text-muted-foreground">
                 <div className="overflow-hidden border border-border bg-card">
-                  <img src={activeCover.url} alt={`${isSquare ? "Square" : "Vertical"} campaign cover with the line Three people finish one story.`} className="h-auto w-full" />
+                  <img src={activeCover.url} alt={`${isSquare ? "Square" : "Vertical"} One Story, Together campaign cover with a Start their story invitation.`} className="h-auto w-full" />
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild className="rounded-sm shadow-none"><a href={activeVideo.url} download><Download /> Download video</a></Button>
