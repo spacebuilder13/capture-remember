@@ -1,9 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Check, Copy, Download, Film, Lock } from "lucide-react";
+import { Check, Copy, Download, Film } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import campaignPackage from "@/assets/one-story-together/distance-campaign-package.zip.asset.json";
+import socialsPackage from "@/assets/one-story-together/socials-package.zip.asset.json";
 import squareCover from "@/assets/one-story-together/distance-square-cover.png.asset.json";
 import squareVideo from "@/assets/one-story-together/distance-square-video.mp4.asset.json";
 import verticalCover from "@/assets/one-story-together/distance-vertical-cover.png.asset.json";
@@ -12,15 +12,15 @@ import verticalVideo from "@/assets/one-story-together/distance-vertical-video.m
 export const Route = createFileRoute("/one-story-together/socials")({
   head: () => ({
     meta: [
-      { title: "One Story, Together campaign | MemReel" },
-      { name: "description", content: "Review campaign 04 motion concepts and copy for One Story, Together." },
-      { property: "og:title", content: "One Story, Together campaign | MemReel" },
-      { property: "og:description", content: "Review campaign 04 motion concepts and copy for One Story, Together." },
+      { title: "One Story, Together | MemReel" },
+      { name: "description", content: "Videos and social posts for One Story, Together by MemReel." },
+      { property: "og:title", content: "One Story, Together | MemReel" },
+      { property: "og:description", content: "Bring far-away grandparents into story time with MemReel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: CampaignReview,
+  component: Socials,
 });
 
 type Format = "vertical" | "square" | "instagram" | "linkedin";
@@ -30,7 +30,7 @@ const COPY: Record<"instagram" | "linkedin", string> = {
   linkedin: `Your child is three. At bedtime, you remember the Panchatantra stories Daadi told you until you fell asleep.\n\nNow, Daadi and your child live an ocean apart. Calls help. Visits matter. But childhood keeps moving between them.\n\nMemReel brings Daadi into story time now. She tells a story in her own voice. Your child listens, makes a choice, and becomes part of it.\n\nOne Story, Together. Bring far-away grandparents into story time.`,
 };
 
-function CampaignReview() {
+function Socials() {
   const [active, setActive] = useState<Format>("vertical");
   const [copied, setCopied] = useState(false);
   const isCopy = active === "instagram" || active === "linkedin";
@@ -50,24 +50,24 @@ function CampaignReview() {
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
           <Link to="/" className="font-display text-2xl">Mem<span className="text-primary">Reel</span></Link>
-          <span className="flex items-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" /> Internal review</span>
+          <Link to="/one-story-together" className="text-xs text-muted-foreground hover:text-foreground">One Story, Together</Link>
         </div>
       </header>
 
       <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
         <div className="border-b border-border pb-10">
-          <p className="text-xs font-semibold uppercase text-primary">Campaign 04 · One Story, Together</p>
-          <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Campaign creatives</h1>
-          <p className="mt-4 max-w-2xl text-muted-foreground">A distance-led story about bringing Daadi into story time now. No AI images are used.</p>
+          <p className="text-xs font-semibold uppercase text-primary">One Story, Together</p>
+          <h1 className="mt-3 max-w-4xl font-display text-5xl leading-tight sm:text-6xl">Bring Daadi into story time.</h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">Videos and social posts about closing the distance between a child and a far-away grandparent.</p>
           <div className="mt-6 inline-flex items-center gap-2 border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
             <Film className="size-4 text-primary" /> Two final 21-second videos with captions and sound.
           </div>
           <Button asChild className="mt-6 rounded-sm shadow-none sm:ml-3 sm:mt-0">
-            <a href={campaignPackage.url} download><Download /> Download all assets</a>
+            <a href={socialsPackage.url} download><Download /> Download everything</a>
           </Button>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-2 pb-2" role="tablist" aria-label="Campaign review">
+        <div className="mt-8 flex flex-wrap gap-2 pb-2" role="tablist" aria-label="Videos and social posts">
           {(["vertical", "square", "instagram", "linkedin"] as Format[]).map((key) => (
             <Button key={key} type="button" role="tab" aria-selected={active === key} variant={active === key ? "default" : "outline"} className="shrink-0 rounded-sm shadow-none" onClick={() => { setActive(key); setCopied(false); }}>
               {key === "vertical" ? "Vertical motion" : key === "square" ? "Square motion" : key === "instagram" ? "Instagram copy" : "LinkedIn copy"}
@@ -95,7 +95,7 @@ function CampaignReview() {
           </div>
 
           <aside className="lg:sticky lg:top-8">
-            <p className="text-xs font-semibold uppercase text-primary">{isCopy ? "Campaign copy" : "Final motion asset"}</p>
+            <p className="text-xs font-semibold uppercase text-primary">{isCopy ? "Social post" : "Video"}</p>
             <h2 className="mt-2 font-display text-4xl">{isCopy ? (active === "instagram" ? "Instagram" : "LinkedIn") : "Childhood will not wait."}</h2>
             {isCopy ? (
               <div className="mt-6 flex flex-wrap gap-3">
@@ -107,7 +107,7 @@ function CampaignReview() {
             ) : (
               <div className="mt-6 space-y-6 border-t border-border pt-6 text-sm text-muted-foreground">
                 <div className="overflow-hidden border border-border bg-card">
-                  <img src={activeCover.url} alt={`${isSquare ? "Square" : "Vertical"} One Story, Together campaign cover with a Start their story invitation.`} className="h-auto w-full" />
+                  <img src={activeCover.url} alt={`${isSquare ? "Square" : "Vertical"} One Story, Together cover with a Start their story invitation.`} className="h-auto w-full" />
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild className="rounded-sm shadow-none"><a href={activeVideo.url} download><Download /> Download video</a></Button>
