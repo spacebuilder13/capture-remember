@@ -15,3 +15,4 @@
 - Use art-directed landscape and portrait first-screen photography selected by viewport orientation so the embedded title and family remain visible without letterboxing.
 - Far-Away Moments (`/far-away-moments`) needs no sign-in: server functions in `src/lib/moments.functions.ts` write `moment_shares`/`moment_events` and the private `moment-photos` bucket with the admin client only after validation and per-session rate limits; tables have no client grants.
 - Journal Context (/journal) is an email invite list only: no sign-in; emails go to journal_waitlist (anon insert-only). Why: keep the test to one simple ask.
+- One Story, Together (`/one-story-together`) is a browser-local research prototype: session audio and activity stay in the browser, and the campaign uses original code-rendered graphics with no AI-generated images. Why: interviews need a reliable guided handoff without accounts or synthetic family imagery.

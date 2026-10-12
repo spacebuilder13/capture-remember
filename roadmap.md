@@ -14,3 +14,6 @@
 - [ ] Approve Journal Context social wording
 - [x] Add Far-Away Moments (from Visionary Spark) as registry card 03 with experience and socials
 - [ ] Approve Far-Away Moments social wording
+- [x] Add One Story, Together as campaign 04 with a three-person research prototype
+- [x] Add the campaign 04 motion direction and draft copy review page
+- [ ] Approve campaign 04 wording before final motion renders
