@@ -15,6 +15,8 @@
 - [x] Add Far-Away Moments (from Visionary Spark) as registry card 03 with experience and socials
 - [ ] Approve Far-Away Moments social wording
 - [x] Add One Story, Together as campaign 04 with a three-person family story flow
+- [x] One Story, Together: WhatsApp role links, return leg, own line, voiced choice, setup form, legibility
+- [ ] Notify Bhavik of new setup requests (waiting on: email or list page choice)
 - [x] Add the campaign 04 motion direction and copy review page
 - [x] Build final campaign 04 videos, covers, copy downloads, and asset package
 - [x] Replace campaign 04 creative set with the distance-led Daadi story

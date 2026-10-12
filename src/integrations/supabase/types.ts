@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      family_stories: {
+        Row: {
+          age_band: string
+          child_name: string
+          child_token: string
+          choice: string | null
+          created_at: string
+          detail: string | null
+          devices: Json
+          grandparent_label: string
+          grandparent_token: string
+          id: string
+          own_line_added: boolean
+          own_line_seconds: number | null
+          parent_response: string | null
+          reply_token: string
+          return_sent: boolean
+          second_exchange: boolean
+          second_exchange_by: string | null
+          steps: Json
+          theme: string
+        }
+        Insert: {
+          age_band: string
+          child_name: string
+          child_token: string
+          choice?: string | null
+          created_at?: string
+          detail?: string | null
+          devices?: Json
+          grandparent_label?: string
+          grandparent_token: string
+          id?: string
+          own_line_added?: boolean
+          own_line_seconds?: number | null
+          parent_response?: string | null
+          reply_token: string
+          return_sent?: boolean
+          second_exchange?: boolean
+          second_exchange_by?: string | null
+          steps?: Json
+          theme: string
+        }
+        Update: {
+          age_band?: string
+          child_name?: string
+          child_token?: string
+          choice?: string | null
+          created_at?: string
+          detail?: string | null
+          devices?: Json
+          grandparent_label?: string
+          grandparent_token?: string
+          id?: string
+          own_line_added?: boolean
+          own_line_seconds?: number | null
+          parent_response?: string | null
+          reply_token?: string
+          return_sent?: boolean
+          second_exchange?: boolean
+          second_exchange_by?: string | null
+          steps?: Json
+          theme?: string
+        }
+        Relationships: []
+      }
       journal_entries: {
         Row: {
           created_at: string
@@ -208,6 +274,80 @@ export type Database = {
           photo_path?: string
           rewritten?: string
           session_id?: string
+        }
+        Relationships: []
+      }
+      story_recordings: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          kind: string
+          path: string
+          story_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          kind: string
+          path: string
+          story_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          kind?: string
+          path?: string
+          story_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "story_recordings_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "family_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      story_setup_requests: {
+        Row: {
+          child_age: string
+          child_name: string
+          consented: boolean
+          created_at: string
+          favourite_thing: string
+          grandparent_label: string
+          grandparent_whatsapp: string
+          id: string
+          parent_name: string
+          parent_whatsapp: string
+        }
+        Insert: {
+          child_age: string
+          child_name: string
+          consented: boolean
+          created_at?: string
+          favourite_thing: string
+          grandparent_label: string
+          grandparent_whatsapp: string
+          id?: string
+          parent_name: string
+          parent_whatsapp: string
+        }
+        Update: {
+          child_age?: string
+          child_name?: string
+          consented?: boolean
+          created_at?: string
+          favourite_thing?: string
+          grandparent_label?: string
+          grandparent_whatsapp?: string
+          id?: string
+          parent_name?: string
+          parent_whatsapp?: string
         }
         Relationships: []
       }

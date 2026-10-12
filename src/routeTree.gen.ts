@@ -20,6 +20,7 @@ import { Route as JournalAppRouteImport } from './routes/journal/app'
 import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
 import { Route as OneStoryTogetherIndexRouteImport } from './routes/one-story-together/index'
 import { Route as OneStoryTogetherSocialsRouteImport } from './routes/one-story-together/socials'
+import { Route as OneStoryTogetherSTokenRouteImport } from './routes/one-story-together/s.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,6 +78,11 @@ const OneStoryTogetherSocialsRoute = OneStoryTogetherSocialsRouteImport.update({
   path: '/one-story-together/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OneStoryTogetherSTokenRoute = OneStoryTogetherSTokenRouteImport.update({
+  id: '/one-story-together/s/$token',
+  path: '/one-story-together/s/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
   '/one-story-together': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/one-story-together/s/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/far-away-moments'
     | '/journal'
     | '/one-story-together'
+    | '/one-story-together/s/$token'
   id:
     | '__root__'
     | '/'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/one-story-together/s/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
   OneStoryTogetherIndexRoute: typeof OneStoryTogetherIndexRoute
+  OneStoryTogetherSTokenRoute: typeof OneStoryTogetherSTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OneStoryTogetherSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/one-story-together/s/$token': {
+      id: '/one-story-together/s/$token'
+      path: '/one-story-together/s/$token'
+      fullPath: '/one-story-together/s/$token'
+      preLoaderRoute: typeof OneStoryTogetherSTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -268,6 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
   OneStoryTogetherIndexRoute: OneStoryTogetherIndexRoute,
+  OneStoryTogetherSTokenRoute: OneStoryTogetherSTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

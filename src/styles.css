@@ -66,6 +66,7 @@
   --color-story-mist: var(--story-mist);
   --color-story-coral: var(--story-coral);
   --color-story-coral-soft: var(--story-coral-soft);
+  --color-story-coral-deep: var(--story-coral-deep);
   --color-story-blue: var(--story-blue);
   --color-story-blue-soft: var(--story-blue-soft);
   --color-story-lime: var(--story-lime);
@@ -111,6 +112,7 @@
   --story-paper: oklch(0.985 0.014 89);
   --story-mist: oklch(0.95 0.018 92);
   --story-coral: oklch(0.72 0.17 33);
+  --story-coral-deep: oklch(0.52 0.17 33);
   --story-coral-soft: oklch(0.91 0.07 35);
   --story-blue: oklch(0.5 0.19 266);
   --story-blue-soft: oklch(0.87 0.07 262);
