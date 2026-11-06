@@ -81,7 +81,7 @@ function StoryLink() {
               <h1 className="font-display text-4xl leading-tight">Lovely. Who joined?</h1>
               <div className="mt-5 flex flex-wrap gap-2">
                 {(Object.keys(WHO) as Who[]).map((w) => (
-                  <button key={w} type="button" onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border border-border px-5 py-2.5 font-semibold transition ${who.includes(w) ? "border-story-coral bg-primary text-primary-foreground" : "bg-background"}`}>
+                  <button key={w} type="button" onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border border-border px-5 py-2.5 font-semibold transition ${who.includes(w) ? "border-primary bg-primary text-primary-foreground" : "bg-background"}`}>
                     {WHO[w]}
                   </button>
                 ))}
@@ -91,7 +91,7 @@ function StoryLink() {
           {answer === "just_me" && <h1 className="font-display text-4xl leading-tight">Thank you for telling it.</h1>}
           {answer === "not_yet" && <h1 className="font-display text-4xl leading-tight">That's fine. Tonight works too.</h1>}
 
-          <div className="mt-12 border-t-2 border-border pt-8">
+          <div className="mt-12 border-t border-border pt-8">
             <p className="font-display text-2xl">Who else has a story like this?</p>
             <a
               href={nomineeLink()}
