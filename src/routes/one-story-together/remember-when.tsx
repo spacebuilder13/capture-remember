@@ -82,10 +82,11 @@ function RememberWhen() {
   if (stage === "open")
     return (
       <main className="min-h-screen bg-background text-foreground">
-        <MemHeader overPhoto />
+        <div className="hidden [@media(min-aspect-ratio:3/4)]:block [@media(min-aspect-ratio:3/4)]:absolute [@media(min-aspect-ratio:3/4)]:inset-x-0 [@media(min-aspect-ratio:3/4)]:top-0 [@media(min-aspect-ratio:3/4)]:z-20"><MemHeader /></div>
         <h1 className="sr-only [@media(min-aspect-ratio:3/4)]:hidden">Who's that baby?</h1>
         <section className="flex flex-col items-center bg-secondary [@media(min-aspect-ratio:3/4)]:hidden">
           <div className="relative w-full max-w-[calc(82svh*9/16)]">
+            <MemHeader overPhoto />
             <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="block h-auto w-full" />
             <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
           </div>
