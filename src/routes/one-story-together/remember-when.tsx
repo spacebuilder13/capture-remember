@@ -95,7 +95,7 @@ function RememberWhen() {
             <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
             <div className="mt-8">{startButton}</div>
           </div>
-          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square w-[55vw] max-w-[100svh] self-center object-cover" />
+          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square mr-[4vw] w-[50vw] max-w-[88svh] self-center rounded-sm shadow-lg object-cover" />
         </section>
         <section className="bg-secondary py-20 sm:py-28 [@media(min-aspect-ratio:3/4)]:hidden">
           <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
