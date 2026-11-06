@@ -3,6 +3,8 @@ import { Check, Copy, Download, Film } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import rwSquare from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
+import rwStory from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import socialsPackage from "@/assets/one-story-together/socials-package.zip.asset.json";
 import squareCover from "@/assets/one-story-together/distance-square-cover.png.asset.json";
 import squareVideo from "@/assets/one-story-together/distance-square-video.mp4.asset.json";
@@ -29,6 +31,48 @@ const COPY: Record<"instagram" | "linkedin", string> = {
   instagram: `Your child is three.\n\nAt bedtime, you remember how Daadi told you Panchatantra stories until you fell asleep.\n\nNow, an ocean separates them. Childhood will not wait for the next visit.\n\nWith MemReel, Daadi can tell those stories in her own voice. Your child can listen, choose, and become part of them.\n\nOne Story, Together. Bring Daadi into story time.`,
   linkedin: `Your child is three. At bedtime, you remember the Panchatantra stories Daadi told you until you fell asleep.\n\nNow, Daadi and your child live an ocean apart. Calls help. Visits matter. But childhood keeps moving between them.\n\nMemReel brings Daadi into story time now. She tells a story in her own voice. Your child listens, makes a choice, and becomes part of it.\n\nOne Story, Together. Bring far-away grandparents into story time.`,
 };
+
+const RW_CAPTION = `A two-year-old finds a photo of herself at three weeks old and wants to know everything. Who was holding her, why she looked like that and what papa did after that.\n\nThen Mum and Papa start telling it differently, and nobody goes to bed on time. What's the first story your little one would ask about? Tell it to them tonight, and tell us who joined in.`;
+
+function RememberWhenSection() {
+  const [copied, setCopied] = useState(false);
+  return (
+    <section className="mx-auto max-w-7xl border-t border-border px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <p className="text-xs font-semibold uppercase text-primary">Remember When</p>
+      <h2 className="mt-3 font-display text-4xl sm:text-5xl">Who's that baby?</h2>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1fr_minmax(18rem,1fr)]">
+        {[
+          { img: rwSquare, label: "Feed (square)", src: "feed" as const },
+          { img: rwStory, label: "Story (tall)", src: "story" as const },
+        ].map(({ img, label, src }) => (
+          <div key={src}>
+            <Link to="/one-story-together/remember-when" search={{ src }}>
+              <img src={img.url} alt={`${label} image: a family looks at a baby photo on a phone.`} className="h-auto w-full border border-border" />
+            </Link>
+            <div className="mt-3 flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">{label}</span>
+              <a href={img.url} download className="inline-flex items-center gap-1 underline"><Download className="size-4" /> Download</a>
+            </div>
+          </div>
+        ))}
+        <div>
+          <div className="border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{RW_CAPTION}</div>
+          <Button
+            variant="outline"
+            className="mt-4 rounded-sm shadow-none"
+            onClick={async () => {
+              await navigator.clipboard.writeText(RW_CAPTION);
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1500);
+            }}
+          >
+            {copied ? <Check /> : <Copy />} {copied ? "Copied" : "Copy caption"}
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function Socials() {
   const [active, setActive] = useState<Format>("vertical");
@@ -119,6 +163,7 @@ function Socials() {
           </aside>
         </div>
       </section>
+      <RememberWhenSection />
     </main>
   );
 }

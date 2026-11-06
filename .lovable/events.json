@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.remember_spark_picked": {
+      "event_schema_version": 1,
+      "description": "Parent picked a story spark card.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "spark": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.remember_start_clicked": {
+      "event_schema_version": 1,
+      "description": "Visitor tapped \"Pick a story to tell\" on Remember When.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "src": {
+            "type": "string"
+          },
+          "nominee": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
