@@ -100,7 +100,7 @@ function RememberWhen() {
     return (
       <RememberShell>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
-        <p className="mt-3 text-story-ink/75">Tap one.</p>
+        <p className="mt-3 text-muted-foreground">Tap one.</p>
         <div className="mt-8 grid gap-3">
           {SPARK_KEYS.map((k, i) => (
             <SparkCard
@@ -123,11 +123,11 @@ function RememberWhen() {
   if (stage === "tell" && spark)
     return (
       <RememberShell>
-        <p className="text-xs font-semibold uppercase text-story-coral-deep">{SPARKS[spark].title}</p>
+        <p className="text-xs font-semibold uppercase text-primary">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
-        <p className="mt-4 border-l-2 border-story-coral-deep pl-4 italic text-story-ink/80">“{SPARKS[spark].starter}”</p>
+        <p className="mt-4 border-l-2 border-primary pl-4 italic text-muted-foreground">“{SPARKS[spark].starter}”</p>
 
-        <div className="mt-6 min-h-32 rounded-sm border border-story-ink/15 bg-card p-4">
+        <div className="mt-6 min-h-32 rounded-sm border border-border bg-background p-4">
           {typedOnly || !speech.listening ? (
             <textarea
               value={story}
@@ -135,21 +135,21 @@ function RememberWhen() {
               placeholder={typedOnly ? SPARKS[spark].starter : "Your words appear here as you talk."}
               aria-label="Your story"
               rows={5}
-              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-story-ink/50"
+              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-muted-foreground"
             />
           ) : (
             <p className="text-[15px] leading-relaxed" aria-live="polite">
-              {story} <span className="text-story-ink/55">{speech.interim}</span>
-              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-story-coral-deep align-middle" />
+              {story} <span className="text-muted-foreground">{speech.interim}</span>
+              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-primary-deep align-middle" />
             </p>
           )}
-          <p className="mt-2 text-right text-xs text-story-ink/60">{story.length}/400</p>
+          <p className="mt-2 text-right text-xs text-muted-foreground">{story.length}/400</p>
         </div>
 
         {!typedOnly && (
           <div className="mt-8 flex flex-col items-center">
           <div className="relative">
-            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-story-coral" />}
+            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-primary" />}
           <button
             type="button"
             aria-label={speech.listening ? "Listening, let go to stop" : "Hold to talk"}
@@ -161,7 +161,7 @@ function RememberWhen() {
             onPointerUp={speech.stop}
             onPointerLeave={() => speech.listening && speech.stop()}
             onContextMenu={(e) => e.preventDefault()}
-            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-coral text-story-ink"}`}
+            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-primary/80 text-primary-foreground" : "bg-primary text-primary-foreground"}`}
           >
             <Mic className="size-10" />
           </button>
@@ -169,8 +169,8 @@ function RememberWhen() {
           <p className="mt-3 text-base font-semibold">{speech.listening ? "Listening… let go to stop" : "Hold to talk"}</p>
           </div>
         )}
-        {speech.denied && <p className="mt-3 text-sm text-story-coral-deep">The microphone is off. You can type your story instead.</p>}
-        {speech.supported === false && <p className="mt-3 text-sm text-story-ink/70">This browser cannot listen. Please type your story.</p>}
+        {speech.denied && <p className="mt-3 text-sm text-primary">The microphone is off. You can type your story instead.</p>}
+        {speech.supported === false && <p className="mt-3 text-sm text-muted-foreground">This browser cannot listen. Please type your story.</p>}
         {!typedOnly && (
           <button
             type="button"
@@ -185,7 +185,7 @@ function RememberWhen() {
           </button>
         )}
 
-        {error && <p className="mt-4 text-sm text-story-coral-deep">{error}</p>}
+        {error && <p className="mt-4 text-sm text-primary">{error}</p>}
         <div className="mt-8">
           <BigButton onClick={onSave} disabled={busy || story.trim().length < 3 || speech.listening}>
             {busy ? "Saving…" : "Save my story"}
@@ -202,7 +202,7 @@ function RememberWhen() {
       {sent ? (
         <Rise className="mt-8">
           <p className="flex items-center gap-2 text-lg font-semibold">
-            <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight.
+            <Check className="size-5 text-primary" /> Sent. Tell it tonight.
           </p>
           <a
             href={typeof window === "undefined" ? "#" : nomineeLink()}
@@ -225,15 +225,15 @@ function RememberWhen() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Their email"
-            className="mt-4 h-14 w-full rounded-sm border border-story-ink/30 bg-card px-4 text-lg outline-none focus:border-story-coral-deep"
+            className="mt-4 h-14 w-full rounded-sm border border-border bg-background px-4 text-lg outline-none focus:border-primary"
           />
-          {error && <p className="mt-2 text-sm text-story-coral-deep">{error}</p>}
+          {error && <p className="mt-2 text-sm text-primary">{error}</p>}
           <div className="mt-4">
             <BigButton onClick={onEmail} disabled={busy || !email.includes("@")}>
               <Send className="mr-2 size-5" /> {busy ? "Sending…" : "Send the memory"}
             </BigButton>
           </div>
-          <p className="mt-3 text-xs text-story-ink/70">We use this email only to send this memory.</p>
+          <p className="mt-3 text-xs text-muted-foreground">We use this email only to send this memory.</p>
         </Rise>
       )}
     </RememberShell>
