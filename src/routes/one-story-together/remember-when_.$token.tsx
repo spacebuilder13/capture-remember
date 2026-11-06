@@ -6,7 +6,7 @@ import { BigButton, RememberShell, StoryCard, nomineeLink } from "@/components/r
 import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
 import { answerRememberFollowup, deleteRememberStory, getRememberStory } from "@/lib/remember.functions";
 
-export const Route = createFileRoute("/one-story-together/remember-when/$token")({
+export const Route = createFileRoute("/one-story-together/remember-when_/$token")({
   head: () => ({
     meta: [
       { title: "Your story | Remember When" },

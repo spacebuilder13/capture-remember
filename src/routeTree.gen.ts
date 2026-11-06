@@ -19,7 +19,9 @@ import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalAppRouteImport } from './routes/journal/app'
 import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
 import { Route as OneStoryTogetherIndexRouteImport } from './routes/one-story-together/index'
+import { Route as OneStoryTogetherRememberWhenRouteImport } from './routes/one-story-together/remember-when'
 import { Route as OneStoryTogetherSocialsRouteImport } from './routes/one-story-together/socials'
+import { Route as OneStoryTogetherRememberWhenTokenRouteImport } from './routes/one-story-together/remember-when.$token'
 import { Route as OneStoryTogetherSTokenRouteImport } from './routes/one-story-together/s.$token'
 
 const IndexRoute = IndexRouteImport.update({
@@ -73,11 +75,23 @@ const OneStoryTogetherIndexRoute = OneStoryTogetherIndexRouteImport.update({
   path: '/one-story-together/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OneStoryTogetherRememberWhenRoute =
+  OneStoryTogetherRememberWhenRouteImport.update({
+    id: '/one-story-together/remember-when',
+    path: '/one-story-together/remember-when',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OneStoryTogetherSocialsRoute = OneStoryTogetherSocialsRouteImport.update({
   id: '/one-story-together/socials',
   path: '/one-story-together/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OneStoryTogetherRememberWhenTokenRoute =
+  OneStoryTogetherRememberWhenTokenRouteImport.update({
+    id: '/$token',
+    path: '/$token',
+    getParentRoute: () => OneStoryTogetherRememberWhenRoute,
+  } as any)
 const OneStoryTogetherSTokenRoute = OneStoryTogetherSTokenRouteImport.update({
   id: '/one-story-together/s/$token',
   path: '/one-story-together/s/$token',
@@ -91,11 +105,13 @@ export interface FileRoutesByFullPath {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRouteWithChildren
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesByTo {
@@ -105,11 +121,13 @@ export interface FileRoutesByTo {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRouteWithChildren
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
   '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
   '/one-story-together': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesById {
@@ -120,11 +138,13 @@ export interface FileRoutesById {
   '/far-away-moments/socials': typeof FarAwayMomentsSocialsRoute
   '/journal/app': typeof JournalAppRoute
   '/journal/socials': typeof JournalSocialsRoute
+  '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRouteWithChildren
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRouteTypes {
@@ -136,11 +156,13 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/remember-when'
     | '/one-story-together/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/one-story-together/remember-when/$token'
     | '/one-story-together/s/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,11 +172,13 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/remember-when'
     | '/one-story-together/socials'
     | '/captured-remembered'
     | '/far-away-moments'
     | '/journal'
     | '/one-story-together'
+    | '/one-story-together/remember-when/$token'
     | '/one-story-together/s/$token'
   id:
     | '__root__'
@@ -164,11 +188,13 @@ export interface FileRouteTypes {
     | '/far-away-moments/socials'
     | '/journal/app'
     | '/journal/socials'
+    | '/one-story-together/remember-when'
     | '/one-story-together/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/one-story-together/remember-when/$token'
     | '/one-story-together/s/$token'
   fileRoutesById: FileRoutesById
 }
@@ -179,6 +205,7 @@ export interface RootRouteChildren {
   FarAwayMomentsSocialsRoute: typeof FarAwayMomentsSocialsRoute
   JournalAppRoute: typeof JournalAppRoute
   JournalSocialsRoute: typeof JournalSocialsRoute
+  OneStoryTogetherRememberWhenRoute: typeof OneStoryTogetherRememberWhenRouteWithChildren
   OneStoryTogetherSocialsRoute: typeof OneStoryTogetherSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
   FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
@@ -259,12 +286,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OneStoryTogetherIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/one-story-together/remember-when': {
+      id: '/one-story-together/remember-when'
+      path: '/one-story-together/remember-when'
+      fullPath: '/one-story-together/remember-when'
+      preLoaderRoute: typeof OneStoryTogetherRememberWhenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/one-story-together/socials': {
       id: '/one-story-together/socials'
       path: '/one-story-together/socials'
       fullPath: '/one-story-together/socials'
       preLoaderRoute: typeof OneStoryTogetherSocialsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/one-story-together/remember-when/$token': {
+      id: '/one-story-together/remember-when/$token'
+      path: '/$token'
+      fullPath: '/one-story-together/remember-when/$token'
+      preLoaderRoute: typeof OneStoryTogetherRememberWhenTokenRouteImport
+      parentRoute: typeof OneStoryTogetherRememberWhenRoute
     }
     '/one-story-together/s/$token': {
       id: '/one-story-together/s/$token'
@@ -276,6 +317,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OneStoryTogetherRememberWhenRouteChildren {
+  OneStoryTogetherRememberWhenTokenRoute: typeof OneStoryTogetherRememberWhenTokenRoute
+}
+
+const OneStoryTogetherRememberWhenRouteChildren: OneStoryTogetherRememberWhenRouteChildren =
+  {
+    OneStoryTogetherRememberWhenTokenRoute:
+      OneStoryTogetherRememberWhenTokenRoute,
+  }
+
+const OneStoryTogetherRememberWhenRouteWithChildren =
+  OneStoryTogetherRememberWhenRoute._addFileChildren(
+    OneStoryTogetherRememberWhenRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SocialsRoute: SocialsRoute,
@@ -283,6 +339,8 @@ const rootRouteChildren: RootRouteChildren = {
   FarAwayMomentsSocialsRoute: FarAwayMomentsSocialsRoute,
   JournalAppRoute: JournalAppRoute,
   JournalSocialsRoute: JournalSocialsRoute,
+  OneStoryTogetherRememberWhenRoute:
+    OneStoryTogetherRememberWhenRouteWithChildren,
   OneStoryTogetherSocialsRoute: OneStoryTogetherSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
   FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
