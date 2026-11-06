@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Copy, Keyboard, Mic, Send } from "lucide-react";
+import { Check, Keyboard, Mic, Send } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
-import { BigButton, RememberShell, StoryCard, nomineeLink } from "@/components/remember-ui";
+import { BigButton, Eyebrow, RememberShell, Rise, SparkCard, StoryCard, nomineeLink } from "@/components/remember-ui";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
@@ -42,7 +42,6 @@ function RememberWhen() {
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
-  const [copied, setCopied] = useState(false);
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
   const saveEmail = useServerFn(saveRememberEmail);
@@ -66,7 +65,6 @@ function RememberWhen() {
     go("tonight");
   };
 
-  const link = token ? `${typeof window === "undefined" ? "" : window.location.origin}/one-story-together/remember-when/${token}` : "";
 
   const onEmail = async () => {
     if (!token) return;
@@ -81,10 +79,11 @@ function RememberWhen() {
 
   if (stage === "open")
     return (
-      <RememberShell>
-        <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone." className="h-auto w-full rounded-sm" />
-        <p className="mt-8 text-lg">What's the first story your little one would ask about?</p>
-        <div className="mt-6">
+      <RememberShell tone="ink">
+        <Rise><img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone." className="h-auto w-full rounded-sm" /></Rise>
+        <Rise delay={250} className="mt-8"><Eyebrow tone="ink">Remember When</Eyebrow></Rise>
+        <Rise delay={400}><h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</h1></Rise>
+        <Rise delay={600} className="mt-8">
           <BigButton
             onClick={() => {
               window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
@@ -93,7 +92,7 @@ function RememberWhen() {
           >
             Pick a story to tell
           </BigButton>
-        </div>
+        </Rise>
       </RememberShell>
     );
 
@@ -103,10 +102,10 @@ function RememberWhen() {
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-story-ink/75">Tap one.</p>
         <div className="mt-8 grid gap-3">
-          {SPARK_KEYS.map((k) => (
-            <BigButton
+          {SPARK_KEYS.map((k, i) => (
+            <SparkCard
               key={k}
-              variant="outline"
+              index={i}
               onClick={() => {
                 window.__lovableEvents?.track?.("project.remember_spark_picked", { spark: k });
                 setSpark(k);
@@ -115,7 +114,7 @@ function RememberWhen() {
               }}
             >
               {SPARKS[k].title}
-            </BigButton>
+            </SparkCard>
           ))}
         </div>
       </RememberShell>
@@ -126,20 +125,20 @@ function RememberWhen() {
       <RememberShell>
         <p className="text-xs font-semibold uppercase text-story-coral-deep">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
-        <p className="mt-3 text-story-ink/75">Start with: “{SPARKS[spark].starter}”</p>
+        <p className="mt-4 border-l-2 border-story-coral-deep pl-4 italic text-story-ink/80">“{SPARKS[spark].starter}”</p>
 
-        <div className="mt-6 min-h-40 border-2 border-story-ink bg-card p-4">
+        <div className="mt-6 min-h-32 rounded-sm border border-story-ink/15 bg-card p-4">
           {typedOnly || !speech.listening ? (
             <textarea
               value={story}
               onChange={(e) => speech.setText(e.target.value.slice(0, 400))}
               placeholder={typedOnly ? SPARKS[spark].starter : "Your words appear here as you talk."}
               aria-label="Your story"
-              rows={6}
-              className="w-full resize-none bg-transparent text-lg outline-none placeholder:text-story-ink/50"
+              rows={5}
+              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-story-ink/50"
             />
           ) : (
-            <p className="text-lg" aria-live="polite">
+            <p className="text-[15px] leading-relaxed" aria-live="polite">
               {story} <span className="text-story-ink/55">{speech.interim}</span>
               <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-story-coral-deep align-middle" />
             </p>
@@ -148,8 +147,12 @@ function RememberWhen() {
         </div>
 
         {!typedOnly && (
+          <div className="mt-8 flex flex-col items-center">
+          <div className="relative">
+            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-story-coral" />}
           <button
             type="button"
+            aria-label={speech.listening ? "Listening, let go to stop" : "Hold to talk"}
             onPointerDown={(e) => {
               e.preventDefault();
               window.__lovableEvents?.track?.("project.remember_talk_started", {});
@@ -158,10 +161,13 @@ function RememberWhen() {
             onPointerUp={speech.stop}
             onPointerLeave={() => speech.listening && speech.stop()}
             onContextMenu={(e) => e.preventDefault()}
-            className={`mt-4 flex w-full touch-none select-none items-center justify-center gap-3 rounded-sm py-5 text-lg font-semibold ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-blue text-story-paper"}`}
+            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-coral text-story-ink"}`}
           >
-            <Mic className="size-5" /> {speech.listening ? "Listening… let go to stop" : "Hold to talk"}
+            <Mic className="size-10" />
           </button>
+          </div>
+          <p className="mt-3 text-base font-semibold">{speech.listening ? "Listening… let go to stop" : "Hold to talk"}</p>
+          </div>
         )}
         {speech.denied && <p className="mt-3 text-sm text-story-coral-deep">The microphone is off. You can type your story instead.</p>}
         {speech.supported === false && <p className="mt-3 text-sm text-story-ink/70">This browser cannot listen. Please type your story.</p>}
@@ -173,7 +179,7 @@ function RememberWhen() {
               speech.stop();
               setMode("typed");
             }}
-            className="mt-3 inline-flex items-center gap-2 text-sm underline"
+            className="mx-auto mt-3 flex items-center gap-2 text-sm underline"
           >
             <Keyboard className="size-4" /> Type instead
           </button>
@@ -194,69 +200,42 @@ function RememberWhen() {
       <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} />}</div>
 
       {sent ? (
-        <p className="mt-8 flex items-center gap-2 text-lg font-semibold">
-          <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight and see who joins in.
-        </p>
+        <Rise className="mt-8">
+          <p className="flex items-center gap-2 text-lg font-semibold">
+            <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight.
+          </p>
+          <a
+            href={typeof window === "undefined" ? "#" : nomineeLink()}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "tonight" })}
+            className="mt-4 inline-block text-sm underline"
+          >
+            Ask someone to share theirs
+          </a>
+        </Rise>
       ) : (
-        <div className="mt-8">
-          <label htmlFor="rw-email" className="text-lg font-semibold">Where should we send it, so you have it at bedtime?</label>
-          <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-            <input
-              id="rw-email"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              className="min-w-0 flex-1 rounded-sm border-2 border-story-ink bg-card px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-story-blue"
-            />
-            <button type="button" onClick={onEmail} disabled={busy || !email.includes("@")} className="inline-flex items-center justify-center gap-2 rounded-sm bg-story-ink px-5 py-3 font-semibold text-story-paper disabled:opacity-50">
-              <Send className="size-4" /> Send it to me
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-story-ink/70">We will only use this to send your story. No marketing.</p>
+        <Rise delay={300} className="mt-10">
+          <label htmlFor="rw-email" className="font-display text-3xl leading-tight">Who should get this memory?</label>
+          <input
+            id="rw-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Their email"
+            className="mt-4 h-14 w-full rounded-sm border border-story-ink/30 bg-card px-4 text-lg outline-none focus:border-story-coral-deep"
+          />
           {error && <p className="mt-2 text-sm text-story-coral-deep">{error}</p>}
-        </div>
+          <div className="mt-4">
+            <BigButton onClick={onEmail} disabled={busy || !email.includes("@")}>
+              <Send className="mr-2 size-5" /> {busy ? "Sending…" : "Send the memory"}
+            </BigButton>
+          </div>
+          <p className="mt-3 text-xs text-story-ink/70">We use this email only to send this memory.</p>
+        </Rise>
       )}
-
-      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 underline"
-          onClick={async () => {
-            await navigator.clipboard.writeText(link);
-            window.__lovableEvents?.track?.("project.remember_link_copied", {});
-            setCopied(true);
-          }}
-        >
-          {copied ? <Check className="size-4" /> : <Copy className="size-4" />} {copied ? "Link copied" : "Copy my link"}
-        </button>
-        <a
-          className="underline"
-          href={`https://wa.me/?text=${encodeURIComponent(`My story for tonight: ${link}`)}`}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => window.__lovableEvents?.track?.("project.remember_whatsapp_self", {})}
-        >
-          Send it to myself on WhatsApp
-        </a>
-      </div>
-
-      <div className="mt-12 border-t-2 border-story-ink/15 pt-8">
-        <p className="font-display text-2xl">Who else has a story like this?</p>
-        <a
-          href={typeof window === "undefined" ? "#" : nomineeLink()}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "tonight" })}
-          className="mt-4 block rounded-sm border-2 border-story-ink bg-card px-5 py-4 text-lg font-semibold hover:bg-story-mist"
-        >
-          Ask someone to share theirs
-        </a>
-      </div>
-
-      <p className="mt-12 text-center text-sm text-story-ink/70">Remember When, by MemReel.</p>
     </RememberShell>
   );
 }
