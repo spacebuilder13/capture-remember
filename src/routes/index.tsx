@@ -50,23 +50,13 @@ const EXPERIMENTS = [
   },
   {
     number: "04",
-    name: "One Story, Together",
-    hypothesis:
-      "Far-away grandparents can become part of a child’s everyday life when their voice turns story time into a shared moment.",
-    signal: "A grandparent tells it, and a child listens, chooses, and takes part",
-    status: "Live",
-    experience: "/one-story-together",
-    socials: "/one-story-together/socials",
-  },
-  {
-    number: "05",
     name: "Remember When",
     hypothesis:
       "One question from a toddler about an old photo can get parents telling a family story tonight, and bring others in.",
     signal: "A parent tells the story, and someone else joins in",
     status: "Live",
-    experience: "/one-story-together/remember-when",
-    socials: "/one-story-together/socials",
+    experience: "/remember-when",
+    socials: "/remember-when/socials",
   },
 ] as const;
 
