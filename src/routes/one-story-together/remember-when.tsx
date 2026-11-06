@@ -82,21 +82,21 @@ function RememberWhen() {
     return (
       <main className="min-h-screen bg-background text-foreground">
         <MemHeader overPhoto />
-        <h1 className="sr-only landscape:hidden">Who's that baby?</h1>
-        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground landscape:hidden">
+        <h1 className="sr-only [@media(min-aspect-ratio:3/4)]:hidden">Who's that baby?</h1>
+        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground [@media(min-aspect-ratio:3/4)]:hidden">
           <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
           <div className="relative z-10 w-full px-5 pb-10">{startButton}</div>
         </section>
-        <section className="hidden min-h-svh bg-secondary landscape:grid landscape:grid-cols-[1fr_auto]">
+        <section className="hidden min-h-svh bg-secondary [@media(min-aspect-ratio:3/4)]:grid [@media(min-aspect-ratio:3/4)]:grid-cols-[1fr_auto]">
           <div className="flex flex-col justify-center px-8 pt-20 pb-12 lg:px-16">
             <h1 className="max-w-lg font-display text-4xl leading-tight lg:text-6xl">What's the first story your little one would ask about?</h1>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
             <div className="mt-8">{startButton}</div>
           </div>
-          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="h-svh w-auto max-w-[60vw] object-cover" />
+          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="h-svh w-auto max-w-[55vw] object-cover" />
         </section>
-        <section className="bg-secondary py-20 sm:py-28 landscape:hidden">
+        <section className="bg-secondary py-20 sm:py-28 [@media(min-aspect-ratio:3/4)]:hidden">
           <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
             <p className="font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</p>
             <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>

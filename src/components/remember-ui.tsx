@@ -3,11 +3,11 @@ import { Lock } from "lucide-react";
 
 export function MemHeader({ overPhoto = false }: { overPhoto?: boolean }) {
   return (
-    <header className={`${overPhoto ? "absolute inset-x-0 top-0 z-20 text-primary-foreground landscape:text-foreground" : "text-foreground"} mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12`}>
+    <header className={`${overPhoto ? "absolute inset-x-0 top-0 z-20 text-primary-foreground [@media(min-aspect-ratio:3/4)]:text-foreground" : "text-foreground"} mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12`}>
       <a href="https://memreel.io/" className="font-display text-2xl drop-shadow-sm" aria-label="MemReel home">
         Mem<span className="font-sans text-base font-semibold">Reel</span>
       </a>
-      <span className="flex items-center gap-2 text-xs font-medium drop-shadow-sm">
+      <span className={`flex items-center gap-2 text-xs font-medium drop-shadow-sm ${overPhoto ? "[@media(min-aspect-ratio:3/4)]:text-primary-foreground" : ""}`}>
         <Lock className="size-3.5" /> Private to you
       </span>
     </header>
