@@ -7,6 +7,7 @@ import { z } from "zod";
 import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, familyLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
+import { ANIMALS } from "@/components/remember-animals";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
 import { saveRememberStory } from "@/lib/remember.functions";
@@ -110,11 +111,12 @@ function RememberWhen() {
       <RememberShell step={1}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-muted-foreground">Tap one.</p>
-        <div className="mt-8 grid gap-3">
+        <div className="mt-8 grid grid-cols-2 gap-3">
           {SPARK_KEYS.map((k, i) => (
             <SparkCard
               key={k}
               index={i}
+              art={ANIMALS[k]()}
               onClick={() => {
                 window.__lovableEvents?.track?.("project.remember_spark_picked", { spark: k });
                 setSpark(k);
@@ -134,26 +136,30 @@ function RememberWhen() {
       <RememberShell step={2}>
         <p className="text-xs font-semibold uppercase text-primary">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
-        <p className="mt-4 border-l-2 border-primary pl-4 italic text-muted-foreground">“{SPARKS[spark].starter}”</p>
-
-        <div className="mt-6 min-h-32 rounded-sm border border-border bg-background p-4">
+        <blockquote className="relative mt-8 px-8 sm:px-10">
+          <span aria-hidden className="absolute -top-4 left-0 font-display text-6xl leading-none text-primary">“</span>
           {typedOnly || !speech.listening ? (
             <textarea
               value={story}
-              onChange={(e) => speech.setText(e.target.value.slice(0, 400))}
-              placeholder={typedOnly ? SPARKS[spark].starter : "Your words appear here as you talk."}
+              onChange={(e) => {
+                speech.setText(e.target.value.slice(0, 400));
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              placeholder={SPARKS[spark].starter}
               aria-label="Your story"
-              rows={5}
-              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-muted-foreground"
+              rows={2}
+              className="block w-full resize-none overflow-hidden border-b border-transparent bg-transparent font-display text-xl leading-snug outline-none placeholder:text-muted-foreground/70 focus:border-border sm:text-2xl"
             />
           ) : (
-            <p className="text-[15px] leading-relaxed" aria-live="polite">
-              {story} <span className="text-muted-foreground">{speech.interim}</span>
-              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-primary-deep align-middle" />
+            <p className="min-h-[3.5rem] font-display text-xl leading-snug sm:text-2xl" aria-live="polite">
+              {story || <span className="text-muted-foreground/70">{story ? "" : SPARKS[spark].starter}</span>} <span className="text-muted-foreground">{speech.interim}</span>
+              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-primary align-middle" />
             </p>
           )}
-          <p className="mt-2 text-right text-xs text-muted-foreground">{story.length}/400</p>
-        </div>
+          <span aria-hidden className="absolute -bottom-8 right-0 font-display text-6xl leading-none text-primary">”</span>
+          <p className="mt-1 text-right text-xs text-muted-foreground">{story.length}/400</p>
+        </blockquote>
 
         {!typedOnly && (
           <div className="mt-8 flex flex-col items-center">
