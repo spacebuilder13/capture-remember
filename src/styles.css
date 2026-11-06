@@ -244,4 +244,6 @@
 .rw-rise { opacity: 0; animation: rw-rise .5s ease-out forwards; }
 .rw-settle { animation: rw-settle .6s cubic-bezier(.2,.8,.2,1) both; }
 .rw-ring { animation: rw-ring 1.4s ease-out infinite; }
-@media (prefers-reduced-motion: reduce) { .rw-rise, .rw-settle { animation: none; opacity: 1; } .rw-ring { animation: none; } }
+@keyframes rw-wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-7deg) scale(1.05); } 60% { transform: rotate(6deg) scale(1.05); } }
+.rw-wiggle { animation: rw-wiggle .45s ease-in-out; }
+@media (prefers-reduced-motion: reduce) { .rw-rise, .rw-settle { animation: none; opacity: 1; } .rw-ring, .rw-wiggle { animation: none; } }

@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { Lock } from "lucide-react";
 
 export function MemHeader({ overPhoto = false }: { overPhoto?: boolean }) {
@@ -68,15 +68,21 @@ export function BigButton({ children, onClick, disabled, variant = "solid" }: { 
   );
 }
 
-export function SparkCard({ children, index, onClick }: { children: ReactNode; index: number; onClick: () => void }) {
+export function SparkCard({ children, index, onClick, art }: { children: ReactNode; index: number; onClick: () => void; art: ReactNode }) {
+  const [picked, setPicked] = useState(false);
   return (
-    <Rise delay={70 * index}>
+    <Rise delay={70 * index} className={index === 4 ? "col-span-2 mx-auto w-[calc(50%-0.375rem)]" : ""}>
       <button
         type="button"
-        onClick={onClick}
-        className="flex min-h-16 w-full items-center rounded-sm border border-border bg-background px-5 py-4 text-left text-base font-medium transition hover:border-primary hover:bg-secondary active:scale-[0.98]"
+        onClick={() => {
+          setPicked(true);
+          const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          window.setTimeout(onClick, reduce ? 0 : 480);
+        }}
+        className={`flex h-full w-full flex-col items-center rounded-sm border-2 bg-background p-3 text-center text-sm font-semibold leading-snug transition hover:border-primary hover:bg-secondary active:scale-[0.98] sm:p-4 sm:text-base ${picked ? "border-primary bg-secondary" : "border-border"}`}
       >
-        {children}
+        <span className={`block aspect-square w-full max-w-36 ${picked ? "rw-wiggle" : ""}`}>{art}</span>
+        <span className="mt-2">{children}</span>
       </button>
     </Rise>
   );

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, familyLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
+import { ANIMALS } from "@/components/remember-animals";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
 import { saveRememberStory } from "@/lib/remember.functions";
@@ -110,11 +111,12 @@ function RememberWhen() {
       <RememberShell step={1}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-muted-foreground">Tap one.</p>
-        <div className="mt-8 grid gap-3">
+        <div className="mt-8 grid grid-cols-2 gap-3">
           {SPARK_KEYS.map((k, i) => (
             <SparkCard
               key={k}
               index={i}
+              art={ANIMALS[k]()}
               onClick={() => {
                 window.__lovableEvents?.track?.("project.remember_spark_picked", { spark: k });
                 setSpark(k);
