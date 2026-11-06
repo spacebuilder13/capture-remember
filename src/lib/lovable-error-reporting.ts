@@ -15,7 +15,9 @@ type LovableEvents = {
 
 declare global {
   interface Window {
-    __lovableEvents?: LovableEvents;
+    __lovableEvents?: LovableEvents & {
+      track?: (event: string, properties?: Record<string, unknown>) => string | null;
+    };
     __lovableReportRuntimeError?: (payload: {
       message: string;
       stack?: string;

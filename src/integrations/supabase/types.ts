@@ -277,6 +277,80 @@ export type Database = {
         }
         Relationships: []
       }
+      remember_followups: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          story_id: string
+          who: string[]
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          story_id: string
+          who?: string[]
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          story_id?: string
+          who?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remember_followups_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "remember_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      remember_stories: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          length_chars: number
+          link_opened_at: string | null
+          mode: string
+          nominated_by: string | null
+          source: string | null
+          spark: string
+          story: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          length_chars?: number
+          link_opened_at?: string | null
+          mode: string
+          nominated_by?: string | null
+          source?: string | null
+          spark: string
+          story: string
+          token: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          length_chars?: number
+          link_opened_at?: string | null
+          mode?: string
+          nominated_by?: string | null
+          source?: string | null
+          spark?: string
+          story?: string
+          token?: string
+        }
+        Relationships: []
+      }
       story_recordings: {
         Row: {
           created_at: string
