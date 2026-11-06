@@ -74,6 +74,58 @@ function RememberWhenSection() {
   );
 }
 
+const REDDIT_TITLE = "What’s the one story your parents told every single time the album came out?";
+const REDDIT_BODY = `My dad took all the photos in our house and he also kept every album itemized and labelled, he was really good with that.
+
+So whenever the albums came out it was a whole thing. He’d go one photo at a time telling us what was happening, who was there, what were the highlights... then my mother would join and tell me the same story completely differently. Watching the two of them argue over who was remembering it right was the best part of it all honestly.
+
+He never stopped doing it either. So he took pictures at my office baby shower years later and that went into an album also. It was a small party my office folks threw in the conference room. There’s a whiteboard behind everyone, people are wearing these silly things on their heads, my mother is standing there with a crown on her head for some reason, and me in the middle of it, very pregnant. My son is obsessed with this although it must be a very strange photo for a kid to look at, right?
+
+He’s been asking what’s going on in it every few months for about three years. It’s not super deep but every time the question is one step ahead of the last one. Started with why is everyone wearing that. Then why do I look so big (because I’m pregnant). Then where was he, and I got to say 'you weren’t born'. Last time it was why don’t we see these people anymore, because half of them moved to Austin.
+
+And then of course everyone has a different answer for him and we’re right back to the arguing.
+
+What was yours? And has it reached your kids yet or do they have their own by now?`;
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <Button
+      variant="outline"
+      className="mt-3 rounded-sm shadow-none"
+      onClick={async () => {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1500);
+      }}
+    >
+      {copied ? <Check /> : <Copy />} {copied ? "Copied" : label}
+    </Button>
+  );
+}
+
+function RedditSection() {
+  return (
+    <section className="mx-auto max-w-7xl border-t border-border px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <p className="text-xs font-semibold uppercase text-primary">Remember When · Reddit</p>
+      <h2 className="mt-3 font-display text-4xl sm:text-5xl">The album story</h2>
+      <p className="mt-3 max-w-2xl text-sm text-muted-foreground">Post on Reddit with the photo, and use this text as the post. Do not plant replies.</p>
+      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div>
+          <p className="text-xs font-semibold uppercase text-muted-foreground">Title</p>
+          <div className="mt-2 border border-border bg-card p-5 font-semibold leading-relaxed">{REDDIT_TITLE}</div>
+          <CopyButton text={REDDIT_TITLE} label="Copy title" />
+        </div>
+        <div>
+          <p className="text-xs font-semibold uppercase text-muted-foreground">Post text</p>
+          <div className="mt-2 max-h-[32rem] overflow-y-auto border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{REDDIT_BODY}</div>
+          <CopyButton text={REDDIT_BODY} label="Copy post text" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Socials() {
   const [active, setActive] = useState<Format>("vertical");
   const [copied, setCopied] = useState(false);
@@ -164,6 +216,7 @@ function Socials() {
         </div>
       </section>
       <RememberWhenSection />
+      <RedditSection />
     </main>
   );
 }
