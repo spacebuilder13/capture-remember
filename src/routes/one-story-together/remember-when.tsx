@@ -65,7 +65,6 @@ function RememberWhen() {
     go("tonight");
   };
 
-  const link = token ? `${typeof window === "undefined" ? "" : window.location.origin}/one-story-together/remember-when/${token}` : "";
 
   const onEmail = async () => {
     if (!token) return;

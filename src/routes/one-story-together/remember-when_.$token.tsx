@@ -81,7 +81,7 @@ function StoryLink() {
               <h1 className="font-display text-4xl leading-tight">Lovely. Who joined?</h1>
               <div className="mt-5 flex flex-wrap gap-2">
                 {(Object.keys(WHO) as Who[]).map((w) => (
-                  <button key={w} type="button" onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border-2 border-story-ink px-4 py-2 font-semibold ${who.includes(w) ? "bg-story-ink text-story-paper" : "bg-card"}`}>
+                  <button key={w} type="button" onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border border-story-ink/30 px-5 py-2.5 font-semibold transition ${who.includes(w) ? "border-story-coral bg-story-coral text-story-ink" : "bg-card"}`}>
                     {WHO[w]}
                   </button>
                 ))}
@@ -98,7 +98,7 @@ function StoryLink() {
               target="_blank"
               rel="noreferrer"
               onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "checkin" })}
-              className="mt-4 block rounded-sm border-2 border-story-ink bg-card px-5 py-4 text-lg font-semibold hover:bg-story-mist"
+              className="mt-4 block rounded-sm border border-story-ink/30 bg-card px-5 py-4 text-center text-lg font-semibold hover:border-story-coral-deep"
             >
               Ask someone to share theirs
             </a>
