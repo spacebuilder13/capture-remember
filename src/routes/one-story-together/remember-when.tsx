@@ -65,33 +65,40 @@ function RememberWhen() {
   };
 
 
+  const startButton = (
+    <button
+      type="button"
+      onClick={() => {
+        window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
+        go("spark");
+      }}
+      className="inline-flex h-12 items-center gap-2 rounded-sm bg-primary px-6 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
+    >
+      Pick a story to tell <ArrowRight className="size-4" />
+    </button>
+  );
+
   if (stage === "open")
     return (
       <main className="min-h-screen bg-background text-foreground">
         <MemHeader overPhoto />
-        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground">
-          <picture className="absolute inset-0">
-            <source media="(orientation: portrait)" srcSet={storyImage.url} />
-            <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="h-full w-full object-cover object-center" />
-          </picture>
+        <h1 className="sr-only landscape:hidden">Who's that baby?</h1>
+        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground landscape:hidden">
+          <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12">
-            <h1 className="sr-only">Who's that baby?</h1>
-            <button
-              type="button"
-              onClick={() => {
-                window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
-                go("spark");
-              }}
-              className="inline-flex h-12 items-center gap-2 rounded-sm bg-primary px-6 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
-            >
-              Pick a story to tell <ArrowRight className="size-4" />
-            </button>
-          </div>
+          <div className="relative z-10 w-full px-5 pb-10">{startButton}</div>
         </section>
-        <section className="bg-secondary py-20 sm:py-28">
+        <section className="hidden min-h-svh bg-secondary landscape:grid landscape:grid-cols-[1fr_auto]">
+          <div className="flex flex-col justify-center px-8 pt-20 pb-12 lg:px-16">
+            <h1 className="max-w-lg font-display text-4xl leading-tight lg:text-6xl">What's the first story your little one would ask about?</h1>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
+            <div className="mt-8">{startButton}</div>
+          </div>
+          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="h-svh w-auto max-w-[60vw] object-cover" />
+        </section>
+        <section className="bg-secondary py-20 sm:py-28 landscape:hidden">
           <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
-            <h2 className="font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</h2>
+            <p className="font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</p>
             <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
           </div>
         </section>
