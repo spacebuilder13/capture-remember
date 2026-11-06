@@ -21,8 +21,10 @@ import { Route as JournalSocialsRouteImport } from './routes/journal/socials'
 import { Route as OneStoryTogetherIndexRouteImport } from './routes/one-story-together/index'
 import { Route as OneStoryTogetherRememberWhenRouteImport } from './routes/one-story-together/remember-when'
 import { Route as OneStoryTogetherSocialsRouteImport } from './routes/one-story-together/socials'
+import { Route as RememberWhenIndexRouteImport } from './routes/remember-when/index'
+import { Route as RememberWhenTokenRouteImport } from './routes/remember-when/$token'
+import { Route as RememberWhenSocialsRouteImport } from './routes/remember-when/socials'
 import { Route as OneStoryTogetherRememberWhenTokenRouteImport } from './routes/one-story-together/remember-when_.$token'
-import { Route as OneStoryTogetherSTokenRouteImport } from './routes/one-story-together/s.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -86,17 +88,27 @@ const OneStoryTogetherSocialsRoute = OneStoryTogetherSocialsRouteImport.update({
   path: '/one-story-together/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RememberWhenIndexRoute = RememberWhenIndexRouteImport.update({
+  id: '/remember-when/',
+  path: '/remember-when/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RememberWhenTokenRoute = RememberWhenTokenRouteImport.update({
+  id: '/remember-when/$token',
+  path: '/remember-when/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RememberWhenSocialsRoute = RememberWhenSocialsRouteImport.update({
+  id: '/remember-when/socials',
+  path: '/remember-when/socials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OneStoryTogetherRememberWhenTokenRoute =
   OneStoryTogetherRememberWhenTokenRouteImport.update({
     id: '/one-story-together/remember-when_/$token',
     path: '/one-story-together/remember-when/$token',
     getParentRoute: () => rootRouteImport,
   } as any)
-const OneStoryTogetherSTokenRoute = OneStoryTogetherSTokenRouteImport.update({
-  id: '/one-story-together/s/$token',
-  path: '/one-story-together/s/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,12 +119,14 @@ export interface FileRoutesByFullPath {
   '/journal/socials': typeof JournalSocialsRoute
   '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRoute
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
+  '/remember-when/$token': typeof RememberWhenTokenRoute
+  '/remember-when/socials': typeof RememberWhenSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
-  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -123,12 +137,14 @@ export interface FileRoutesByTo {
   '/journal/socials': typeof JournalSocialsRoute
   '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRoute
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
+  '/remember-when/$token': typeof RememberWhenTokenRoute
+  '/remember-when/socials': typeof RememberWhenSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
   '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
   '/one-story-together': typeof OneStoryTogetherIndexRoute
+  '/remember-when': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
-  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,12 +156,14 @@ export interface FileRoutesById {
   '/journal/socials': typeof JournalSocialsRoute
   '/one-story-together/remember-when': typeof OneStoryTogetherRememberWhenRoute
   '/one-story-together/socials': typeof OneStoryTogetherSocialsRoute
+  '/remember-when/$token': typeof RememberWhenTokenRoute
+  '/remember-when/socials': typeof RememberWhenSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
+  '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when_/$token': typeof OneStoryTogetherRememberWhenTokenRoute
-  '/one-story-together/s/$token': typeof OneStoryTogetherSTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -158,12 +176,14 @@ export interface FileRouteTypes {
     | '/journal/socials'
     | '/one-story-together/remember-when'
     | '/one-story-together/socials'
+    | '/remember-when/$token'
+    | '/remember-when/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/remember-when/'
     | '/one-story-together/remember-when/$token'
-    | '/one-story-together/s/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -174,12 +194,14 @@ export interface FileRouteTypes {
     | '/journal/socials'
     | '/one-story-together/remember-when'
     | '/one-story-together/socials'
+    | '/remember-when/$token'
+    | '/remember-when/socials'
     | '/captured-remembered'
     | '/far-away-moments'
     | '/journal'
     | '/one-story-together'
+    | '/remember-when'
     | '/one-story-together/remember-when/$token'
-    | '/one-story-together/s/$token'
   id:
     | '__root__'
     | '/'
@@ -190,12 +212,14 @@ export interface FileRouteTypes {
     | '/journal/socials'
     | '/one-story-together/remember-when'
     | '/one-story-together/socials'
+    | '/remember-when/$token'
+    | '/remember-when/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-story-together/'
+    | '/remember-when/'
     | '/one-story-together/remember-when_/$token'
-    | '/one-story-together/s/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -207,12 +231,14 @@ export interface RootRouteChildren {
   JournalSocialsRoute: typeof JournalSocialsRoute
   OneStoryTogetherRememberWhenRoute: typeof OneStoryTogetherRememberWhenRoute
   OneStoryTogetherSocialsRoute: typeof OneStoryTogetherSocialsRoute
+  RememberWhenTokenRoute: typeof RememberWhenTokenRoute
+  RememberWhenSocialsRoute: typeof RememberWhenSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
   FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
   OneStoryTogetherIndexRoute: typeof OneStoryTogetherIndexRoute
+  RememberWhenIndexRoute: typeof RememberWhenIndexRoute
   OneStoryTogetherRememberWhenTokenRoute: typeof OneStoryTogetherRememberWhenTokenRoute
-  OneStoryTogetherSTokenRoute: typeof OneStoryTogetherSTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -301,18 +327,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OneStoryTogetherSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/remember-when/': {
+      id: '/remember-when/'
+      path: '/remember-when'
+      fullPath: '/remember-when/'
+      preLoaderRoute: typeof RememberWhenIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remember-when/$token': {
+      id: '/remember-when/$token'
+      path: '/remember-when/$token'
+      fullPath: '/remember-when/$token'
+      preLoaderRoute: typeof RememberWhenTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remember-when/socials': {
+      id: '/remember-when/socials'
+      path: '/remember-when/socials'
+      fullPath: '/remember-when/socials'
+      preLoaderRoute: typeof RememberWhenSocialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/one-story-together/remember-when_/$token': {
       id: '/one-story-together/remember-when_/$token'
       path: '/one-story-together/remember-when/$token'
       fullPath: '/one-story-together/remember-when/$token'
       preLoaderRoute: typeof OneStoryTogetherRememberWhenTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/one-story-together/s/$token': {
-      id: '/one-story-together/s/$token'
-      path: '/one-story-together/s/$token'
-      fullPath: '/one-story-together/s/$token'
-      preLoaderRoute: typeof OneStoryTogetherSTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -327,13 +367,15 @@ const rootRouteChildren: RootRouteChildren = {
   JournalSocialsRoute: JournalSocialsRoute,
   OneStoryTogetherRememberWhenRoute: OneStoryTogetherRememberWhenRoute,
   OneStoryTogetherSocialsRoute: OneStoryTogetherSocialsRoute,
+  RememberWhenTokenRoute: RememberWhenTokenRoute,
+  RememberWhenSocialsRoute: RememberWhenSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
   FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
   OneStoryTogetherIndexRoute: OneStoryTogetherIndexRoute,
+  RememberWhenIndexRoute: RememberWhenIndexRoute,
   OneStoryTogetherRememberWhenTokenRoute:
     OneStoryTogetherRememberWhenTokenRoute,
-  OneStoryTogetherSTokenRoute: OneStoryTogetherSTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
