@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import rwSquare from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import rwStory from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
+import redditPortrait from "@/assets/one-story-together/remember-when/reddit-portrait.png.asset.json";
+import redditSquare from "@/assets/one-story-together/remember-when/reddit-square.png.asset.json";
 import socialsPackage from "@/assets/one-story-together/socials-package.zip.asset.json";
 import squareCover from "@/assets/one-story-together/distance-square-cover.png.asset.json";
 import squareVideo from "@/assets/one-story-together/distance-square-video.mp4.asset.json";
@@ -110,7 +112,21 @@ function RedditSection() {
       <p className="text-xs font-semibold uppercase text-primary">Remember When · Reddit</p>
       <h2 className="mt-3 font-display text-4xl sm:text-5xl">The album story</h2>
       <p className="mt-3 max-w-2xl text-sm text-muted-foreground">Post on Reddit with the photo, and use this text as the post. Do not plant replies.</p>
-      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+      <div className="mt-8 grid gap-8 sm:grid-cols-2">
+        {[
+          { img: redditPortrait, label: "Portrait (4:5)" },
+          { img: redditSquare, label: "Square (1:1)" },
+        ].map(({ img, label }) => (
+          <div key={label}>
+            <img src={img.url} alt={`${label} photo: an album print of an office baby shower on a wooden table.`} className="h-auto w-full border border-border" />
+            <div className="mt-3 flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">{label}</span>
+              <a href={img.url} download className="inline-flex items-center gap-1 underline"><Download className="size-4" /> Download</a>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-10 grid gap-8 lg:grid-cols-2">
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Title</p>
           <div className="mt-2 border border-border bg-card p-5 font-semibold leading-relaxed">{REDDIT_TITLE}</div>
@@ -118,7 +134,7 @@ function RedditSection() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Post text</p>
-          <div className="mt-2 max-h-[32rem] overflow-y-auto border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{REDDIT_BODY}</div>
+          <div className="mt-2 border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{REDDIT_BODY}</div>
           <CopyButton text={REDDIT_BODY} label="Copy post text" />
         </div>
       </div>
