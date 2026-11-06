@@ -44,6 +44,7 @@ export function useSpeech(maxSeconds: number) {
       let mid = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const r = e.results[i];
+        if (!r) continue;
         if (r.isFinal) fin += r[0].transcript;
         else mid += r[0].transcript;
       }
