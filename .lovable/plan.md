@@ -10,10 +10,10 @@ Yes — the current screens are plain wireframes. This pass gives them the same 
 - **Open screen:** dark ink background like the main page, the Instagram photo full-bleed at the top, small yellow label "Remember When", the question in the big display font, one coral button.
 - **Pick a story:** the five cards become large paper cards with a simple drawn mark each (no AI images), coral border on tap, cards slide in one after another.
 - **Tell it:** paper background, the story name as a small coral label, big display heading, the starter line set like a quote.
-- **Tonight:** the saved story as a paper card that settles into place, email box and buttons in the same style as the other pages (coral main button, outlined second buttons), WhatsApp and copy side by side.
+- **Tonight (simplified):** the saved story as a paper card that settles into place, then one clear ask: "Who should get this memory?" with one email box and one coral button "Send the memory". After sending: a short "Sent" line and a small optional text link "Ask someone to share theirs". Remove the copy-link and WhatsApp buttons and the confusing last line, so there is only one choice on this screen.
 - **Private link page:** same paper/ink styling; "Did anyone join in?" choices as large cards; who chips in the pill style used on the main page.
 - **Motion:** the same gentle fade-and-rise used on the main page's memory lines; respects "reduce motion" settings.
-- Same copy and flow; nothing about the steps, email timing, or tracking changes.
+- Other screens keep the same copy and steps. The email now means "the person who receives the memory"; the email they get holds the story and its private link. Sending that email still needs MemReel's email sender connected.
 
 ## Check
 Screenshots at phone (390), your current size (749), and desktop (1280) for every screen, including the listening state, checking contrast and that nothing overlaps.
