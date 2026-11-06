@@ -4,7 +4,7 @@ import { Check, Copy, Keyboard, Mic, Send } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
-import { BigButton, RememberShell, StoryCard, nomineeLink } from "@/components/remember-ui";
+import { BigButton, Eyebrow, RememberShell, Rise, SparkCard, StoryCard, nomineeLink } from "@/components/remember-ui";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
@@ -81,10 +81,11 @@ function RememberWhen() {
 
   if (stage === "open")
     return (
-      <RememberShell>
-        <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone." className="h-auto w-full rounded-sm" />
-        <p className="mt-8 text-lg">What's the first story your little one would ask about?</p>
-        <div className="mt-6">
+      <RememberShell tone="ink">
+        <Rise><img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone." className="h-auto w-full rounded-sm" /></Rise>
+        <Rise delay={250} className="mt-8"><Eyebrow tone="ink">Remember When</Eyebrow></Rise>
+        <Rise delay={400}><h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</h1></Rise>
+        <Rise delay={600} className="mt-8">
           <BigButton
             onClick={() => {
               window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
@@ -93,7 +94,7 @@ function RememberWhen() {
           >
             Pick a story to tell
           </BigButton>
-        </div>
+        </Rise>
       </RememberShell>
     );
 
@@ -103,10 +104,10 @@ function RememberWhen() {
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-story-ink/75">Tap one.</p>
         <div className="mt-8 grid gap-3">
-          {SPARK_KEYS.map((k) => (
-            <BigButton
+          {SPARK_KEYS.map((k, i) => (
+            <SparkCard
               key={k}
-              variant="outline"
+              index={i}
               onClick={() => {
                 window.__lovableEvents?.track?.("project.remember_spark_picked", { spark: k });
                 setSpark(k);
@@ -115,7 +116,7 @@ function RememberWhen() {
               }}
             >
               {SPARKS[k].title}
-            </BigButton>
+            </SparkCard>
           ))}
         </div>
       </RememberShell>
@@ -126,20 +127,20 @@ function RememberWhen() {
       <RememberShell>
         <p className="text-xs font-semibold uppercase text-story-coral-deep">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
-        <p className="mt-3 text-story-ink/75">Start with: “{SPARKS[spark].starter}”</p>
+        <p className="mt-4 border-l-2 border-story-coral-deep pl-4 italic text-story-ink/80">“{SPARKS[spark].starter}”</p>
 
-        <div className="mt-6 min-h-40 border-2 border-story-ink bg-card p-4">
+        <div className="mt-6 min-h-32 rounded-sm border border-story-ink/15 bg-card p-4">
           {typedOnly || !speech.listening ? (
             <textarea
               value={story}
               onChange={(e) => speech.setText(e.target.value.slice(0, 400))}
               placeholder={typedOnly ? SPARKS[spark].starter : "Your words appear here as you talk."}
               aria-label="Your story"
-              rows={6}
-              className="w-full resize-none bg-transparent text-lg outline-none placeholder:text-story-ink/50"
+              rows={5}
+              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-story-ink/50"
             />
           ) : (
-            <p className="text-lg" aria-live="polite">
+            <p className="text-[15px] leading-relaxed" aria-live="polite">
               {story} <span className="text-story-ink/55">{speech.interim}</span>
               <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-story-coral-deep align-middle" />
             </p>
@@ -148,8 +149,12 @@ function RememberWhen() {
         </div>
 
         {!typedOnly && (
+          <div className="mt-8 flex flex-col items-center">
+          <div className="relative">
+            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-story-coral" />}
           <button
             type="button"
+            aria-label={speech.listening ? "Listening, let go to stop" : "Hold to talk"}
             onPointerDown={(e) => {
               e.preventDefault();
               window.__lovableEvents?.track?.("project.remember_talk_started", {});
@@ -158,10 +163,13 @@ function RememberWhen() {
             onPointerUp={speech.stop}
             onPointerLeave={() => speech.listening && speech.stop()}
             onContextMenu={(e) => e.preventDefault()}
-            className={`mt-4 flex w-full touch-none select-none items-center justify-center gap-3 rounded-sm py-5 text-lg font-semibold ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-blue text-story-paper"}`}
+            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-coral text-story-ink"}`}
           >
-            <Mic className="size-5" /> {speech.listening ? "Listening… let go to stop" : "Hold to talk"}
+            <Mic className="size-10" />
           </button>
+          </div>
+          <p className="mt-3 text-base font-semibold">{speech.listening ? "Listening… let go to stop" : "Hold to talk"}</p>
+          </div>
         )}
         {speech.denied && <p className="mt-3 text-sm text-story-coral-deep">The microphone is off. You can type your story instead.</p>}
         {speech.supported === false && <p className="mt-3 text-sm text-story-ink/70">This browser cannot listen. Please type your story.</p>}
@@ -173,7 +181,7 @@ function RememberWhen() {
               speech.stop();
               setMode("typed");
             }}
-            className="mt-3 inline-flex items-center gap-2 text-sm underline"
+            className="mx-auto mt-3 flex items-center gap-2 text-sm underline"
           >
             <Keyboard className="size-4" /> Type instead
           </button>
