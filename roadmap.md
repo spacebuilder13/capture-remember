@@ -17,6 +17,8 @@
 - [x] Add One Story, Together as campaign 04 with a three-person family story flow
 - [x] One Story, Together: WhatsApp role links, return leg, own line, voiced choice, setup form, legibility
 - [ ] Notify Bhavik of new setup requests (waiting on: email or list page choice)
+- [x] Remember When: Instagram images, story flow after the tap, private check-in link, nominate, analytics
+- [ ] Remember When morning email (waiting on: MemReel email sender domain)
 - [x] Add the campaign 04 motion direction and copy review page
 - [x] Build final campaign 04 videos, covers, copy downloads, and asset package
 - [x] Replace campaign 04 creative set with the distance-led Daadi story
