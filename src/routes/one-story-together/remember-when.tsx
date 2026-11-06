@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Copy, Keyboard, Mic, Send } from "lucide-react";
+import { Check, Keyboard, Mic, Send } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -42,7 +42,6 @@ function RememberWhen() {
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
-  const [copied, setCopied] = useState(false);
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
   const saveEmail = useServerFn(saveRememberEmail);
@@ -202,69 +201,42 @@ function RememberWhen() {
       <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} />}</div>
 
       {sent ? (
-        <p className="mt-8 flex items-center gap-2 text-lg font-semibold">
-          <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight and see who joins in.
-        </p>
+        <Rise className="mt-8">
+          <p className="flex items-center gap-2 text-lg font-semibold">
+            <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight.
+          </p>
+          <a
+            href={typeof window === "undefined" ? "#" : nomineeLink()}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "tonight" })}
+            className="mt-4 inline-block text-sm underline"
+          >
+            Ask someone to share theirs
+          </a>
+        </Rise>
       ) : (
-        <div className="mt-8">
-          <label htmlFor="rw-email" className="text-lg font-semibold">Where should we send it, so you have it at bedtime?</label>
-          <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-            <input
-              id="rw-email"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              className="min-w-0 flex-1 rounded-sm border-2 border-story-ink bg-card px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-story-blue"
-            />
-            <button type="button" onClick={onEmail} disabled={busy || !email.includes("@")} className="inline-flex items-center justify-center gap-2 rounded-sm bg-story-ink px-5 py-3 font-semibold text-story-paper disabled:opacity-50">
-              <Send className="size-4" /> Send it to me
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-story-ink/70">We will only use this to send your story. No marketing.</p>
+        <Rise delay={300} className="mt-10">
+          <label htmlFor="rw-email" className="font-display text-3xl leading-tight">Who should get this memory?</label>
+          <input
+            id="rw-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Their email"
+            className="mt-4 h-14 w-full rounded-sm border border-story-ink/30 bg-card px-4 text-lg outline-none focus:border-story-coral-deep"
+          />
           {error && <p className="mt-2 text-sm text-story-coral-deep">{error}</p>}
-        </div>
+          <div className="mt-4">
+            <BigButton onClick={onEmail} disabled={busy || !email.includes("@")}>
+              <Send className="mr-2 size-5" /> {busy ? "Sending…" : "Send the memory"}
+            </BigButton>
+          </div>
+          <p className="mt-3 text-xs text-story-ink/70">We use this email only to send this memory.</p>
+        </Rise>
       )}
-
-      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 underline"
-          onClick={async () => {
-            await navigator.clipboard.writeText(link);
-            window.__lovableEvents?.track?.("project.remember_link_copied", {});
-            setCopied(true);
-          }}
-        >
-          {copied ? <Check className="size-4" /> : <Copy className="size-4" />} {copied ? "Link copied" : "Copy my link"}
-        </button>
-        <a
-          className="underline"
-          href={`https://wa.me/?text=${encodeURIComponent(`My story for tonight: ${link}`)}`}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => window.__lovableEvents?.track?.("project.remember_whatsapp_self", {})}
-        >
-          Send it to myself on WhatsApp
-        </a>
-      </div>
-
-      <div className="mt-12 border-t-2 border-story-ink/15 pt-8">
-        <p className="font-display text-2xl">Who else has a story like this?</p>
-        <a
-          href={typeof window === "undefined" ? "#" : nomineeLink()}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "tonight" })}
-          className="mt-4 block rounded-sm border-2 border-story-ink bg-card px-5 py-4 text-lg font-semibold hover:bg-story-mist"
-        >
-          Ask someone to share theirs
-        </a>
-      </div>
-
-      <p className="mt-12 text-center text-sm text-story-ink/70">Remember When, by MemReel.</p>
     </RememberShell>
   );
 }
