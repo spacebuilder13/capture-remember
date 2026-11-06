@@ -9,7 +9,7 @@ import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asse
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
-import { saveRememberEmail, saveRememberStory } from "@/lib/remember.functions";
+import { saveRememberStory } from "@/lib/remember.functions";
 
 const search = z.object({
   src: z.enum(["feed", "story"]).optional().catch(undefined),
@@ -41,11 +41,9 @@ function RememberWhen() {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
-  const saveEmail = useServerFn(saveRememberEmail);
   const typedOnly = speech.supported === false || speech.denied || mode === "typed";
   const story = speech.text;
 
@@ -66,17 +64,6 @@ function RememberWhen() {
     go("tonight");
   };
 
-
-  const _unusedEmail = async () => {
-    if (!token) return;
-    setBusy(true);
-    setError("");
-    const res = await saveEmail({ data: { token, email } });
-    setBusy(false);
-    if ("error" in res) return setError(res.error ?? "Please check your email address.");
-    window.__lovableEvents?.track?.("project.remember_email_sent", {});
-    setSent(true);
-  };
 
   if (stage === "open")
     return (
