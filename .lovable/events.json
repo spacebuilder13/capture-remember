@@ -1,6 +1,66 @@
 {
   "schema_version": 1,
   "events": {
+    "project.remember_checkin_answered": {
+      "event_schema_version": 1,
+      "description": "Parent answered Did anyone join in.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.remember_email_sent": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Send it to me with a valid email.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_link_copied": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Copy my link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_nominate": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Ask someone to share theirs.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "project.remember_spark_picked": {
       "event_schema_version": 1,
       "description": "Parent picked a story spark card.",
@@ -34,6 +94,85 @@
           },
           "nominee": {
             "type": "boolean"
+          }
+        }
+      }
+    },
+    "project.remember_story_saved": {
+      "event_schema_version": 1,
+      "description": "Parent saved a Remember When story.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "spark": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "length": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "project.remember_talk_started": {
+      "event_schema_version": 1,
+      "description": "Parent pressed Hold to talk.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_type_instead": {
+      "event_schema_version": 1,
+      "description": "Parent switched to typing.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_whatsapp_self": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Send it to myself on WhatsApp.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_who_joined": {
+      "event_schema_version": 1,
+      "description": "Parent selected who joined the story.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "who": {
+            "type": "string"
           }
         }
       }
