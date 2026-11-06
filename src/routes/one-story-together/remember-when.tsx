@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Keyboard, Mic, Send } from "lucide-react";
+import { ArrowRight, Check, Keyboard, Mic, Send } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
-import { BigButton, Eyebrow, RememberShell, Rise, SparkCard, StoryCard, nomineeLink } from "@/components/remember-ui";
+import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, familyLink } from "@/components/remember-ui";
+import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
-import { saveRememberEmail, saveRememberStory } from "@/lib/remember.functions";
+import { saveRememberStory } from "@/lib/remember.functions";
 
 const search = z.object({
   src: z.enum(["feed", "story"]).optional().catch(undefined),
@@ -40,11 +41,9 @@ function RememberWhen() {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
-  const saveEmail = useServerFn(saveRememberEmail);
   const typedOnly = speech.supported === false || speech.denied || mode === "typed";
   const story = speech.text;
 
@@ -66,41 +65,51 @@ function RememberWhen() {
   };
 
 
-  const onEmail = async () => {
-    if (!token) return;
-    setBusy(true);
-    setError("");
-    const res = await saveEmail({ data: { token, email } });
-    setBusy(false);
-    if ("error" in res) return setError(res.error ?? "Please check your email address.");
-    window.__lovableEvents?.track?.("project.remember_email_sent", {});
-    setSent(true);
-  };
+  const startButton = (
+    <button
+      type="button"
+      onClick={() => {
+        window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
+        go("spark");
+      }}
+      className="inline-flex h-12 items-center gap-2 rounded-sm bg-primary px-6 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
+    >
+      Pick a story to tell <ArrowRight className="size-4" />
+    </button>
+  );
 
   if (stage === "open")
     return (
-      <RememberShell tone="ink">
-        <Rise><img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone." className="h-auto w-full rounded-sm" /></Rise>
-        <Rise delay={250} className="mt-8"><Eyebrow tone="ink">Remember When</Eyebrow></Rise>
-        <Rise delay={400}><h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</h1></Rise>
-        <Rise delay={600} className="mt-8">
-          <BigButton
-            onClick={() => {
-              window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
-              go("spark");
-            }}
-          >
-            Pick a story to tell
-          </BigButton>
-        </Rise>
-      </RememberShell>
+      <main className="min-h-screen bg-background text-foreground">
+        <MemHeader overPhoto />
+        <h1 className="sr-only [@media(min-aspect-ratio:3/4)]:hidden">Who's that baby?</h1>
+        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground [@media(min-aspect-ratio:3/4)]:hidden">
+          <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
+          <div className="relative z-10 w-full px-5 pb-10">{startButton}</div>
+        </section>
+        <section className="hidden min-h-svh bg-secondary [@media(min-aspect-ratio:3/4)]:grid [@media(min-aspect-ratio:3/4)]:grid-cols-[1fr_auto]">
+          <div className="flex flex-col justify-center px-8 pt-20 pb-12 lg:px-16">
+            <h1 className="max-w-lg font-display text-4xl leading-tight lg:text-6xl">What's the first story your little one would ask about?</h1>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
+            <div className="mt-8">{startButton}</div>
+          </div>
+          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square w-[55vw] max-w-[100svh] self-center object-cover" />
+        </section>
+        <section className="bg-secondary py-20 sm:py-28 [@media(min-aspect-ratio:3/4)]:hidden">
+          <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
+            <p className="font-display text-4xl leading-tight sm:text-5xl">What's the first story your little one would ask about?</p>
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
+          </div>
+        </section>
+      </main>
     );
 
   if (stage === "spark")
     return (
-      <RememberShell>
+      <RememberShell step={1}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
-        <p className="mt-3 text-story-ink/75">Tap one.</p>
+        <p className="mt-3 text-muted-foreground">Tap one.</p>
         <div className="mt-8 grid gap-3">
           {SPARK_KEYS.map((k, i) => (
             <SparkCard
@@ -122,12 +131,12 @@ function RememberWhen() {
 
   if (stage === "tell" && spark)
     return (
-      <RememberShell>
-        <p className="text-xs font-semibold uppercase text-story-coral-deep">{SPARKS[spark].title}</p>
+      <RememberShell step={2}>
+        <p className="text-xs font-semibold uppercase text-primary">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
-        <p className="mt-4 border-l-2 border-story-coral-deep pl-4 italic text-story-ink/80">“{SPARKS[spark].starter}”</p>
+        <p className="mt-4 border-l-2 border-primary pl-4 italic text-muted-foreground">“{SPARKS[spark].starter}”</p>
 
-        <div className="mt-6 min-h-32 rounded-sm border border-story-ink/15 bg-card p-4">
+        <div className="mt-6 min-h-32 rounded-sm border border-border bg-background p-4">
           {typedOnly || !speech.listening ? (
             <textarea
               value={story}
@@ -135,21 +144,21 @@ function RememberWhen() {
               placeholder={typedOnly ? SPARKS[spark].starter : "Your words appear here as you talk."}
               aria-label="Your story"
               rows={5}
-              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-story-ink/50"
+              className="w-full resize-none bg-transparent text-[15px] leading-relaxed outline-none placeholder:text-muted-foreground"
             />
           ) : (
             <p className="text-[15px] leading-relaxed" aria-live="polite">
-              {story} <span className="text-story-ink/55">{speech.interim}</span>
-              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-story-coral-deep align-middle" />
+              {story} <span className="text-muted-foreground">{speech.interim}</span>
+              <span className="ml-1 inline-block h-5 w-0.5 animate-pulse bg-primary-deep align-middle" />
             </p>
           )}
-          <p className="mt-2 text-right text-xs text-story-ink/60">{story.length}/400</p>
+          <p className="mt-2 text-right text-xs text-muted-foreground">{story.length}/400</p>
         </div>
 
         {!typedOnly && (
           <div className="mt-8 flex flex-col items-center">
           <div className="relative">
-            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-story-coral" />}
+            {speech.listening && <span aria-hidden className="rw-ring absolute inset-0 rounded-full bg-primary" />}
           <button
             type="button"
             aria-label={speech.listening ? "Listening, let go to stop" : "Hold to talk"}
@@ -161,7 +170,7 @@ function RememberWhen() {
             onPointerUp={speech.stop}
             onPointerLeave={() => speech.listening && speech.stop()}
             onContextMenu={(e) => e.preventDefault()}
-            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-story-coral-deep text-story-paper" : "bg-story-coral text-story-ink"}`}
+            className={`relative flex size-28 touch-none select-none items-center justify-center rounded-full shadow-lg transition active:scale-95 sm:size-32 ${speech.listening ? "bg-primary/80 text-primary-foreground" : "bg-primary text-primary-foreground"}`}
           >
             <Mic className="size-10" />
           </button>
@@ -169,8 +178,8 @@ function RememberWhen() {
           <p className="mt-3 text-base font-semibold">{speech.listening ? "Listening… let go to stop" : "Hold to talk"}</p>
           </div>
         )}
-        {speech.denied && <p className="mt-3 text-sm text-story-coral-deep">The microphone is off. You can type your story instead.</p>}
-        {speech.supported === false && <p className="mt-3 text-sm text-story-ink/70">This browser cannot listen. Please type your story.</p>}
+        {speech.denied && <p className="mt-3 text-sm text-primary">The microphone is off. You can type your story instead.</p>}
+        {speech.supported === false && <p className="mt-3 text-sm text-muted-foreground">This browser cannot listen. Please type your story.</p>}
         {!typedOnly && (
           <button
             type="button"
@@ -185,7 +194,7 @@ function RememberWhen() {
           </button>
         )}
 
-        {error && <p className="mt-4 text-sm text-story-coral-deep">{error}</p>}
+        {error && <p className="mt-4 text-sm text-primary">{error}</p>}
         <div className="mt-8">
           <BigButton onClick={onSave} disabled={busy || story.trim().length < 3 || speech.listening}>
             {busy ? "Saving…" : "Save my story"}
@@ -195,45 +204,30 @@ function RememberWhen() {
     );
 
   return (
-    <RememberShell>
+    <RememberShell step={3}>
       <h1 className="font-display text-4xl leading-tight sm:text-5xl">Tell it to them tonight.</h1>
       <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} />}</div>
-
       {sent ? (
-        <Rise className="mt-8">
+        <Rise className="mt-10">
           <p className="flex items-center gap-2 text-lg font-semibold">
-            <Check className="size-5 text-story-coral-deep" /> Sent. Tell it tonight.
+            <Check className="size-5 text-primary" /> Sent. Tell it tonight.
           </p>
-          <a
-            href={typeof window === "undefined" ? "#" : nomineeLink()}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => window.__lovableEvents?.track?.("project.remember_nominate", { from: "tonight" })}
-            className="mt-4 inline-block text-sm underline"
-          >
-            Ask someone to share theirs
-          </a>
         </Rise>
       ) : (
         <Rise delay={300} className="mt-10">
-          <label htmlFor="rw-email" className="font-display text-3xl leading-tight">Who should get this memory?</label>
-          <input
-            id="rw-email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Their email"
-            className="mt-4 h-14 w-full rounded-sm border border-story-ink/30 bg-card px-4 text-lg outline-none focus:border-story-coral-deep"
-          />
-          {error && <p className="mt-2 text-sm text-story-coral-deep">{error}</p>}
-          <div className="mt-4">
-            <BigButton onClick={onEmail} disabled={busy || !email.includes("@")}>
-              <Send className="mr-2 size-5" /> {busy ? "Sending…" : "Send the memory"}
-            </BigButton>
-          </div>
-          <p className="mt-3 text-xs text-story-ink/70">We use this email only to send this memory.</p>
+          <p className="font-display text-2xl leading-snug">Who else should hear this? Send it to them.</p>
+          <a
+            href={spark && token && typeof window !== "undefined" ? familyLink(SPARKS[spark].title, story, token) : "#"}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              window.__lovableEvents?.track?.("project.remember_family_shared", { spark });
+              setSent(true);
+            }}
+            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90"
+          >
+            <Send className="size-5" /> Send it to family on WhatsApp
+          </a>
         </Rise>
       )}
     </RememberShell>
