@@ -134,7 +134,7 @@ function RedditSection() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Post text</p>
-          <div className="mt-2 max-h-[32rem] overflow-y-auto border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{REDDIT_BODY}</div>
+          <div className="mt-2 border border-border bg-card p-5 text-sm leading-relaxed whitespace-pre-line">{REDDIT_BODY}</div>
           <CopyButton text={REDDIT_BODY} label="Copy post text" />
         </div>
       </div>
