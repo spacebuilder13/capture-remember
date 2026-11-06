@@ -81,7 +81,7 @@ export function SparkCard({ children, index, onClick, art }: { children: ReactNo
         }}
         className={`flex h-full w-full flex-col items-center rounded-sm border-2 bg-background p-3 text-center text-sm font-semibold leading-snug transition hover:border-primary hover:bg-secondary active:scale-[0.98] sm:p-4 sm:text-base ${picked ? "border-primary bg-secondary" : "border-border"}`}
       >
-        <span className={`block aspect-square w-full max-w-36 ${picked ? "rw-wiggle" : ""}`}>{art}</span>
+        <span className={`block aspect-square w-full max-w-24 sm:max-w-36 ${picked ? "rw-wiggle" : ""}`}>{art}</span>
         <span className="mt-2">{children}</span>
       </button>
     </Rise>

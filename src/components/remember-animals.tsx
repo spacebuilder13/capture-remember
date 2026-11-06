@@ -87,15 +87,21 @@ function Elephants() {
   const id = "when_small";
   return (
     <Crayon id={id}>
-      <path d="M14 60 Q16 38 40 38 Q62 38 64 58 L64 84 M14 60 L14 84 M30 70 L30 86 M48 70 L48 86" />
-      <path d="M64 56 Q76 62 72 82 Q70 90 76 90" />
-      <path d="M44 44 Q34 52 42 62 Q52 60 50 46" fill={H(id)} />
-      <circle cx="56" cy="50" r="1.6" />
-      <path d="M72 82 Q78 80 80 76" />
-      <path d="M80 80 Q82 66 96 66 Q108 66 108 80 L108 96 M82 80 L82 96 M92 88 L92 98 M102 88 L102 98" />
-      <path d="M80 78 Q72 82 76 90" />
-      <circle cx="88" cy="74" r="1.4" />
-      <path d="M98 70 Q92 74 96 80 Q102 78 100 72" fill={H(id)} />
+      {/* mum, facing right */}
+      <ellipse cx="38" cy="64" rx="26" ry="18" />
+      <path d="M22 78 L22 94 M34 80 L34 94 M46 80 L46 94 M56 76 L56 92" />
+      <circle cx="66" cy="50" r="14" />
+      <path d="M58 42 Q44 46 48 62 Q58 66 62 56" fill={H(id)} />
+      <circle cx="70" cy="46" r="1.8" />
+      <path d="M78 54 Q86 66 82 78 Q80 84 86 84" />
+      <path d="M12 60 Q6 66 10 72" />
+      {/* calf, holding mum's tail? no: trunk up to mum */}
+      <ellipse cx="92" cy="86" rx="13" ry="9" />
+      <path d="M84 94 L84 102 M92 95 L92 103 M100 94 L100 102" />
+      <circle cx="102" cy="76" r="8" />
+      <path d="M98 72 Q90 74 94 82" fill={H(id)} />
+      <circle cx="105" cy="74" r="1.4" />
+      <path d="M108 80 Q114 86 112 92" />
     </Crayon>
   );
 }
