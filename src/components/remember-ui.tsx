@@ -91,13 +91,13 @@ export function SparkCard({ children, index, onClick, art }: { children: ReactNo
 const SHARE_ORIGIN = "https://capture-remember.lovable.app";
 
 export function nomineeLink() {
-  const url = `${SHARE_ORIGIN}/one-story-together/remember-when?from=nominee`;
+  const url = `${SHARE_ORIGIN}/remember-when?from=nominee`;
   const text = `I just told my little one a story about when they were tiny. What's the first story yours would ask about? ${url}`;
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
 export function familyLink(title: string, story: string, token: string) {
-  const url = `${SHARE_ORIGIN}/one-story-together/remember-when/${token}`;
+  const url = `${SHARE_ORIGIN}/remember-when/${token}`;
   const text = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nAdd what you remember: ${url}`;
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
