@@ -82,12 +82,15 @@ function RememberWhen() {
   if (stage === "open")
     return (
       <main className="min-h-screen bg-background text-foreground">
-        <MemHeader overPhoto />
+        <div className="hidden [@media(min-aspect-ratio:3/4)]:block [@media(min-aspect-ratio:3/4)]:absolute [@media(min-aspect-ratio:3/4)]:inset-x-0 [@media(min-aspect-ratio:3/4)]:top-0 [@media(min-aspect-ratio:3/4)]:z-20"><MemHeader /></div>
         <h1 className="sr-only [@media(min-aspect-ratio:3/4)]:hidden">Who's that baby?</h1>
-        <section className="relative flex min-h-[92svh] items-end overflow-hidden bg-foreground [@media(min-aspect-ratio:3/4)]:hidden">
-          <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="absolute inset-0 h-full w-full object-cover object-center" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
-          <div className="relative z-10 w-full px-5 pb-10">{startButton}</div>
+        <section className="flex flex-col items-center bg-secondary [@media(min-aspect-ratio:3/4)]:hidden">
+          <div className="relative w-full max-w-[calc(82svh*9/16)]">
+            <MemHeader overPhoto />
+            <img src={storyImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="block h-auto w-full" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-foreground/45 to-transparent" />
+          </div>
+          <div className="w-full max-w-[calc(82svh*9/16)] px-5 py-5">{startButton}</div>
         </section>
         <section className="hidden min-h-svh bg-secondary [@media(min-aspect-ratio:3/4)]:grid [@media(min-aspect-ratio:3/4)]:grid-cols-[1fr_auto]">
           <div className="flex flex-col justify-center px-8 pt-20 pb-12 lg:px-16">
@@ -95,7 +98,7 @@ function RememberWhen() {
             <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
             <div className="mt-8">{startButton}</div>
           </div>
-          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square w-[55vw] max-w-[100svh] self-center object-cover" />
+          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square mr-[4vw] w-[50vw] max-w-[88svh] self-center rounded-sm shadow-lg object-cover" />
         </section>
         <section className="bg-secondary py-20 sm:py-28 [@media(min-aspect-ratio:3/4)]:hidden">
           <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
