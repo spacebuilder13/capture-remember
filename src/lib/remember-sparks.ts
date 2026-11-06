@@ -8,8 +8,3 @@ export const SPARKS: Record<SparkKey, { title: string; starter: string }> = {
   when_small: { title: "Something from when you were small", starter: "When I was your age…" },
   own: { title: "I will share my own memory", starter: "I remember…" },
 };
-
-export function track(event: string, properties?: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
-  window.__lovableEvents?.track?.(`project.remember_${event}`, properties);
-}
