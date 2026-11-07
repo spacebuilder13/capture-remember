@@ -57,7 +57,7 @@ export const saveRememberStory = createServerFn({ method: "POST" })
     const since = new Date(Date.now() - 3600_000).toISOString();
     const { count } = await db.from("remember_stories").select("id", { count: "exact", head: true }).gte("created_at", since);
     if ((count ?? 0) > 500) return { error: "Too many stories right now. Please try again soon." };
-    const [dir, name] = data.photoPath.split("/");
+    const [dir = "", name = ""] = data.photoPath.split("/");
     const { data: found } = await db.storage.from("remember-photos").list(dir, { search: name });
     if (!found?.some((o) => o.name === name)) return { error: "Please add your photo again." };
     const row = {
