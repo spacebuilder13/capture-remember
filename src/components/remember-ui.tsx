@@ -23,11 +23,11 @@ export function RememberShell({ children, step }: { children: ReactNode; step?: 
           <div className="mb-10 flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase text-primary">Your story</p>
-              <p className="mt-1 text-sm text-muted-foreground">Step {step} of 3</p>
+              <p className="mt-1 text-sm text-muted-foreground">Step {step} of 4</p>
             </div>
             <div className="flex gap-1.5" aria-hidden>
-              {[1, 2, 3].map((i) => (
-                <span key={i} className={`h-1.5 w-12 ${i <= step ? "bg-primary" : "bg-border"}`} />
+              {[1, 2, 3, 4].map((i) => (
+                <span key={i} className={`h-1.5 w-9 sm:w-12 ${i <= step ? "bg-primary" : "bg-border"}`} />
               ))}
             </div>
           </div>
@@ -46,9 +46,10 @@ export function Rise({ children, delay = 0, className = "" }: { children: ReactN
   );
 }
 
-export function StoryCard({ title, story }: { title: string; story: string }) {
+export function StoryCard({ title, story, photoUrl }: { title: string; story: string; photoUrl?: string | null }) {
   return (
     <div className="rw-settle border-l-2 border-primary bg-secondary px-6 py-5 shadow-lg">
+      {photoUrl && <img src={photoUrl} alt="The photo this story is about" className="mb-5 max-h-80 w-auto rotate-[-1.5deg] border-[6px] border-background object-contain shadow-md" />}
       <p className="text-xs font-semibold uppercase text-primary">{title}</p>
       <p className="mt-3 whitespace-pre-line font-display text-2xl leading-snug">“{story}”</p>
     </div>
