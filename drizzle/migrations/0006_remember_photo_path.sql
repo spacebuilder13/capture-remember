@@ -1,0 +1,1 @@
+ALTER TABLE public.remember_stories ADD COLUMN IF NOT EXISTS photo_path text;

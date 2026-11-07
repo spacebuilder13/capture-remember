@@ -318,6 +318,7 @@ export type Database = {
           link_opened_at: string | null
           mode: string
           nominated_by: string | null
+          photo_path: string | null
           source: string | null
           spark: string
           story: string
@@ -331,6 +332,7 @@ export type Database = {
           link_opened_at?: string | null
           mode: string
           nominated_by?: string | null
+          photo_path?: string | null
           source?: string | null
           spark: string
           story: string
@@ -344,6 +346,7 @@ export type Database = {
           link_opened_at?: string | null
           mode?: string
           nominated_by?: string | null
+          photo_path?: string | null
           source?: string | null
           spark?: string
           story?: string
