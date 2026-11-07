@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Check, Keyboard, Mic, Send } from "lucide-react";
+import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mic, Send } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -10,7 +10,7 @@ import squareImage from "@/assets/one-story-together/remember-when/square.jpg.as
 import { ANIMALS } from "@/components/remember-animals";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
-import { saveRememberStory } from "@/lib/remember.functions";
+import { saveRememberStory, uploadRememberPhoto } from "@/lib/remember.functions";
 
 const search = z.object({
   src: z.enum(["feed", "story"]).optional().catch(undefined),
@@ -32,7 +32,22 @@ export const Route = createFileRoute("/remember-when/")({
   component: RememberWhen,
 });
 
-type Stage = "open" | "spark" | "tell" | "tonight";
+type Stage = "open" | "photo" | "spark" | "tell" | "tonight";
+
+async function shrink(file: File): Promise<Blob> {
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * k);
+    c.height = Math.round(bmp.height * k);
+    c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
+    const b = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", 0.85));
+    return b ?? file;
+  } catch {
+    return file;
+  }
+}
 
 function RememberWhen() {
   const { src, from } = Route.useSearch();
@@ -45,6 +60,39 @@ function RememberWhen() {
   const [sent, setSent] = useState(false);
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
+  const upload = useServerFn(uploadRememberPhoto);
+  const [photo, setPhoto] = useState<{ blob: Blob; url: string } | null>(null);
+  const [photoPath, setPhotoPath] = useState<string | null>(null);
+
+  const onPick = async (f: File | undefined) => {
+    if (!f) return;
+    setError("");
+    window.__lovableEvents?.track?.(photo ? "project.remember_photo_replaced" : "project.remember_photo_picked", {});
+    const blob = await shrink(f);
+    if (photo) URL.revokeObjectURL(photo.url);
+    setPhoto({ blob, url: URL.createObjectURL(blob) });
+    setPhotoPath(null);
+  };
+
+  const onUsePhoto = async () => {
+    if (!photo) return;
+    if (photoPath) return go("spark");
+    setBusy(true);
+    setError("");
+    const fd = new FormData();
+    fd.append("photo", new File([photo.blob], "photo.jpg", { type: photo.blob.type || "image/jpeg" }));
+    try {
+      const res = await upload({ data: fd });
+      if ("error" in res) throw new Error(res.error);
+      setPhotoPath(res.path);
+      go("spark");
+    } catch (e) {
+      window.__lovableEvents?.track?.("project.remember_photo_failed", {});
+      setError(e instanceof Error && e.message ? e.message : "We could not save your photo. Please try again.");
+    } finally {
+      setBusy(false);
+    }
+  };
   const typedOnly = speech.supported === false || speech.denied || mode === "typed";
   const story = speech.text;
 
@@ -54,10 +102,10 @@ function RememberWhen() {
   };
 
   const onSave = async () => {
-    if (!spark || story.trim().length < 3) return;
+    if (!spark || !photoPath || story.trim().length < 3) return;
     setBusy(true);
     setError("");
-    const res = await save({ data: { spark, story, mode: typedOnly ? "typed" : mode, source: src, nominatedBy: from } });
+    const res = await save({ data: { photoPath, spark, story, mode: typedOnly ? "typed" : mode, source: src, nominatedBy: from } });
     setBusy(false);
     if ("error" in res) return setError(res.error ?? "Please try again.");
     window.__lovableEvents?.track?.("project.remember_story_saved", { spark, mode: typedOnly ? "typed" : mode, length: story.length });
@@ -71,7 +119,8 @@ function RememberWhen() {
       type="button"
       onClick={() => {
         window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
-        go("spark");
+        window.__lovableEvents?.track?.("project.remember_photo_step_shown", {});
+        go("photo");
       }}
       className="inline-flex h-12 items-center gap-2 rounded-sm bg-primary px-6 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
     >
@@ -109,9 +158,38 @@ function RememberWhen() {
       </main>
     );
 
-  if (stage === "spark")
+  if (stage === "photo")
     return (
       <RememberShell step={1}>
+        <h1 className="font-display text-4xl leading-tight sm:text-5xl">Add the photo.</h1>
+        <p className="mt-3 text-muted-foreground">Find the photo they would ask about.</p>
+        {photo ? (
+          <Rise className="mt-8 flex flex-col items-center">
+            <img src={photo.url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
+            <label className="mt-5 cursor-pointer text-sm underline">
+              Pick another
+              <input type="file" accept="image/*" className="sr-only" onChange={(e) => onPick(e.target.files?.[0])} />
+            </label>
+          </Rise>
+        ) : (
+          <label className="mt-8 flex aspect-[4/3] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-primary bg-secondary text-center transition hover:bg-secondary/70">
+            <ImagePlus className="size-12 text-primary" />
+            <span className="text-lg font-semibold">Tap to pick a photo</span>
+            <span className="text-sm text-muted-foreground">From your phone or camera</span>
+            <input type="file" accept="image/*" aria-label="Pick a photo" className="sr-only" onChange={(e) => onPick(e.target.files?.[0])} />
+          </label>
+        )}
+        <p className="mt-5 flex items-center justify-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" /> Only you and the people you send it to can see this photo.</p>
+        {error && <p className="mt-4 text-sm text-primary">{error}</p>}
+        <div className="mt-6">
+          <BigButton onClick={onUsePhoto} disabled={!photo || busy}>{busy ? "Saving photo…" : "Use this photo"}</BigButton>
+        </div>
+      </RememberShell>
+    );
+
+  if (stage === "spark")
+    return (
+      <RememberShell step={2}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-muted-foreground">Tap one.</p>
         <div className="mt-8 grid grid-cols-2 gap-3">
@@ -136,7 +214,7 @@ function RememberWhen() {
 
   if (stage === "tell" && spark)
     return (
-      <RememberShell step={2}>
+      <RememberShell step={3}>
         <p className="text-xs font-semibold uppercase text-primary">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Tell it in your own words.</h1>
         <blockquote className="relative mt-8 px-8 sm:px-10">
@@ -213,9 +291,9 @@ function RememberWhen() {
     );
 
   return (
-    <RememberShell step={3}>
+    <RememberShell step={4}>
       <h1 className="font-display text-4xl leading-tight sm:text-5xl">Tell it to them tonight.</h1>
-      <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} />}</div>
+      <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} photoUrl={photo?.url} />}</div>
       {sent ? (
         <Rise className="mt-10">
           <p className="flex items-center gap-2 text-lg font-semibold">

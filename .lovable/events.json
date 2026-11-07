@@ -176,6 +176,58 @@
           }
         }
       }
+    },
+    "project.remember_photo_step_shown": {
+      "event_schema_version": 1,
+      "description": "Photo step opened on Remember When.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_picked": {
+      "event_schema_version": 1,
+      "description": "Parent picked a photo.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_replaced": {
+      "event_schema_version": 1,
+      "description": "Parent picked a different photo.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_failed": {
+      "event_schema_version": 1,
+      "description": "Photo upload failed.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
     }
   }
 }

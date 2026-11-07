@@ -30,7 +30,7 @@ function StoryLink() {
   const get = useServerFn(getRememberStory);
   const answerFn = useServerFn(answerRememberFollowup);
   const del = useServerFn(deleteRememberStory);
-  const [story, setStory] = useState<{ spark: string; story: string } | null>(null);
+  const [story, setStory] = useState<{ spark: string; story: string; photoUrl?: string | null } | null>(null);
   const [error, setError] = useState("");
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [who, setWho] = useState<Who[]>([]);
@@ -63,7 +63,7 @@ function StoryLink() {
 
   return (
     <RememberShell>
-      <StoryCard title={title} story={story.story} />
+      <StoryCard title={title} story={story.story} photoUrl={story.photoUrl} />
 
       {!answer ? (
         <div className="mt-10">
