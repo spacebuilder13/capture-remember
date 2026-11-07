@@ -46,7 +46,7 @@ export function Rise({ children, delay = 0, className = "" }: { children: ReactN
   );
 }
 
-export function StoryCard({ title, story, photoUrl }: { title: string; story: string; photoUrl?: string | null }) {
+export function StoryCard({ title, story, photoUrl }: { title: string; story: string; photoUrl?: string | null | undefined }) {
   return (
     <div className="rw-settle border-l-2 border-primary bg-secondary px-6 py-5 shadow-lg">
       {photoUrl && <img src={photoUrl} alt="The photo this story is about" className="mb-5 max-h-80 w-auto rotate-[-1.5deg] border-[6px] border-background object-contain shadow-md" />}
