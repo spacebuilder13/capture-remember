@@ -229,6 +229,18 @@
         "properties": {}
       }
     },
+    "project.remember_reply_added": {
+      "event_schema_version": 1,
+      "description": "Family member added a memory to a story.",
+      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
+      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+    },
+    "project.remember_owner_link_copied": {
+      "event_schema_version": 1,
+      "description": "Parent copied their private link.",
+      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
+      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+    },
     "project.remember_email_shared": {
       "event_schema_version": 1,
       "description": "Parent tapped Send it by email.",

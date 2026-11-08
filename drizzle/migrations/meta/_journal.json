@@ -50,6 +50,13 @@
       "when": 1794074620638,
       "tag": "0006_remember_photo_path",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794136281004,
+      "tag": "0007_remember_owner_token_and_replies",
+      "breakpoints": true
     }
   ]
 }

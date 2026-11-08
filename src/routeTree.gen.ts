@@ -25,6 +25,7 @@ import { Route as RememberWhenIndexRouteImport } from './routes/remember-when/in
 import { Route as RememberWhenTokenRouteImport } from './routes/remember-when/$token'
 import { Route as RememberWhenSocialsRouteImport } from './routes/remember-when/socials'
 import { Route as OneStoryTogetherRememberWhenTokenRouteImport } from './routes/one-story-together/remember-when_.$token'
+import { Route as RememberWhenMeTokenRouteImport } from './routes/remember-when/me.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -109,6 +110,11 @@ const OneStoryTogetherRememberWhenTokenRoute =
     path: '/one-story-together/remember-when/$token',
     getParentRoute: () => rootRouteImport,
   } as any)
+const RememberWhenMeTokenRoute = RememberWhenMeTokenRouteImport.update({
+  id: '/remember-when/me/$token',
+  path: '/remember-when/me/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
   '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
+  '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/one-story-together': typeof OneStoryTogetherIndexRoute
   '/remember-when': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
+  '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
   '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when_/$token': typeof OneStoryTogetherRememberWhenTokenRoute
+  '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/one-story-together/'
     | '/remember-when/'
     | '/one-story-together/remember-when/$token'
+    | '/remember-when/me/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/one-story-together'
     | '/remember-when'
     | '/one-story-together/remember-when/$token'
+    | '/remember-when/me/$token'
   id:
     | '__root__'
     | '/'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/one-story-together/'
     | '/remember-when/'
     | '/one-story-together/remember-when_/$token'
+    | '/remember-when/me/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   OneStoryTogetherIndexRoute: typeof OneStoryTogetherIndexRoute
   RememberWhenIndexRoute: typeof RememberWhenIndexRoute
   OneStoryTogetherRememberWhenTokenRoute: typeof OneStoryTogetherRememberWhenTokenRoute
+  RememberWhenMeTokenRoute: typeof RememberWhenMeTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -355,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OneStoryTogetherRememberWhenTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/remember-when/me/$token': {
+      id: '/remember-when/me/$token'
+      path: '/remember-when/me/$token'
+      fullPath: '/remember-when/me/$token'
+      preLoaderRoute: typeof RememberWhenMeTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -376,6 +396,7 @@ const rootRouteChildren: RootRouteChildren = {
   RememberWhenIndexRoute: RememberWhenIndexRoute,
   OneStoryTogetherRememberWhenTokenRoute:
     OneStoryTogetherRememberWhenTokenRoute,
+  RememberWhenMeTokenRoute: RememberWhenMeTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
