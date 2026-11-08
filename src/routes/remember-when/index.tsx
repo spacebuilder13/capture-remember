@@ -83,7 +83,7 @@ function RememberWhen() {
   const onUsePhoto = async () => {
     const pick = picks[chosen];
     if (!pick) return;
-    if (photoPath && uploadedIdx === chosen) return go("spark");
+    if (photoPath && uploadedIdx === chosen) return go("tell");
     setBusy(true);
     setError("");
     window.__lovableEvents?.track?.("project.remember_photo_chosen", { position: chosen + 1, count: picks.length });
@@ -97,7 +97,7 @@ function RememberWhen() {
       if ("error" in res) throw new Error(res.error);
       setPhotoPath(res.path);
       setUploadedIdx(chosen);
-      go("spark");
+      go("tell");
     } catch (e) {
       window.__lovableEvents?.track?.("project.remember_photo_failed", {});
       setError(e instanceof Error && e.message ? e.message : "We could not save your photo. Please try again.");
@@ -131,8 +131,7 @@ function RememberWhen() {
       type="button"
       onClick={() => {
         window.__lovableEvents?.track?.("project.remember_start_clicked", { src: src ?? "direct", nominee: from === "nominee" });
-        window.__lovableEvents?.track?.("project.remember_photo_step_shown", {});
-        go("photo");
+        go("spark");
       }}
       className="inline-flex h-12 items-center gap-2 rounded-sm bg-primary px-6 text-base font-medium text-primary-foreground transition hover:bg-primary/90"
     >
@@ -172,9 +171,9 @@ function RememberWhen() {
 
   if (stage === "photo")
     return (
-      <RememberShell step={1}>
+      <RememberShell step={2}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Add the photo.</h1>
-        <p className="mt-3 text-muted-foreground">Find the photo they would ask about.</p>
+        <p className="mt-3 text-muted-foreground">{spark ? <>Find a photo for: <span className="font-semibold text-foreground">{SPARKS[spark].title}</span></> : "Find the photo they would ask about."}</p>
         {picks.length === 1 ? (
           <Rise className="mt-8 flex flex-col items-center">
             <img src={picks[0]?.url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
@@ -229,7 +228,7 @@ function RememberWhen() {
 
   if (stage === "spark")
     return (
-      <RememberShell step={2}>
+      <RememberShell step={1}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Pick a story to tell.</h1>
         <p className="mt-3 text-muted-foreground">Tap one.</p>
         <div className="mt-8 grid grid-cols-2 gap-3">
@@ -242,7 +241,8 @@ function RememberWhen() {
                 window.__lovableEvents?.track?.("project.remember_spark_picked", { spark: k });
                 setSpark(k);
                 speech.setText("");
-                go("tell");
+                window.__lovableEvents?.track?.("project.remember_photo_step_shown", {});
+                go("photo");
               }}
             >
               {SPARKS[k].title}
