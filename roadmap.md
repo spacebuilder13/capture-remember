@@ -1,5 +1,7 @@
 # MemReel experiment roadmap
 
+- [ ] Remember When: full photo → sharing → family reply → private check-in/delete QA at phone, tablet and laptop; share screenshots and fix issues.
+
 - [x] Ground the brand, brief, and competitor evidence
 - [x] Choose the Incomplete Photograph direction
 - [x] Build the example-first single-page experience with a three-step prompt-card journey
