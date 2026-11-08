@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mail, Mic, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { RememberTextarea } from "@/components/remember-textarea";
 
 import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink, ownerLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
@@ -41,7 +42,10 @@ async function shrink(file: File): Promise<Blob> {
     const c = document.createElement("canvas");
     c.width = Math.round(bmp.width * k);
     c.height = Math.round(bmp.height * k);
-    c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
+    const ctx = c.getContext("2d");
+    if (!ctx) { bmp.close(); return file; }
+    ctx.drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close();
     const b = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", 0.85));
     return b ?? file;
   } catch {
@@ -122,13 +126,15 @@ function RememberWhen() {
     if (!spark || !photoPath || story.trim().length < 3) return;
     setBusy(true);
     setError("");
-    const res = await save({ data: { photoPath, spark, story, mode: typedOnly ? "typed" : mode, source: src, nominatedBy: from } });
-    setBusy(false);
-    if ("error" in res) return setError(res.error ?? "Please try again.");
-    window.__lovableEvents?.track?.("project.remember_story_saved", { spark, mode: typedOnly ? "typed" : mode, length: story.length });
-    setToken(res.token);
-    setOwnerToken(res.ownerToken);
-    go("tonight");
+    try {
+      const res = await save({ data: { photoPath, spark, story, mode: typedOnly ? "typed" : mode, source: src, nominatedBy: from } });
+      if ("error" in res) return setError(res.error ?? "Please try again.");
+      window.__lovableEvents?.track?.("project.remember_story_saved", { spark, mode: typedOnly ? "typed" : mode, length: story.length });
+      setToken(res.token);
+      setOwnerToken(res.ownerToken);
+      go("tonight");
+    } catch { setError("We could not save your story. Please try again."); }
+    finally { setBusy(false); }
   };
 
 
@@ -268,17 +274,15 @@ function RememberWhen() {
         <blockquote className="relative mt-8 px-8 sm:px-10">
           <span aria-hidden className="absolute -top-4 left-0 font-display text-6xl leading-none text-primary">“</span>
           {typedOnly || !speech.listening ? (
-            <textarea
+            <RememberTextarea
               value={story}
               onChange={(e) => {
                 speech.setText(e.target.value.slice(0, 400));
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
               }}
               placeholder={SPARKS[spark].starter}
               aria-label="Your story"
               rows={2}
-              className="block w-full resize-none overflow-hidden border-b border-transparent bg-transparent font-display text-xl leading-snug outline-none placeholder:text-muted-foreground/70 focus:border-border sm:text-2xl"
+              className="block w-full resize-none overflow-hidden border-b border-transparent bg-transparent font-display text-xl leading-snug outline-none placeholder:text-muted-foreground focus:border-border sm:text-2xl"
             />
           ) : (
             <p className="min-h-[3.5rem] font-display text-xl leading-snug sm:text-2xl" aria-live="polite">
@@ -340,7 +344,27 @@ function RememberWhen() {
 
   const names = { sender: sender.trim(), child: child.trim() };
   const namesOk = !!names.sender && !!names.child;
-  const persistNames = () => (ownerToken ? saveNames({ data: { token: ownerToken, ...names } }).catch(() => {}) : Promise.resolve());
+  const share = async (channel: "whatsapp" | "email") => {
+    if (!ownerToken || !spark || !token || !namesOk || busy) return;
+    // Reserve the tab during the tap, before awaiting the name save.
+    const tab = channel === "whatsapp" ? window.open("about:blank", "_blank") : null;
+    if (tab) tab.opener = null;
+    setBusy(true); setError("");
+    try {
+      const result = await saveNames({ data: { token: ownerToken, ...names } });
+      if ("error" in result) throw new Error(result.error);
+      if (channel === "whatsapp") {
+        const url = familyLink(SPARKS[spark].title, names, token);
+        if (tab) tab.location.href = url;
+        else window.location.href = url;
+      } else window.location.href = emailLink(SPARKS[spark].title, names, token);
+      window.__lovableEvents?.track?.(channel === "whatsapp" ? "project.remember_family_shared" : "project.remember_email_shared", {});
+      setSent(true);
+    } catch {
+      tab?.close();
+      setError("We could not save the names. Please try sharing again.");
+    } finally { setBusy(false); }
+  };
 
   return (
     <RememberShell step={4}>
@@ -349,7 +373,7 @@ function RememberWhen() {
       <Rise delay={300} className="mt-10">
         {sent ? (
           <p className="flex items-center gap-2 text-lg font-semibold">
-            <Check className="size-5 text-primary" /> Sent. Tell it tonight.
+            <Check className="size-5 text-primary" /> Your message is ready. Send it, then tell it tonight.
           </p>
         ) : (
           <p className="font-display text-2xl leading-snug">Who else was there? Ask them to add their part.</p>
@@ -368,12 +392,10 @@ function RememberWhen() {
           href={spark && token ? familyLink(SPARKS[spark].title, names, token) : "#"}
           target="_blank"
           rel="noreferrer"
-          aria-disabled={!namesOk}
+          aria-disabled={!namesOk || busy}
           onClick={(e) => {
-            if (!namesOk) return e.preventDefault();
-            void persistNames();
-            window.__lovableEvents?.track?.("project.remember_family_shared", {});
-            setSent(true);
+            e.preventDefault();
+            void share("whatsapp");
           }}
           className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90 aria-disabled:pointer-events-none aria-disabled:opacity-50"
         >
@@ -381,17 +403,16 @@ function RememberWhen() {
         </a>
         <a
           href={spark && token ? emailLink(SPARKS[spark].title, names, token) : "#"}
-          aria-disabled={!namesOk}
+          aria-disabled={!namesOk || busy}
           onClick={(e) => {
-            if (!namesOk) return e.preventDefault();
-            void persistNames();
-            window.__lovableEvents?.track?.("project.remember_email_shared", {});
-            setSent(true);
+            e.preventDefault();
+            void share("email");
           }}
           className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-sm border-2 border-primary bg-background px-6 text-base font-semibold text-foreground transition hover:bg-secondary aria-disabled:pointer-events-none aria-disabled:opacity-50"
         >
           <Mail className="size-5" /> Send it by email
         </a>
+        {error && <p role="alert" className="mt-4 text-sm text-primary">{error}</p>}
         {sent && ownerToken && (
           <div className="mt-8 rounded-sm bg-secondary px-5 py-4">
             <p className="font-semibold">Save your private link</p>
@@ -399,9 +420,11 @@ function RememberWhen() {
             <button
               type="button"
               onClick={async () => {
-                await navigator.clipboard?.writeText(ownerLink(ownerToken)).catch(() => {});
-                window.__lovableEvents?.track?.("project.remember_owner_link_copied", {});
-                setCopied(true);
+                try {
+                  await navigator.clipboard.writeText(ownerLink(ownerToken));
+                  window.__lovableEvents?.track?.("project.remember_owner_link_copied", {});
+                  setCopied(true);
+                } catch { setError("We could not copy the link. Please try again."); }
               }}
               className="mt-3 inline-flex h-11 items-center gap-2 rounded-sm border border-border bg-background px-4 text-sm font-semibold hover:border-primary"
             >

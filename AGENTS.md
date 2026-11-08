@@ -17,3 +17,5 @@
 - Journal Context (/journal) is an email invite list only: no sign-in; emails go to journal_waitlist (anon insert-only). Why: keep the test to one simple ask.
 - One Story, Together was removed; its tables and `story-audio` bucket are kept with no app code reaching them, and old `/one-story-together/*` URLs redirect. Why: the user kept the data but dropped the experiment.
 - Remember When (`/remember-when`, socials `/remember-when/socials`, family link `/remember-when/$token` (`rw_`, adds replies) and parent-only link `/remember-when/me/$token` (`rw_o_`, check-in, replies, delete)) stores typed or live-transcribed text plus one required photo (private `remember-photos` bucket, `pending/<uuid>`, signed URLs only), never audio; `remember_stories`/`remember_followups`/`remember_replies` have no client grants and are reached only via `src/lib/remember.functions.ts`. Why: the brief starts from a real baby photo, needs no sign-up, and a child's voice should not be stored.
+
+- Remember When quote inputs share an auto-expanding textarea so typed text, starter text and live transcription remain fully visible.
