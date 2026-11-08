@@ -4,7 +4,8 @@ import { z } from "zod";
 import { SPARK_KEYS } from "@/lib/remember-sparks";
 import { PHOTO_EXT, PHOTO_PATH, checkPhoto } from "@/lib/remember-photo";
 
-const token = z.string().regex(/^rw_[A-Za-z0-9_-]{40,}$/);
+// Accepts both the old long codes (40+ chars) and the new short ones (11).
+const token = z.string().regex(/^rw_[A-Za-z0-9_-]{10,}$/);
 const tag = z.string().trim().max(40).regex(/^[a-z0-9_-]*$/i).optional();
 
 async function admin() {
@@ -13,7 +14,8 @@ async function admin() {
 }
 
 function newToken(prefix = "rw_") {
-  const b = crypto.getRandomValues(new Uint8Array(32));
+  // 8 random bytes -> 11 base64url chars; ~64 bits of entropy, still unguessable.
+  const b = crypto.getRandomValues(new Uint8Array(8));
   let s = "";
   for (const x of b) s += String.fromCharCode(x);
   return `${prefix}${btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
