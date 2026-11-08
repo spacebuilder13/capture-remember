@@ -30,7 +30,7 @@ describe("Remember When mutation recovery", () => {
     await screen.findByText("We could not save your memory. Please try again.");
     fireEvent.click(screen.getByRole("button", { name: "Add my memory" }));
     await waitFor(() => expect(api.addRememberReply).toHaveBeenCalledTimes(2));
-    expect(api.addRememberReply.mock.calls[1][0].data.memory).toBe("Nani brought the cake.");
+    expect(api.addRememberReply.mock.calls[1]?.[0]?.data.memory).toBe("Nani brought the cake.");
   });
 
   it("reads a saved grandparent check-in on a fresh private-page visit", async () => {
@@ -52,7 +52,7 @@ describe("Remember When mutation recovery", () => {
     await screen.findByRole("alert");
     fireEvent.click(screen.getByRole("button", { name: "Not yet" }));
     await waitFor(() => expect(api.answerRememberFollowup).toHaveBeenCalledTimes(2));
-    expect(api.answerRememberFollowup.mock.calls[1][0].data.answer).toBe("not_yet");
+    expect(api.answerRememberFollowup.mock.calls[1]?.[0]?.data.answer).toBe("not_yet");
   });
 
   it("keeps the story available when deletion fails", async () => {
