@@ -191,7 +191,7 @@
       }
     },
     "project.remember_photo_picked": {
-      "event_schema_version": 1,
+      "event_schema_version": 2,
       "description": "Parent picked photos from the gallery.",
       "privacy": {
         "contains_pii": false,
