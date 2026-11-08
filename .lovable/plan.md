@@ -11,7 +11,10 @@
 2. **Stories with no blurred copy** (older stories, or stories with no photo) show a Remember When image instead of the registry image. They will not show their own photo for now.
 3. **No backfill.** Older photos won't be processed. If we do it later, it will be scoped to a list of stories you approve, with a record of every change so it can be undone.
 4. **Caching.** I'll shorten how long our server tells readers to keep the blurred image, from 1 hour to 10 minutes. This does not control WhatsApp: it may keep its own copy of a preview for an unknown time, including after a story is deleted.
-5. **No change to who can see or add photos:** anyone with the link (see Access).
+5. **No change to who can see or add photos:** anyone with the link (see Access). The wording in the app will say so plainly:
+   - Last screen, near the send buttons: "Anyone you send this link to, or who it's forwarded to, can see the story and photos and add to them."
+   - Family page, near "Add a photo": "Anyone with this link can see and add to this story."
+   - Parent's private page: "Keep this link to yourself. It's the only way to check in or delete the story."
 6. **Short link fallback.** The `/r/...` page shows a plain "Open story" link, so it still works if scripts fail to load.
 7. **Crawlers don't count as visitors.** The preview fetch only reads names. It never marks a link as opened and never sends events. Today the "link opened" mark and all events run only in a browser after the page loads. I'll also skip them when the browser identifies itself as a known preview or crawler bot, such as WhatsApp, Facebook, Twitter, Slack, Telegram or Google.
 8. **Cleanup** removes every test story's records (story, memories, check-ins, added photos) plus its stored original, added photos and blurred preview. That includes the earlier test story, if any is left. I'll confirm with a final query that none remain.
