@@ -309,6 +309,41 @@ export type Database = {
           },
         ]
       }
+      remember_photos: {
+        Row: {
+          added_by: string | null
+          created_at: string
+          id: string
+          path: string
+          role: string
+          story_id: string
+        }
+        Insert: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          path: string
+          role: string
+          story_id: string
+        }
+        Update: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          path?: string
+          role?: string
+          story_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "remember_photos_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "remember_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       remember_replies: {
         Row: {
           created_at: string
@@ -353,6 +388,7 @@ export type Database = {
           nominated_by: string | null
           owner_token: string | null
           photo_path: string | null
+          preview_path: string | null
           sender_name: string | null
           source: string | null
           spark: string
@@ -370,6 +406,7 @@ export type Database = {
           nominated_by?: string | null
           owner_token?: string | null
           photo_path?: string | null
+          preview_path?: string | null
           sender_name?: string | null
           source?: string | null
           spark: string
@@ -387,6 +424,7 @@ export type Database = {
           nominated_by?: string | null
           owner_token?: string | null
           photo_path?: string | null
+          preview_path?: string | null
           sender_name?: string | null
           source?: string | null
           spark?: string

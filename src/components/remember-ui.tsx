@@ -1,5 +1,5 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
-import { Lock } from "lucide-react";
+import { ImagePlus, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function MemHeader({ overPhoto = false }: { overPhoto?: boolean }) {
@@ -115,4 +115,49 @@ export function emailLink(title: string, n: Names, token: string) {
 
 export function familyLink(title: string, n: Names, token: string) {
   return `https://wa.me/?text=${encodeURIComponent(shareText(title, n, token))}`;
+}
+
+export function PhotoStrip({ photos }: { photos: { url: string; addedBy: string | null }[] }) {
+  if (!photos.length) return null;
+  return (
+    <div className="mt-6">
+      <p className="text-xs font-semibold uppercase text-primary">Photos the family added</p>
+      <ul className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {photos.map((p, i) => (
+          <li key={p.url} className={i % 2 ? "rotate-[1.5deg]" : "rotate-[-1.5deg]"}>
+            <img src={p.url} alt={`Photo added by ${p.addedBy || "family"}`} className="aspect-square w-full border-[5px] border-background object-cover shadow-md" />
+            <p className="mt-2 text-xs font-semibold text-muted-foreground">Added by {p.addedBy || "family"}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function AddPhotoButton({ busy, onFile }: { busy: boolean; onFile: (f: File) => void }) {
+  return (
+    <label className={`mt-4 flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-sm border border-dashed border-primary bg-background px-6 text-base font-semibold hover:bg-secondary ${busy ? "pointer-events-none opacity-50" : ""}`}>
+      <ImagePlus className="size-5 text-primary" /> {busy ? "Adding your photo…" : "Add a photo"}
+      <input type="file" accept="image/*" className="sr-only" aria-label="Add a photo" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) onFile(f); }} />
+    </label>
+  );
+}
+
+/** Shrinks a photo to max 1600px JPEG before upload. */
+export async function shrinkPhoto(file: File): Promise<File> {
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * k);
+    c.height = Math.round(bmp.height * k);
+    const ctx = c.getContext("2d");
+    if (!ctx) { bmp.close(); return file; }
+    ctx.drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close();
+    const b = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", 0.85));
+    return b ? new File([b], "photo.jpg", { type: "image/jpeg" }) : file;
+  } catch {
+    return file;
+  }
 }
