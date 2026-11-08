@@ -101,14 +101,17 @@ export function ownerLink(ownerToken: string) {
   return `${SHARE_ORIGIN}/remember-when/me/${ownerToken}`;
 }
 
-export function emailLink(title: string, story: string, token: string) {
+export type Names = { sender: string; child: string };
+
+function shareText(title: string, n: Names, token: string) {
   const url = `${SHARE_ORIGIN}/remember-when/${token}`;
-  const body = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nWhat do you remember? Add it here: ${url}`;
-  return `mailto:?subject=${encodeURIComponent(`A story for tonight: ${title}`)}&body=${encodeURIComponent(body)}`;
+  return `Hi! It's ${n.sender}.\n\n${n.child} found this photo and keeps asking about it:\n"${title}"\n\nI'm telling them the story tonight. You were part of it, so I'd love your bit too.\n\nAdd one line here, it takes a minute. I'll read it to ${n.child} tonight:\n${url}`;
 }
 
-export function familyLink(title: string, story: string, token: string) {
-  const url = `${SHARE_ORIGIN}/remember-when/${token}`;
-  const text = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nWhat do you remember? Add it here: ${url}`;
-  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+export function emailLink(title: string, n: Names, token: string) {
+  return `mailto:?subject=${encodeURIComponent(`${n.child} keeps asking about this photo`)}&body=${encodeURIComponent(shareText(title, n, token))}`;
+}
+
+export function familyLink(title: string, n: Names, token: string) {
+  return `https://wa.me/?text=${encodeURIComponent(shareText(title, n, token))}`;
 }

@@ -343,6 +343,7 @@ export type Database = {
       }
       remember_stories: {
         Row: {
+          child_name: string | null
           created_at: string
           email: string | null
           id: string
@@ -352,12 +353,14 @@ export type Database = {
           nominated_by: string | null
           owner_token: string | null
           photo_path: string | null
+          sender_name: string | null
           source: string | null
           spark: string
           story: string
           token: string
         }
         Insert: {
+          child_name?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -367,12 +370,14 @@ export type Database = {
           nominated_by?: string | null
           owner_token?: string | null
           photo_path?: string | null
+          sender_name?: string | null
           source?: string | null
           spark: string
           story: string
           token: string
         }
         Update: {
+          child_name?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -382,6 +387,7 @@ export type Database = {
           nominated_by?: string | null
           owner_token?: string | null
           photo_path?: string | null
+          sender_name?: string | null
           source?: string | null
           spark?: string
           story?: string
