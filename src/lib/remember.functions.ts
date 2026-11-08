@@ -122,7 +122,8 @@ export const getRememberOwnerStory = createServerFn({ method: "POST" })
     const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token, child_name").eq("owner_token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
     const { data: replies } = await db.from("remember_replies").select("name, memory, created_at").eq("story_id", row.id).order("created_at");
-    return { spark: row.spark, story: row.story, childName: row.child_name, familyToken: row.token, photoUrl: await signed(db, row.photo_path), replies: replies ?? [] };
+    const { data: followups } = await db.from("remember_followups").select("answer, who").eq("story_id", row.id).order("created_at", { ascending: false }).limit(1);
+    return { spark: row.spark, story: row.story, childName: row.child_name, familyToken: row.token, photoUrl: await signed(db, row.photo_path), replies: replies ?? [], last: followups?.[0] ?? null };
   });
 
 export const addRememberReply = createServerFn({ method: "POST" })
@@ -173,10 +174,17 @@ export const deleteRememberStory = createServerFn({ method: "POST" })
     const db = await admin();
     const { data: row } = await db.from("remember_stories").select("id, photo_path").eq("owner_token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work." };
-    if (row.photo_path) await db.storage.from("remember-photos").remove([row.photo_path]);
-    await db.from("remember_followups").delete().eq("story_id", row.id);
-    await db.from("remember_replies").delete().eq("story_id", row.id);
-    await db.from("remember_stories").delete().eq("id", row.id);
+    const failure = { error: "We could not finish deleting your story. Please try again." };
+    if (row.photo_path) {
+      const { error } = await db.storage.from("remember-photos").remove([row.photo_path]);
+      if (error) return failure;
+    }
+    const followups = await db.from("remember_followups").delete().eq("story_id", row.id);
+    if (followups.error) return failure;
+    const replies = await db.from("remember_replies").delete().eq("story_id", row.id);
+    if (replies.error) return failure;
+    const story = await db.from("remember_stories").delete().eq("id", row.id);
+    if (story.error) return failure;
     return { ok: true };
   });
 

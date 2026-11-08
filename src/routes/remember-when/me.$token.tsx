@@ -24,6 +24,8 @@ export const Route = createFileRoute("/remember-when/me/$token")({
 type Answer = "joined" | "just_me" | "not_yet";
 type Who = "partner" | "grandparent" | "child" | "someone_else";
 const WHO: Record<Who, string> = { partner: "Partner", grandparent: "Grandparent", child: "My child", someone_else: "Someone else" };
+const isAnswer = (value: string): value is Answer => ["joined", "just_me", "not_yet"].includes(value);
+const isWho = (value: string): value is Who => Object.hasOwn(WHO, value);
 type Data = { spark: string; story: string; childName: string | null; photoUrl: string | null; replies: { name: string | null; memory: string }[] };
 
 function OwnerLink() {
@@ -36,23 +38,41 @@ function OwnerLink() {
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [who, setWho] = useState<Who[]>([]);
   const [deleted, setDeleted] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     get({ data: { token } })
-      .then((r) => ("error" in r ? setError(r.error ?? "") : setStory(r)))
+      .then((r) => {
+        if ("error" in r) return setError(r.error ?? "");
+        setStory(r);
+        if (r.last && isAnswer(r.last.answer)) {
+          setAnswer(r.last.answer);
+          setWho((r.last.who ?? []).filter(isWho));
+        }
+      })
       .catch(() => setError("This link does not work."));
   }, [token, get]);
 
   const pick = async (a: Answer) => {
-    setAnswer(a);
-    window.__lovableEvents?.track?.("project.remember_checkin_answered", { answer: a });
-    await answerFn({ data: { token, answer: a, who: [] } });
+    setBusy(true); setError("");
+    try {
+      const res = await answerFn({ data: { token, answer: a, who: [] } });
+      if ("error" in res) return setError(res.error ?? "Please try again.");
+      setAnswer(a);
+      window.__lovableEvents?.track?.("project.remember_checkin_answered", { answer: a });
+    } catch { setError("We could not save your answer. Please try again."); }
+    finally { setBusy(false); }
   };
   const toggleWho = async (w: Who) => {
     const next = who.includes(w) ? who.filter((x) => x !== w) : [...who, w];
-    setWho(next);
-    if (!who.includes(w)) window.__lovableEvents?.track?.("project.remember_who_joined", { who: w });
-    await answerFn({ data: { token, answer: "joined", who: next } });
+    setBusy(true); setError("");
+    try {
+      const res = await answerFn({ data: { token, answer: "joined", who: next } });
+      if ("error" in res) return setError(res.error ?? "Please try again.");
+      setWho(next);
+      if (!who.includes(w)) window.__lovableEvents?.track?.("project.remember_who_joined", { who: w });
+    } catch { setError("We could not save your answer. Please try again."); }
+    finally { setBusy(false); }
   };
 
   if (deleted) return <RememberShell><p className="text-lg">Your story is deleted.</p></RememberShell>;
@@ -86,9 +106,9 @@ function OwnerLink() {
         <div className="mt-12 border-t border-border pt-8">
           <h1 className="font-display text-3xl leading-tight">Did you tell it? Did anyone join in?</h1>
           <div className="mt-6 grid gap-3">
-            <BigButton onClick={() => pick("joined")}>Yes, someone added to it</BigButton>
-            <BigButton variant="outline" onClick={() => pick("just_me")}>I told it, just me</BigButton>
-            <BigButton variant="outline" onClick={() => pick("not_yet")}>Not yet</BigButton>
+            <BigButton disabled={busy} onClick={() => pick("joined")}>Yes, someone added to it</BigButton>
+            <BigButton disabled={busy} variant="outline" onClick={() => pick("just_me")}>I told it, just me</BigButton>
+            <BigButton disabled={busy} variant="outline" onClick={() => pick("not_yet")}>Not yet</BigButton>
           </div>
         </div>
       ) : (
@@ -98,7 +118,7 @@ function OwnerLink() {
               <h1 className="font-display text-3xl leading-tight">Lovely. Who joined?</h1>
               <div className="mt-5 flex flex-wrap gap-2">
                 {(Object.keys(WHO) as Who[]).map((w) => (
-                  <button key={w} type="button" onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border border-border px-5 py-2.5 font-semibold transition ${who.includes(w) ? "border-primary bg-primary text-primary-foreground" : "bg-background"}`}>
+                  <button key={w} type="button" disabled={busy} onClick={() => toggleWho(w)} aria-pressed={who.includes(w)} className={`rounded-full border border-border px-5 py-2.5 font-semibold transition ${who.includes(w) ? "border-primary bg-primary text-primary-foreground" : "bg-background"}`}>
                     {WHO[w]}
                   </button>
                 ))}
@@ -116,14 +136,21 @@ function OwnerLink() {
         </div>
       )}
 
+      {error && <p role="alert" className="mt-6 text-sm text-primary">{error}</p>}
       <p className="mt-12 text-center text-sm text-muted-foreground">Only you have this link. Keep it to see what family add.</p>
       <button
         type="button"
+        disabled={busy}
         className="mx-auto mt-4 block text-xs text-muted-foreground underline"
         onClick={async () => {
           if (!window.confirm("Delete this story?")) return;
-          await del({ data: { token } });
-          setDeleted(true);
+          setBusy(true); setError("");
+          try {
+            const res = await del({ data: { token } });
+            if ("error" in res) return setError(res.error ?? "Please try again.");
+            setDeleted(true);
+          } catch { setError("We could not delete your story. Please try again."); }
+          finally { setBusy(false); }
         }}
       >
         Delete my story

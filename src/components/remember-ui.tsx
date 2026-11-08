@@ -1,5 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function MemHeader({ overPhoto = false }: { overPhoto?: boolean }) {
   return (
@@ -58,14 +59,14 @@ export function StoryCard({ title, story, photoUrl }: { title: string; story: st
 
 export function BigButton({ children, onClick, disabled, variant = "solid" }: { children: ReactNode; onClick: () => void; disabled?: boolean; variant?: "solid" | "outline" }) {
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
       disabled={disabled}
       className={`flex h-14 w-full items-center justify-center rounded-sm px-6 text-base font-semibold transition active:scale-[0.98] disabled:opacity-50 ${variant === "solid" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-border bg-background text-foreground hover:border-primary"}`}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 

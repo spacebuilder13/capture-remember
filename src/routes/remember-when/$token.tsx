@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Mic } from "lucide-react";
 import { useEffect, useState } from "react";
+import { RememberTextarea } from "@/components/remember-textarea";
 
 import { BigButton, RememberShell, Rise, StoryCard } from "@/components/remember-ui";
 import { useSpeech } from "@/hooks/use-speech";
@@ -44,11 +45,13 @@ function FamilyLink() {
   const onAdd = async () => {
     setBusy(true);
     setError("");
-    const res = await add({ data: { token, memory, name: name || undefined } });
-    setBusy(false);
-    if ("error" in res) return setError(res.error ?? "Please try again.");
-    window.__lovableEvents?.track?.("project.remember_reply_added", {});
-    setDone(true);
+    try {
+      const res = await add({ data: { token, memory, name: name || undefined } });
+      if ("error" in res) return setError(res.error ?? "Please try again.");
+      window.__lovableEvents?.track?.("project.remember_reply_added", {});
+      setDone(true);
+    } catch { setError("We could not save your memory. Please try again."); }
+    finally { setBusy(false); }
   };
 
   if (!story) return <RememberShell><p className={error ? "text-lg" : "text-muted-foreground"}>{error || "Loading the story…"}</p></RememberShell>;
@@ -84,14 +87,14 @@ function FamilyLink() {
           </div>
           <blockquote className="relative mt-8 px-8 sm:px-10">
             <span aria-hidden className="absolute -top-4 left-0 font-display text-6xl leading-none text-primary">“</span>
-            <textarea
+            <RememberTextarea
               value={speech.listening ? `${memory} ${speech.interim}`.trim() : memory}
               readOnly={speech.listening}
               onChange={(e) => speech.setText(e.target.value.slice(0, 400))}
               placeholder="I remember when…"
               aria-label="What you remember"
               rows={3}
-              className="block w-full resize-none border-b border-transparent bg-transparent font-display text-xl leading-snug outline-none placeholder:text-muted-foreground/70 focus:border-border sm:text-2xl"
+              className="block w-full resize-none overflow-hidden border-b border-transparent bg-transparent font-display text-xl leading-snug outline-none placeholder:text-muted-foreground focus:border-border sm:text-2xl"
             />
             <span aria-hidden className="absolute -bottom-8 right-0 font-display text-6xl leading-none text-primary">”</span>
             <p className="mt-1 text-right text-xs text-muted-foreground">{memory.length}/400</p>
