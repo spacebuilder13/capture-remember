@@ -229,6 +229,12 @@
         "properties": {}
       }
     },
+    "project.remember_email_shared": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Send it by email.",
+      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
+      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+    },
     "project.remember_photo_failed": {
       "event_schema_version": 1,
       "description": "Photo upload failed.",

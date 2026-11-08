@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mic, Send } from "lucide-react";
+import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mail, Mic, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, familyLink } from "@/components/remember-ui";
+import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { ANIMALS } from "@/components/remember-animals";
@@ -334,29 +334,37 @@ function RememberWhen() {
     <RememberShell step={4}>
       <h1 className="font-display text-4xl leading-tight sm:text-5xl">Tell it to them tonight.</h1>
       <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} photoUrl={photo?.url} />}</div>
-      {sent ? (
-        <Rise className="mt-10">
+      <Rise delay={300} className="mt-10">
+        {sent ? (
           <p className="flex items-center gap-2 text-lg font-semibold">
             <Check className="size-5 text-primary" /> Sent. Tell it tonight.
           </p>
-        </Rise>
-      ) : (
-        <Rise delay={300} className="mt-10">
+        ) : (
           <p className="font-display text-2xl leading-snug">Who else should hear this? Send it to them.</p>
-          <a
-            href={spark && token && typeof window !== "undefined" ? familyLink(SPARKS[spark].title, story, token) : "#"}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => {
-              window.__lovableEvents?.track?.("project.remember_family_shared", { spark });
-              setSent(true);
-            }}
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90"
-          >
-            <Send className="size-5" /> Send it to family on WhatsApp
-          </a>
-        </Rise>
-      )}
+        )}
+        <a
+          href={spark && token ? familyLink(SPARKS[spark].title, story, token) : "#"}
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => {
+            window.__lovableEvents?.track?.("project.remember_family_shared", { spark });
+            setSent(true);
+          }}
+          className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90"
+        >
+          <Send className="size-5" /> Send it on WhatsApp
+        </a>
+        <a
+          href={spark && token ? emailLink(SPARKS[spark].title, story, token) : "#"}
+          onClick={() => {
+            window.__lovableEvents?.track?.("project.remember_email_shared", {});
+            setSent(true);
+          }}
+          className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-sm border-2 border-primary bg-background px-6 text-base font-semibold text-foreground transition hover:bg-secondary"
+        >
+          <Mail className="size-5" /> Send it by email
+        </a>
+      </Rise>
     </RememberShell>
   );
 }
