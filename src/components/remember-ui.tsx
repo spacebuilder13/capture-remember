@@ -104,7 +104,7 @@ export function ownerLink(ownerToken: string) {
 export type Names = { sender: string; child: string };
 
 function shareText(title: string, n: Names, token: string) {
-  const url = `${SHARE_ORIGIN}/remember-when/${token}`;
+  const url = `${SHARE_ORIGIN}/r/${token}`;
   return `Hi! It's ${n.sender}.\n\n${n.child} found this photo and keeps asking about it:\n"${title}"\n\nI'm telling them the story tonight. You were part of it, so I'd love your bit too.\n\nAdd one line here, it takes a minute. I'll read it to ${n.child} tonight:\n${url}`;
 }
 
