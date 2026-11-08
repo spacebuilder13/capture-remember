@@ -97,14 +97,18 @@ export function nomineeLink() {
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
+export function ownerLink(ownerToken: string) {
+  return `${SHARE_ORIGIN}/remember-when/me/${ownerToken}`;
+}
+
 export function emailLink(title: string, story: string, token: string) {
   const url = `${SHARE_ORIGIN}/remember-when/${token}`;
-  const body = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nAdd what you remember: ${url}`;
+  const body = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nWhat do you remember? Add it here: ${url}`;
   return `mailto:?subject=${encodeURIComponent(`A story for tonight: ${title}`)}&body=${encodeURIComponent(body)}`;
 }
 
 export function familyLink(title: string, story: string, token: string) {
   const url = `${SHARE_ORIGIN}/remember-when/${token}`;
-  const text = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nAdd what you remember: ${url}`;
+  const text = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nWhat do you remember? Add it here: ${url}`;
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }

@@ -4,7 +4,7 @@ import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mail, Mic, Send } from "l
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink } from "@/components/remember-ui";
+import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink, ownerLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { ANIMALS } from "@/components/remember-animals";
@@ -55,6 +55,8 @@ function RememberWhen() {
   const [spark, setSpark] = useState<SparkKey | null>(null);
   const [mode, setMode] = useState<"spoken" | "typed">("spoken");
   const [token, setToken] = useState<string | null>(null);
+  const [ownerToken, setOwnerToken] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
@@ -122,6 +124,7 @@ function RememberWhen() {
     if ("error" in res) return setError(res.error ?? "Please try again.");
     window.__lovableEvents?.track?.("project.remember_story_saved", { spark, mode: typedOnly ? "typed" : mode, length: story.length });
     setToken(res.token);
+    setOwnerToken(res.ownerToken);
     go("tonight");
   };
 
@@ -364,6 +367,23 @@ function RememberWhen() {
         >
           <Mail className="size-5" /> Send it by email
         </a>
+        {sent && ownerToken && (
+          <div className="mt-8 rounded-sm bg-secondary px-5 py-4">
+            <p className="font-semibold">Save your private link</p>
+            <p className="mt-1 text-sm text-muted-foreground">See what family add, and tell us how tonight went.</p>
+            <button
+              type="button"
+              onClick={async () => {
+                await navigator.clipboard?.writeText(ownerLink(ownerToken)).catch(() => {});
+                window.__lovableEvents?.track?.("project.remember_owner_link_copied", {});
+                setCopied(true);
+              }}
+              className="mt-3 inline-flex h-11 items-center gap-2 rounded-sm border border-border bg-background px-4 text-sm font-semibold hover:border-primary"
+            >
+              {copied ? <><Check className="size-4 text-primary" /> Copied</> : "Copy my private link"}
+            </button>
+          </div>
+        )}
       </Rise>
     </RememberShell>
   );
