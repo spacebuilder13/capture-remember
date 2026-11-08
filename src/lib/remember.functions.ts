@@ -12,11 +12,11 @@ async function admin() {
   return supabaseAdmin;
 }
 
-function newToken() {
+function newToken(prefix = "rw_") {
   const b = crypto.getRandomValues(new Uint8Array(32));
   let s = "";
   for (const x of b) s += String.fromCharCode(x);
-  return `rw_${btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
+  return `${prefix}${btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")}`;
 }
 
 export const uploadRememberPhoto = createServerFn({ method: "POST" })
@@ -63,6 +63,7 @@ export const saveRememberStory = createServerFn({ method: "POST" })
     const row = {
       photo_path: data.photoPath,
       token: newToken(),
+      owner_token: newToken("rw_o_"),
       spark: data.spark,
       story: data.story,
       mode: data.mode,
@@ -75,7 +76,7 @@ export const saveRememberStory = createServerFn({ method: "POST" })
       console.error(error);
       return { error: "We could not save your story. Please try again." };
     }
-    return { token: row.token };
+    return { token: row.token, ownerToken: row.owner_token };
   });
 
 export const saveRememberEmail = createServerFn({ method: "POST" })
@@ -106,6 +107,40 @@ export const getRememberStory = createServerFn({ method: "POST" })
     return { spark: row.spark, story: row.story, photoUrl, last: f?.[0] ?? null };
   });
 
+async function signed(db: Awaited<ReturnType<typeof admin>>, path: string | null) {
+  if (!path) return null;
+  const { data: s } = await db.storage.from("remember-photos").createSignedUrl(path, 3600);
+  return s?.signedUrl ?? null;
+}
+
+export const getRememberOwnerStory = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ token }).parse(d))
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token").eq("owner_token", data.token).maybeSingle();
+    if (!row) return { error: "This link does not work. It may have been deleted." };
+    const { data: replies } = await db.from("remember_replies").select("name, memory, created_at").eq("story_id", row.id).order("created_at");
+    return { spark: row.spark, story: row.story, familyToken: row.token, photoUrl: await signed(db, row.photo_path), replies: replies ?? [] };
+  });
+
+export const addRememberReply = createServerFn({ method: "POST" })
+  .inputValidator((d) =>
+    z.object({ token, name: z.string().trim().max(40).optional(), memory: z.string().trim().min(2).max(400) }).parse(d),
+  )
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { data: row } = await db.from("remember_stories").select("id").eq("token", data.token).maybeSingle();
+    if (!row) return { error: "This link does not work." };
+    const { count } = await db.from("remember_replies").select("id", { count: "exact", head: true }).eq("story_id", row.id);
+    if ((count ?? 0) >= 20) return { error: "This story has lots of memories already. Thank you!" };
+    const { error } = await db.from("remember_replies").insert({ story_id: row.id, name: data.name || null, memory: data.memory });
+    if (error) {
+      console.error(error);
+      return { error: "We could not save your memory. Please try again." };
+    }
+    return { ok: true };
+  });
+
 export const answerRememberFollowup = createServerFn({ method: "POST" })
   .inputValidator((d) =>
     z
@@ -118,7 +153,7 @@ export const answerRememberFollowup = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("id").eq("token", data.token).maybeSingle();
+    const { data: row } = await db.from("remember_stories").select("id").eq("owner_token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work." };
     const { count } = await db.from("remember_followups").select("id", { count: "exact", head: true }).eq("story_id", row.id);
     if ((count ?? 0) > 20) return { ok: true };
@@ -134,8 +169,11 @@ export const deleteRememberStory = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token }).parse(d))
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("photo_path").eq("token", data.token).maybeSingle();
-    if (row?.photo_path) await db.storage.from("remember-photos").remove([row.photo_path]);
-    await db.from("remember_stories").delete().eq("token", data.token);
+    const { data: row } = await db.from("remember_stories").select("id, photo_path").eq("owner_token", data.token).maybeSingle();
+    if (!row) return { error: "This link does not work." };
+    if (row.photo_path) await db.storage.from("remember-photos").remove([row.photo_path]);
+    await db.from("remember_followups").delete().eq("story_id", row.id);
+    await db.from("remember_replies").delete().eq("story_id", row.id);
+    await db.from("remember_stories").delete().eq("id", row.id);
     return { ok: true };
   });
