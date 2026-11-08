@@ -97,6 +97,12 @@ export function nomineeLink() {
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
+export function emailLink(title: string, story: string, token: string) {
+  const url = `${SHARE_ORIGIN}/remember-when/${token}`;
+  const body = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nAdd what you remember: ${url}`;
+  return `mailto:?subject=${encodeURIComponent(`A story for tonight: ${title}`)}&body=${encodeURIComponent(body)}`;
+}
+
 export function familyLink(title: string, story: string, token: string) {
   const url = `${SHARE_ORIGIN}/remember-when/${token}`;
   const text = `I'm telling our little one this tonight: ${title}.\n\n"${story}"\n\nAdd what you remember: ${url}`;
