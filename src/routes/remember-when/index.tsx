@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, Check, ImagePlus, Keyboard, Lock, Mic, Send } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, familyLink } from "@/components/remember-ui";
@@ -61,30 +61,42 @@ function RememberWhen() {
   const speech = useSpeech(60);
   const save = useServerFn(saveRememberStory);
   const upload = useServerFn(uploadRememberPhoto);
-  const [photo, setPhoto] = useState<{ blob: Blob; url: string } | null>(null);
+  const [picks, setPicks] = useState<{ file: File; url: string }[]>([]);
+  const [chosen, setChosen] = useState(0);
+  const [photo, setPhoto] = useState<{ url: string } | null>(null);
   const [photoPath, setPhotoPath] = useState<string | null>(null);
+  const [uploadedIdx, setUploadedIdx] = useState<number | null>(null);
 
-  const onPick = async (f: File | undefined) => {
-    if (!f) return;
+  useEffect(() => () => picks.forEach((p) => URL.revokeObjectURL(p.url)), [picks]);
+
+  const onPick = (list: FileList | null) => {
+    const files = Array.from(list ?? []).filter((f) => f.type.startsWith("image/") || f.type === "").slice(0, 6);
+    if (!files.length) return;
     setError("");
-    window.__lovableEvents?.track?.(photo ? "project.remember_photo_replaced" : "project.remember_photo_picked", {});
-    const blob = await shrink(f);
-    if (photo) URL.revokeObjectURL(photo.url);
-    setPhoto({ blob, url: URL.createObjectURL(blob) });
+    window.__lovableEvents?.track?.(picks.length ? "project.remember_photo_replaced" : "project.remember_photo_picked", picks.length ? {} : { count: files.length });
+    setPicks(files.map((file) => ({ file, url: URL.createObjectURL(file) })));
+    setChosen(0);
     setPhotoPath(null);
+    setUploadedIdx(null);
   };
 
   const onUsePhoto = async () => {
-    if (!photo) return;
-    if (photoPath) return go("spark");
+    const pick = picks[chosen];
+    if (!pick) return;
+    if (photoPath && uploadedIdx === chosen) return go("spark");
     setBusy(true);
     setError("");
+    window.__lovableEvents?.track?.("project.remember_photo_chosen", { position: chosen + 1, count: picks.length });
+    const blob = await shrink(pick.file);
+    if (photo) URL.revokeObjectURL(photo.url);
+    setPhoto({ url: URL.createObjectURL(blob) });
     const fd = new FormData();
-    fd.append("photo", new File([photo.blob], "photo.jpg", { type: photo.blob.type || "image/jpeg" }));
+    fd.append("photo", new File([blob], "photo.jpg", { type: blob.type || "image/jpeg" }));
     try {
       const res = await upload({ data: fd });
       if ("error" in res) throw new Error(res.error);
       setPhotoPath(res.path);
+      setUploadedIdx(chosen);
       go("spark");
     } catch (e) {
       window.__lovableEvents?.track?.("project.remember_photo_failed", {});
@@ -163,26 +175,54 @@ function RememberWhen() {
       <RememberShell step={1}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">Add the photo.</h1>
         <p className="mt-3 text-muted-foreground">Find the photo they would ask about.</p>
-        {photo ? (
+        {picks.length === 1 ? (
           <Rise className="mt-8 flex flex-col items-center">
-            <img src={photo.url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
+            <img src={picks[0].url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
             <label className="mt-5 cursor-pointer text-sm underline">
-              Pick another
-              <input type="file" accept="image/*" className="sr-only" onChange={(e) => onPick(e.target.files?.[0])} />
+              Pick again
+              <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { onPick(e.target.files); e.target.value = ""; }} />
             </label>
           </Rise>
+        ) : picks.length > 1 ? (
+          <div className="mt-8">
+            <p className="mb-4 font-display text-2xl">Which one would they ask about?</p>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {picks.map((p, i) => (
+                <Rise key={p.url} delay={60 * i}>
+                  <button
+                    type="button"
+                    aria-label={`Photo ${i + 1}`}
+                    aria-pressed={chosen === i}
+                    onClick={() => setChosen(i)}
+                    className={`relative block w-full border-[6px] bg-background shadow-md transition ${chosen === i ? "rotate-[-2deg] border-primary" : "border-background hover:border-border"}`}
+                  >
+                    <img src={p.url} alt="" className="aspect-square w-full object-cover" />
+                    {chosen === i && (
+                      <span className="absolute right-1.5 top-1.5 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <Check className="size-4" />
+                      </span>
+                    )}
+                  </button>
+                </Rise>
+              ))}
+            </div>
+            <label className="mt-5 block cursor-pointer text-center text-sm underline">
+              Pick again
+              <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { onPick(e.target.files); e.target.value = ""; }} />
+            </label>
+          </div>
         ) : (
           <label className="mt-8 flex aspect-[4/3] w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-primary bg-secondary text-center transition hover:bg-secondary/70">
             <ImagePlus className="size-12 text-primary" />
-            <span className="text-lg font-semibold">Tap to pick a photo</span>
-            <span className="text-sm text-muted-foreground">From your phone or camera</span>
-            <input type="file" accept="image/*" aria-label="Pick a photo" className="sr-only" onChange={(e) => onPick(e.target.files?.[0])} />
+            <span className="text-lg font-semibold">Pick a few photos</span>
+            <span className="text-sm text-muted-foreground">Up to 6 from your phone</span>
+            <input type="file" accept="image/*" multiple aria-label="Pick photos" className="sr-only" onChange={(e) => { onPick(e.target.files); e.target.value = ""; }} />
           </label>
         )}
         <p className="mt-5 flex items-center justify-center gap-2 text-xs text-muted-foreground"><Lock className="size-3.5" /> Only you and the people you send it to can see this photo.</p>
         {error && <p className="mt-4 text-sm text-primary">{error}</p>}
         <div className="mt-6">
-          <BigButton onClick={onUsePhoto} disabled={!photo || busy}>{busy ? "Saving photo…" : "Use this photo"}</BigButton>
+          <BigButton onClick={onUsePhoto} disabled={!picks.length || busy}>{busy ? "Saving photo…" : "Use this photo"}</BigButton>
         </div>
       </RememberShell>
     );
