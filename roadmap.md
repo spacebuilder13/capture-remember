@@ -24,3 +24,7 @@
 - [x] Add the campaign 04 motion direction and copy review page
 - [x] Build final campaign 04 videos, covers, copy downloads, and asset package
 - [x] Replace campaign 04 creative set with the distance-led Daadi story
+- [x] Remember When: story-specific previews on both link types, crawler guard, link-holder wording, photo add re-verified
+- [ ] Remember When: check a real WhatsApp preview (waiting on: publish + user pasting a link)
+- [ ] Remember When: remove 2 leftover unsaved test photos from earlier rounds (waiting on: an admin cleanup step)
+- [ ] Remember When: backfill blurred previews for older stories (waiting on: user approval of dry-run count)
