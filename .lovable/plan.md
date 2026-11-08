@@ -11,7 +11,7 @@
 2. **Stories with no blurred copy** (older stories, or stories with no photo) show a Remember When image instead of the registry image. They will not show their own photo for now.
 3. **No backfill.** Older photos won't be processed. If we do it later, it will be scoped to a list of stories you approve, with a record of every change so it can be undone.
 4. **Caching.** I'll shorten how long our server tells readers to keep the blurred image, from 1 hour to 10 minutes. This does not control WhatsApp: it may keep its own copy of a preview for an unknown time, including after a story is deleted.
-5. **No change to who can see or add photos** until you decide (see below).
+5. **No change to who can see or add photos:** anyone with the link (see Access).
 6. **Short link fallback.** The `/r/...` page shows a plain "Open story" link, so it still works if scripts fail to load.
 7. **Crawlers don't count as visitors.** The preview fetch only reads names. It never marks a link as opened and never sends events. Today the "link opened" mark and all events run only in a browser after the page loads. I'll also skip them when the browser identifies itself as a known preview or crawler bot, such as WhatsApp, Facebook, Twitter, Slack, Telegram or Google.
 8. **Cleanup** removes every test story's records (story, memories, check-ins, added photos) plus its stored original, added photos and blurred preview. That includes the earlier test story, if any is left. I'll confirm with a final query that none remain.
@@ -23,13 +23,14 @@
 - Admin access stays inside the server. It is never printed, saved to a file or shown in chat.
 - Run only after you approve the dry-run count.
 
-## Access: how it works today, and a decision for you
-- Each story has two secret codes: one in the family link, one in the parent's private link. The app checks the code on every request. Without the code it gives nothing, and it never lists or indexes stories. Photos are private and shown only through links that expire after an hour.
-- The only thing readable without signing in is the blurred preview, and only with the family code.
-- **Gap against your requirement:** the code is the only check. Anyone a family link is forwarded to can view and add photos. When I asked earlier, "link holder is enough" was the option picked. But your written requirement says a forwarded link should not count as an intended recipient. These two conflict, and I'm not treating the earlier choice as settled.
-- **Options:**
-  - Keep link-holder access, and say clearly that it does not meet the written requirement.
-  - Named recipients: the parent adds each person's phone or email, and the person confirms with a one-time code before seeing or adding photos. The blurred preview can still work, because it doesn't need the real photo. This is a separate piece of work, and email codes need a sending setup.
+## Access (confirmed: anyone with the link)
+- Each story has two secret codes: one in the family link and one in the parent's private link. The app checks the code on every request. Without the code it gives nothing, and it never lists or indexes stories. Photos are private and shown only through links that expire after an hour.
+- **Intended recipients are anyone who holds the family link, including people it's forwarded to.** They can view and add photos and memories. Only the parent's private link can check in or delete.
+- The only thing readable without signing in is the blurred preview, and only with the family code. The real photos are never served there. This fits the link-holder model, since a preview reader also has the link.
+- No named-recipient or one-time-code check for this test.
+
+## Deliberate limitation
+- New stories get their own blurred-photo preview. Older stories with no blurred copy, and stories with no photo, show the Remember When campaign image, not their own photo.
 
 ## Checks
 - **Previews:** for both link types (`/r/...` and the full family page), test a new story, an older story and a story with no photo. Fetch each with WhatsApp and Facebook crawler headers and confirm the first response has the right title and image tags, and that the image loads. After you publish, check one real WhatsApp preview by pasting a new family link into a chat.
