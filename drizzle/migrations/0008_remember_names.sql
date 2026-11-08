@@ -1,0 +1,1 @@
+ALTER TABLE public.remember_stories ADD COLUMN sender_name text, ADD COLUMN child_name text;
