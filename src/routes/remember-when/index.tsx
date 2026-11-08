@@ -158,13 +158,15 @@ function RememberWhen() {
           </div>
           <div className="w-full max-w-[calc(82svh*9/16)] px-5 py-5">{startButton}</div>
         </section>
-        <section className="hidden min-h-svh bg-secondary [@media(min-aspect-ratio:3/4)]:grid [@media(min-aspect-ratio:3/4)]:grid-cols-[1fr_auto]">
-          <div className="flex flex-col justify-center px-8 pt-20 pb-12 lg:px-16">
-            <h1 className="max-w-lg font-display text-4xl leading-tight lg:text-6xl">What's the first story your little one would ask about?</h1>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-muted-foreground">Pick one. Tell it in your own words. Tell it to them tonight.</p>
-            <div className="mt-8">{startButton}</div>
+        <section className="hidden min-h-svh bg-secondary [@media(min-aspect-ratio:3/4)]:flex [@media(min-aspect-ratio:3/4)]:items-center">
+          <div className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] items-center gap-10 px-5 pt-24 pb-12 sm:px-8 lg:gap-16 lg:px-12">
+            <div className="min-w-0">
+              <h1 className="font-display text-4xl leading-tight lg:text-6xl xl:text-7xl">What's the first story your little one would ask about?</h1>
+              <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground xl:text-xl">Pick one. Tell it in your own words. Tell it to them tonight.</p>
+              <div className="mt-10 [&>button]:h-14 [&>button]:px-8 [&>button]:text-lg">{startButton}</div>
+            </div>
+            <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square w-full max-h-[78svh] justify-self-end rounded-sm object-cover shadow-lg" />
           </div>
-          <img src={squareImage.url} alt="A father, mother and their two-year-old look at a baby photo on a phone. Who's that baby?" className="aspect-square mr-[4vw] w-[50vw] max-w-[88svh] self-center rounded-sm shadow-lg object-cover" />
         </section>
         <section className="bg-secondary py-20 sm:py-28 [@media(min-aspect-ratio:3/4)]:hidden">
           <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
