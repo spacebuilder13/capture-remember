@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const api = vi.hoisted(() => ({ getRememberStory: vi.fn(), addRememberReply: vi.fn(), getRememberOwnerStory: vi.fn(), answerRememberFollowup: vi.fn(), deleteRememberStory: vi.fn() }));
+const api = vi.hoisted(() => ({ getRememberStory: vi.fn(), addRememberReply: vi.fn(), getRememberOwnerStory: vi.fn(), answerRememberFollowup: vi.fn(), deleteRememberStory: vi.fn(), addRememberPhoto: vi.fn(), getRememberPreviewMeta: vi.fn() }));
 vi.mock("@/lib/remember.functions", () => api);
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock("@tanstack/react-router", () => ({
@@ -11,7 +11,7 @@ vi.mock("@tanstack/react-router", () => ({
 import { Route as FamilyRoute } from "@/routes/remember-when/$token";
 import { Route as OwnerRoute } from "@/routes/remember-when/me.$token";
 
-const data = { spark: "tiny", story: "We had a picnic.", senderName: "Priya", childName: "Arjun", photoUrl: null, replies: [], last: null };
+const data = { spark: "tiny", story: "We had a picnic.", senderName: "Priya", childName: "Arjun", photoUrl: null, photos: [], replies: [], last: null };
 afterEach(cleanup);
 beforeEach(() => {
   vi.clearAllMocks();
