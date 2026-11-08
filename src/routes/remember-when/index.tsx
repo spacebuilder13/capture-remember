@@ -10,7 +10,7 @@ import squareImage from "@/assets/one-story-together/remember-when/square.jpg.as
 import { ANIMALS } from "@/components/remember-animals";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
-import { saveRememberStory, uploadRememberPhoto } from "@/lib/remember.functions";
+import { saveRememberStory, setRememberNames, uploadRememberPhoto } from "@/lib/remember.functions";
 
 const search = z.object({
   src: z.enum(["feed", "story"]).optional().catch(undefined),
@@ -57,6 +57,9 @@ function RememberWhen() {
   const [token, setToken] = useState<string | null>(null);
   const [ownerToken, setOwnerToken] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sender, setSender] = useState("");
+  const [child, setChild] = useState("");
+  const saveNames = useServerFn(setRememberNames);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
@@ -333,6 +336,10 @@ function RememberWhen() {
       </RememberShell>
     );
 
+  const names = { sender: sender.trim(), child: child.trim() };
+  const namesOk = !!names.sender && !!names.child;
+  const persistNames = () => (ownerToken ? saveNames({ data: { token: ownerToken, ...names } }).catch(() => {}) : Promise.resolve());
+
   return (
     <RememberShell step={4}>
       <h1 className="font-display text-4xl leading-tight sm:text-5xl">Tell it to them tonight.</h1>
@@ -343,27 +350,43 @@ function RememberWhen() {
             <Check className="size-5 text-primary" /> Sent. Tell it tonight.
           </p>
         ) : (
-          <p className="font-display text-2xl leading-snug">Who else should hear this? Send it to them.</p>
+          <p className="font-display text-2xl leading-snug">Who else was there? Ask them to add their part.</p>
         )}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block text-sm font-semibold">
+            Your name
+            <input value={sender} onChange={(e) => setSender(e.target.value.slice(0, 40))} placeholder="For example, Priya" className="mt-2 block h-12 w-full rounded-sm border border-border bg-background px-4 text-base font-normal outline-none focus:border-primary" />
+          </label>
+          <label className="block text-sm font-semibold">
+            Your little one's name
+            <input value={child} onChange={(e) => setChild(e.target.value.slice(0, 40))} placeholder="For example, Arjun" className="mt-2 block h-12 w-full rounded-sm border border-border bg-background px-4 text-base font-normal outline-none focus:border-primary" />
+          </label>
+        </div>
         <a
-          href={spark && token ? familyLink(SPARKS[spark].title, story, token) : "#"}
+          href={spark && token ? familyLink(SPARKS[spark].title, names, token) : "#"}
           target="_blank"
           rel="noreferrer"
-          onClick={() => {
+          aria-disabled={!namesOk}
+          onClick={(e) => {
+            if (!namesOk) return e.preventDefault();
+            void persistNames();
             window.__lovableEvents?.track?.("project.remember_family_shared", {});
             setSent(true);
           }}
-          className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90"
+          className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90 aria-disabled:pointer-events-none aria-disabled:opacity-50"
         >
           <Send className="size-5" /> Send it on WhatsApp
         </a>
         <a
-          href={spark && token ? emailLink(SPARKS[spark].title, story, token) : "#"}
-          onClick={() => {
+          href={spark && token ? emailLink(SPARKS[spark].title, names, token) : "#"}
+          aria-disabled={!namesOk}
+          onClick={(e) => {
+            if (!namesOk) return e.preventDefault();
+            void persistNames();
             window.__lovableEvents?.track?.("project.remember_email_shared", {});
             setSent(true);
           }}
-          className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-sm border-2 border-primary bg-background px-6 text-base font-semibold text-foreground transition hover:bg-secondary"
+          className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-sm border-2 border-primary bg-background px-6 text-base font-semibold text-foreground transition hover:bg-secondary aria-disabled:pointer-events-none aria-disabled:opacity-50"
         >
           <Mail className="size-5" /> Send it by email
         </a>

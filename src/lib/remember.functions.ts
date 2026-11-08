@@ -95,7 +95,7 @@ export const getRememberStory = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token }).parse(d))
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("id, spark, story, link_opened_at, photo_path").eq("token", data.token).maybeSingle();
+    const { data: row } = await db.from("remember_stories").select("id, spark, story, link_opened_at, photo_path, sender_name, child_name").eq("token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
     if (!row.link_opened_at) await db.from("remember_stories").update({ link_opened_at: new Date().toISOString() }).eq("id", row.id);
     const { data: f } = await db.from("remember_followups").select("answer, who").eq("story_id", row.id).order("created_at", { ascending: false }).limit(1);
@@ -104,7 +104,7 @@ export const getRememberStory = createServerFn({ method: "POST" })
       const { data: s } = await db.storage.from("remember-photos").createSignedUrl(row.photo_path, 3600);
       photoUrl = s?.signedUrl ?? null;
     }
-    return { spark: row.spark, story: row.story, photoUrl, last: f?.[0] ?? null };
+    return { spark: row.spark, story: row.story, senderName: row.sender_name, childName: row.child_name, photoUrl, last: f?.[0] ?? null };
   });
 
 async function signed(db: Awaited<ReturnType<typeof admin>>, path: string | null) {
@@ -117,10 +117,10 @@ export const getRememberOwnerStory = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token }).parse(d))
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token").eq("owner_token", data.token).maybeSingle();
+    const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token, child_name").eq("owner_token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
     const { data: replies } = await db.from("remember_replies").select("name, memory, created_at").eq("story_id", row.id).order("created_at");
-    return { spark: row.spark, story: row.story, familyToken: row.token, photoUrl: await signed(db, row.photo_path), replies: replies ?? [] };
+    return { spark: row.spark, story: row.story, childName: row.child_name, familyToken: row.token, photoUrl: await signed(db, row.photo_path), replies: replies ?? [] };
   });
 
 export const addRememberReply = createServerFn({ method: "POST" })
@@ -175,5 +175,19 @@ export const deleteRememberStory = createServerFn({ method: "POST" })
     await db.from("remember_followups").delete().eq("story_id", row.id);
     await db.from("remember_replies").delete().eq("story_id", row.id);
     await db.from("remember_stories").delete().eq("id", row.id);
+    return { ok: true };
+  });
+
+const personName = z.string().trim().min(1).max(40);
+
+export const setRememberNames = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ token, sender: personName, child: personName }).parse(d))
+  .handler(async ({ data }) => {
+    const db = await admin();
+    const { error } = await db.from("remember_stories").update({ sender_name: data.sender, child_name: data.child }).eq("owner_token", data.token);
+    if (error) {
+      console.error(error);
+      return { error: "We could not save the names." };
+    }
     return { ok: true };
   });
