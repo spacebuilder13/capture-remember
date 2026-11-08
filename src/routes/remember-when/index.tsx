@@ -177,7 +177,7 @@ function RememberWhen() {
         <p className="mt-3 text-muted-foreground">Find the photo they would ask about.</p>
         {picks.length === 1 ? (
           <Rise className="mt-8 flex flex-col items-center">
-            <img src={picks[0].url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
+            <img src={picks[0]?.url} alt="The photo you picked" className="max-h-[50svh] w-auto rotate-[-1.5deg] border-8 border-background object-contain shadow-lg" />
             <label className="mt-5 cursor-pointer text-sm underline">
               Pick again
               <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { onPick(e.target.files); e.target.value = ""; }} />
