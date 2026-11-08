@@ -347,7 +347,7 @@ function RememberWhen() {
           target="_blank"
           rel="noreferrer"
           onClick={() => {
-            window.__lovableEvents?.track?.("project.remember_family_shared", { spark });
+            window.__lovableEvents?.track?.("project.remember_family_shared", {});
             setSent(true);
           }}
           className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-sm bg-primary px-6 text-base font-semibold text-primary-foreground transition hover:bg-primary/90"
