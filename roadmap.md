@@ -1,6 +1,6 @@
 # MemReel experiment roadmap
 
-- [ ] Remember When: full photo → sharing → family reply → private check-in/delete QA at phone, tablet and laptop; share screenshots and fix issues.
+- [x] Remember When: full photo → sharing → family reply → private check-in/delete QA at phone, tablet and laptop; share screenshots and fix issues.
 
 - [x] Ground the brand, brief, and competitor evidence
 - [x] Choose the Incomplete Photograph direction
