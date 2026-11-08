@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 
-import { BigButton, RememberShell, StoryCard, nomineeLink } from "@/components/remember-ui";
+import { AddPhotoButton, BigButton, PhotoStrip, RememberShell, StoryCard, nomineeLink, shrinkPhoto } from "@/components/remember-ui";
 import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
-import { answerRememberFollowup, deleteRememberStory, getRememberOwnerStory } from "@/lib/remember.functions";
+import { addRememberPhoto, answerRememberFollowup, deleteRememberStory, getRememberOwnerStory } from "@/lib/remember.functions";
 
 export const Route = createFileRoute("/remember-when/me/$token")({
   head: () => ({
@@ -26,7 +26,7 @@ type Who = "partner" | "grandparent" | "child" | "someone_else";
 const WHO: Record<Who, string> = { partner: "Partner", grandparent: "Grandparent", child: "My child", someone_else: "Someone else" };
 const isAnswer = (value: string): value is Answer => ["joined", "just_me", "not_yet"].includes(value);
 const isWho = (value: string): value is Who => Object.hasOwn(WHO, value);
-type Data = { spark: string; story: string; childName: string | null; photoUrl: string | null; replies: { name: string | null; memory: string }[] };
+type Data = { spark: string; story: string; childName: string | null; photoUrl: string | null; photos: { url: string; addedBy: string | null }[]; replies: { name: string | null; memory: string }[] };
 
 function OwnerLink() {
   const { token } = Route.useParams();
@@ -39,6 +39,24 @@ function OwnerLink() {
   const [who, setWho] = useState<Who[]>([]);
   const [deleted, setDeleted] = useState(false);
   const [busy, setBusy] = useState(false);
+  const addPhoto = useServerFn(addRememberPhoto);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoMsg, setPhotoMsg] = useState("");
+  const onPhoto = async (f: File) => {
+    setPhotoBusy(true); setPhotoMsg("");
+    try {
+      const fd = new FormData();
+      fd.append("token", token);
+      fd.append("name", "You");
+      fd.append("photo", await shrinkPhoto(f));
+      const res = await addPhoto({ data: fd });
+      if ("error" in res) { window.__lovableEvents?.track?.("project.remember_photo_add_failed", {}); return setPhotoMsg(res.error ?? "Please try again."); }
+      setStory((s) => (s ? { ...s, photos: res.photos } : s));
+      setPhotoMsg("Photo added.");
+      window.__lovableEvents?.track?.("project.remember_photo_added", { role: "owner" });
+    } catch { window.__lovableEvents?.track?.("project.remember_photo_add_failed", {}); setPhotoMsg("We could not save your photo. Please try again."); }
+    finally { setPhotoBusy(false); }
+  };
 
   useEffect(() => {
     get({ data: { token } })
@@ -84,6 +102,9 @@ function OwnerLink() {
     <RememberShell>
       <p className="mb-4 text-sm font-semibold uppercase text-primary">Your story</p>
       <StoryCard title={title} story={story.story} photoUrl={story.photoUrl} />
+      <PhotoStrip photos={story.photos} />
+      <AddPhotoButton busy={photoBusy} onFile={onPhoto} />
+      {photoMsg && <p role="status" className="mt-2 text-sm text-primary">{photoMsg}</p>}
 
       <section className="mt-10">
         <h2 className="font-display text-3xl leading-tight">What your family added</h2>

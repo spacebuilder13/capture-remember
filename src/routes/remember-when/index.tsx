@@ -53,6 +53,30 @@ async function shrink(file: File): Promise<Blob> {
   }
 }
 
+// Heavily blurred 1200x630 copy for link previews: faces are not recognisable.
+async function blurredPreview(blob: Blob): Promise<Blob | null> {
+  try {
+    const bmp = await createImageBitmap(blob);
+    const W = 1200, H = 630, k = Math.max(W / bmp.width, H / bmp.height);
+    const tiny = document.createElement("canvas");
+    tiny.width = 32; tiny.height = 17;
+    const t = tiny.getContext("2d");
+    const big = document.createElement("canvas");
+    big.width = W; big.height = H;
+    const g = big.getContext("2d");
+    if (!t || !g) { bmp.close(); return null; }
+    const sw = W / k, sh = H / k;
+    t.drawImage(bmp, (bmp.width - sw) / 2, (bmp.height - sh) / 2, sw, sh, 0, 0, 32, 17);
+    bmp.close();
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    g.drawImage(tiny, 0, 0, W, H);
+    return await new Promise<Blob | null>((r) => big.toBlob(r, "image/jpeg", 0.8));
+  } catch {
+    return null;
+  }
+}
+
 function RememberWhen() {
   const { src, from } = Route.useSearch();
   const [stage, setStage] = useState<Stage>("open");
@@ -101,6 +125,8 @@ function RememberWhen() {
     setPhoto({ url: URL.createObjectURL(blob) });
     const fd = new FormData();
     fd.append("photo", new File([blob], "photo.jpg", { type: blob.type || "image/jpeg" }));
+    const pv = await blurredPreview(blob);
+    if (pv) fd.append("preview", new File([pv], "preview.jpg", { type: "image/jpeg" }));
     try {
       const res = await upload({ data: fd });
       if ("error" in res) throw new Error(res.error);

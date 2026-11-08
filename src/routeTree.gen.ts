@@ -27,6 +27,7 @@ import { Route as RememberWhenTokenRouteImport } from './routes/remember-when/$t
 import { Route as RememberWhenSocialsRouteImport } from './routes/remember-when/socials'
 import { Route as OneStoryTogetherRememberWhenTokenRouteImport } from './routes/one-story-together/remember-when_.$token'
 import { Route as RememberWhenMeTokenRouteImport } from './routes/remember-when/me.$token'
+import { Route as ApiPublicRememberPreviewTokenRouteImport } from './routes/api/public/remember-preview.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -121,6 +122,12 @@ const RememberWhenMeTokenRoute = RememberWhenMeTokenRouteImport.update({
   path: '/remember-when/me/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRememberPreviewTokenRoute =
+  ApiPublicRememberPreviewTokenRouteImport.update({
+    id: '/api/public/remember-preview/$token',
+    path: '/api/public/remember-preview/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
+  '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -161,6 +169,7 @@ export interface FileRoutesByTo {
   '/remember-when': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
+  '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -182,6 +191,7 @@ export interface FileRoutesById {
   '/remember-when/': typeof RememberWhenIndexRoute
   '/one-story-together/remember-when_/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
+  '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/remember-when/'
     | '/one-story-together/remember-when/$token'
     | '/remember-when/me/$token'
+    | '/api/public/remember-preview/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/remember-when'
     | '/one-story-together/remember-when/$token'
     | '/remember-when/me/$token'
+    | '/api/public/remember-preview/$token'
   id:
     | '__root__'
     | '/'
@@ -244,6 +256,7 @@ export interface FileRouteTypes {
     | '/remember-when/'
     | '/one-story-together/remember-when_/$token'
     | '/remember-when/me/$token'
+    | '/api/public/remember-preview/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -265,6 +278,7 @@ export interface RootRouteChildren {
   RememberWhenIndexRoute: typeof RememberWhenIndexRoute
   OneStoryTogetherRememberWhenTokenRoute: typeof OneStoryTogetherRememberWhenTokenRoute
   RememberWhenMeTokenRoute: typeof RememberWhenMeTokenRoute
+  ApiPublicRememberPreviewTokenRoute: typeof ApiPublicRememberPreviewTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -395,6 +409,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RememberWhenMeTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/remember-preview/$token': {
+      id: '/api/public/remember-preview/$token'
+      path: '/api/public/remember-preview/$token'
+      fullPath: '/api/public/remember-preview/$token'
+      preLoaderRoute: typeof ApiPublicRememberPreviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -418,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   OneStoryTogetherRememberWhenTokenRoute:
     OneStoryTogetherRememberWhenTokenRoute,
   RememberWhenMeTokenRoute: RememberWhenMeTokenRoute,
+  ApiPublicRememberPreviewTokenRoute: ApiPublicRememberPreviewTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

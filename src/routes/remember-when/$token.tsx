@@ -4,23 +4,38 @@ import { Check, Mic } from "lucide-react";
 import { useEffect, useState } from "react";
 import { RememberTextarea } from "@/components/remember-textarea";
 
-import { BigButton, RememberShell, Rise, StoryCard } from "@/components/remember-ui";
+import { AddPhotoButton, BigButton, PhotoStrip, RememberShell, Rise, StoryCard, shrinkPhoto } from "@/components/remember-ui";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
-import { addRememberReply, getRememberStory } from "@/lib/remember.functions";
+import { addRememberPhoto, addRememberReply, getRememberPreviewMeta, getRememberStory } from "@/lib/remember.functions";
 
 export const Route = createFileRoute("/remember-when/$token")({
-  head: () => ({
-    meta: [
-      { title: "A story for tonight | Remember When" },
-      { name: "description", content: "A family story is being told tonight. Add what you remember." },
-      { name: "robots", content: "noindex" },
-      { property: "og:title", content: "A story for tonight | Remember When" },
-      { property: "og:description", content: "A family story is being told tonight. Add what you remember." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  loader: ({ params }) => getRememberPreviewMeta({ data: { token: params.token } }).catch(() => null),
+  head: ({ params, loaderData }) => {
+    const m = loaderData;
+    const title = m?.sender ? `${m.sender} is telling ${m.child || "the little one"} a story tonight` : "A story for tonight | Remember When";
+    const desc = "Add what you remember. It takes a minute.";
+    const img = m?.hasPreview ? `https://capture-remember.lovable.app/api/public/remember-preview/${params.token}.jpg` : null;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { name: "robots", content: "noindex" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: img ? "summary_large_image" : "summary" },
+        ...(img
+          ? [
+              { property: "og:image", content: img },
+              { property: "og:image:width", content: "1200" },
+              { property: "og:image:height", content: "630" },
+              { name: "twitter:image", content: img },
+            ]
+          : []),
+      ],
+    };
+  },
   component: FamilyLink,
 });
 
@@ -29,7 +44,25 @@ function FamilyLink() {
   const get = useServerFn(getRememberStory);
   const add = useServerFn(addRememberReply);
   const speech = useSpeech(60);
-  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null } | null>(null);
+  const addPhoto = useServerFn(addRememberPhoto);
+  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null; photos: { url: string; addedBy: string | null }[] } | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoMsg, setPhotoMsg] = useState("");
+  const onPhoto = async (f: File) => {
+    setPhotoBusy(true); setPhotoMsg("");
+    try {
+      const fd = new FormData();
+      fd.append("token", token);
+      if (name.trim()) fd.append("name", name.trim());
+      fd.append("photo", await shrinkPhoto(f));
+      const res = await addPhoto({ data: fd });
+      if ("error" in res) { window.__lovableEvents?.track?.("project.remember_photo_add_failed", {}); return setPhotoMsg(res.error ?? "Please try again."); }
+      setStory((s) => (s ? { ...s, photos: res.photos } : s));
+      setPhotoMsg("Photo added.");
+      window.__lovableEvents?.track?.("project.remember_photo_added", { role: "family" });
+    } catch { window.__lovableEvents?.track?.("project.remember_photo_add_failed", {}); setPhotoMsg("We could not save your photo. Please try again."); }
+    finally { setPhotoBusy(false); }
+  };
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
@@ -65,6 +98,7 @@ function FamilyLink() {
     <RememberShell>
       <p className="mb-4 font-display text-2xl leading-snug">{who} is telling {kid} this story tonight.</p>
       <StoryCard title={title} story={story.story} photoUrl={story.photoUrl} />
+      <PhotoStrip photos={story.photos} />
 
       {done ? (
         <Rise className="mt-10">
@@ -115,6 +149,9 @@ function FamilyLink() {
             How should {story.childName || "they"} know you? <span className="font-normal text-muted-foreground">(optional)</span>
             <input value={name} onChange={(e) => setName(e.target.value.slice(0, 40))} placeholder="For example, Nani" className="mt-2 block h-12 w-full rounded-sm border border-border bg-background px-4 text-base outline-none focus:border-primary" />
           </label>
+          <p className="mt-8 text-sm font-semibold">Have a photo from that time? <span className="font-normal text-muted-foreground">(optional)</span></p>
+          <AddPhotoButton busy={photoBusy} onFile={onPhoto} />
+          {photoMsg && <p role="status" className="mt-2 text-sm text-primary">{photoMsg}</p>}
           {error && <p className="mt-4 text-sm text-primary">{error}</p>}
           <div className="mt-6">
             <BigButton onClick={onAdd} disabled={busy || memory.trim().length < 2 || speech.listening}>{busy ? "Adding…" : "Add my memory"}</BigButton>
