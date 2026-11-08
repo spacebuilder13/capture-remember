@@ -200,7 +200,11 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "properties": { "count": { "type": "integer" } }
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        }
       }
     },
     "project.remember_photo_chosen": {
@@ -213,7 +217,14 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "properties": { "position": { "type": "integer" }, "count": { "type": "integer" } }
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          }
+        }
       }
     },
     "project.remember_photo_replaced": {
@@ -232,24 +243,75 @@
     "project.remember_reply_added": {
       "event_schema_version": 1,
       "description": "Family member added a memory to a story.",
-      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
-      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
     },
     "project.remember_owner_link_copied": {
       "event_schema_version": 1,
       "description": "Parent copied their private link.",
-      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
-      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
     },
     "project.remember_email_shared": {
       "event_schema_version": 1,
       "description": "Parent tapped Send it by email.",
-      "privacy": { "contains_pii": false, "purpose": "product_analytics" },
-      "properties_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
     },
     "project.remember_photo_failed": {
       "event_schema_version": 1,
       "description": "Photo upload failed.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_added": {
+      "event_schema_version": 1,
+      "description": "A photo was added to a story by family or the parent.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.remember_photo_add_failed": {
+      "event_schema_version": 1,
+      "description": "Adding a photo to a story failed.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
