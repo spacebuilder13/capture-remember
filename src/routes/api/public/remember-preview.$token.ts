@@ -13,7 +13,7 @@ export const Route = createFileRoute("/api/public/remember-preview/$token")({
         if (!row?.preview_path?.startsWith("preview/")) return new Response("Not found", { status: 404 });
         const { data: blob, error } = await supabaseAdmin.storage.from("remember-photos").download(row.preview_path);
         if (error || !blob) return new Response("Not found", { status: 404 });
-        return new Response(blob, { headers: { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=3600", "X-Robots-Tag": "noindex" } });
+        return new Response(blob, { headers: { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=600", "X-Robots-Tag": "noindex" } });
       },
     },
   },
