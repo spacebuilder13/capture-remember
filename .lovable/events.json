@@ -192,7 +192,7 @@
     },
     "project.remember_photo_picked": {
       "event_schema_version": 1,
-      "description": "Parent picked a photo.",
+      "description": "Parent picked photos from the gallery.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
@@ -200,7 +200,20 @@
       "properties_schema": {
         "type": "object",
         "additionalProperties": false,
-        "properties": {}
+        "properties": { "count": { "type": "integer" } }
+      }
+    },
+    "project.remember_photo_chosen": {
+      "event_schema_version": 1,
+      "description": "Parent chose one photo from the picked set.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": { "position": { "type": "integer" }, "count": { "type": "integer" } }
       }
     },
     "project.remember_photo_replaced": {
