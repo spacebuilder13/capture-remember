@@ -24,7 +24,7 @@ export const Route = createFileRoute("/remember-when/me/$token")({
 type Answer = "joined" | "just_me" | "not_yet";
 type Who = "partner" | "grandparent" | "child" | "someone_else";
 const WHO: Record<Who, string> = { partner: "Partner", grandparent: "Grandparent", child: "My child", someone_else: "Someone else" };
-type Data = { spark: string; story: string; photoUrl: string | null; replies: { name: string | null; memory: string }[] };
+type Data = { spark: string; story: string; childName: string | null; photoUrl: string | null; replies: { name: string | null; memory: string }[] };
 
 function OwnerLink() {
   const { token } = Route.useParams();
@@ -67,6 +67,7 @@ function OwnerLink() {
 
       <section className="mt-10">
         <h2 className="font-display text-3xl leading-tight">What your family added</h2>
+        {story.replies.length > 0 && <p className="mt-2 text-muted-foreground">Read these to {story.childName || "them"} tonight.</p>}
         {story.replies.length ? (
           <ul className="mt-5 grid gap-4">
             {story.replies.map((r, i) => (

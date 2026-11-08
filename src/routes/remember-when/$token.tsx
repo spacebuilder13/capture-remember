@@ -28,7 +28,7 @@ function FamilyLink() {
   const get = useServerFn(getRememberStory);
   const add = useServerFn(addRememberReply);
   const speech = useSpeech(60);
-  const [story, setStory] = useState<{ spark: string; story: string; photoUrl?: string | null } | null>(null);
+  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null } | null>(null);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
@@ -54,25 +54,34 @@ function FamilyLink() {
   if (!story) return <RememberShell><p className={error ? "text-lg" : "text-muted-foreground"}>{error || "Loading the story…"}</p></RememberShell>;
 
   const title = SPARKS[story.spark as SparkKey]?.title ?? "A family story";
+  const who = story.senderName || "Someone in your family";
+  const kid = story.childName || "your little one";
+    const STARTERS = ["I remember when…", "The funny part was…", "What you don't know is…"];
 
   return (
     <RememberShell>
-      <p className="mb-4 text-sm font-semibold uppercase text-primary">This story is being told tonight</p>
+      <p className="mb-4 font-display text-2xl leading-snug">{who} is telling {kid} this story tonight.</p>
       <StoryCard title={title} story={story.story} photoUrl={story.photoUrl} />
 
       {done ? (
         <Rise className="mt-10">
           <p className="flex items-center gap-2 font-display text-3xl leading-tight">
-            <Check className="size-7 text-primary" /> Thank you.
+            <Check className="size-7 text-primary" /> Added.
           </p>
-          <p className="mt-2 text-lg text-muted-foreground">They will hear your part tonight.</p>
+          <p className="mt-2 text-lg text-muted-foreground">{name.trim() ? `Thank you, ${name.trim()}. ` : ""}{story.childName || "They"} will hear your part tonight.</p>
           <Link to="/remember-when" className="mt-8 block rounded-sm border-2 border-primary bg-background px-5 py-4 text-center text-lg font-semibold hover:bg-secondary">
             Share a story of your own
           </Link>
         </Rise>
       ) : (
         <div className="mt-10">
-          <h1 className="font-display text-4xl leading-tight">What do you remember about this?</h1>
+          <h1 className="font-display text-4xl leading-tight">What do you remember that {story.senderName || "they"} might not?</h1>
+          <p className="mt-3 text-muted-foreground">One line is enough. {story.senderName || "They"} will read it to {kid} tonight, in your name.</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {STARTERS.map((t) => (
+              <button key={t} type="button" onClick={() => speech.setText(t + " ")} className="rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold hover:border-primary">{t}</button>
+            ))}
+          </div>
           <blockquote className="relative mt-8 px-8 sm:px-10">
             <span aria-hidden className="absolute -top-4 left-0 font-display text-6xl leading-none text-primary">“</span>
             <textarea
@@ -100,7 +109,7 @@ function FamilyLink() {
             </button>
           )}
           <label className="mt-8 block text-sm font-semibold">
-            Your name <span className="font-normal text-muted-foreground">(optional)</span>
+            How should {story.childName || "they"} know you? <span className="font-normal text-muted-foreground">(optional)</span>
             <input value={name} onChange={(e) => setName(e.target.value.slice(0, 40))} placeholder="For example, Nani" className="mt-2 block h-12 w-full rounded-sm border border-border bg-background px-4 text-base outline-none focus:border-primary" />
           </label>
           {error && <p className="mt-4 text-sm text-primary">{error}</p>}
