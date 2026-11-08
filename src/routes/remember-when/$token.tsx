@@ -7,35 +7,12 @@ import { RememberTextarea } from "@/components/remember-textarea";
 import { AddPhotoButton, BigButton, PhotoStrip, RememberShell, Rise, StoryCard, shrinkPhoto } from "@/components/remember-ui";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
+import { familyLinkHead, isPreviewBot } from "@/lib/remember-share";
 import { addRememberPhoto, addRememberReply, getRememberPreviewMeta, getRememberStory } from "@/lib/remember.functions";
 
 export const Route = createFileRoute("/remember-when/$token")({
   loader: ({ params }) => getRememberPreviewMeta({ data: { token: params.token } }).catch(() => null),
-  head: ({ params, loaderData }) => {
-    const m = loaderData;
-    const title = m?.sender ? `${m.sender} is telling ${m.child || "the little one"} a story tonight` : "A story for tonight | Remember When";
-    const desc = "Add what you remember. It takes a minute.";
-    const img = m?.hasPreview ? `https://capture-remember.lovable.app/api/public/remember-preview/${params.token}.jpg` : null;
-    return {
-      meta: [
-        { title },
-        { name: "description", content: desc },
-        { name: "robots", content: "noindex" },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: img ? "summary_large_image" : "summary" },
-        ...(img
-          ? [
-              { property: "og:image", content: img },
-              { property: "og:image:width", content: "1200" },
-              { property: "og:image:height", content: "630" },
-              { name: "twitter:image", content: img },
-            ]
-          : []),
-      ],
-    };
-  },
+  head: ({ params, loaderData }) => familyLinkHead(params.token, loaderData),
   component: FamilyLink,
 });
 
@@ -70,6 +47,7 @@ function FamilyLink() {
   const memory = speech.text;
 
   useEffect(() => {
+    if (isPreviewBot(navigator.userAgent)) return; // preview readers are not visitors
     get({ data: { token } })
       .then((r) => ("error" in r ? setError(r.error ?? "") : setStory(r)))
       .catch(() => setError("This link does not work."));
@@ -151,6 +129,7 @@ function FamilyLink() {
           </label>
           <p className="mt-8 text-sm font-semibold">Have a photo from that time? <span className="font-normal text-muted-foreground">(optional)</span></p>
           <AddPhotoButton busy={photoBusy} onFile={onPhoto} />
+          <p className="mt-2 text-xs text-muted-foreground">Anyone with this link can see and add to this story.</p>
           {photoMsg && <p role="status" className="mt-2 text-sm text-primary">{photoMsg}</p>}
           {error && <p className="mt-4 text-sm text-primary">{error}</p>}
           <div className="mt-6">

@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+
+import { isPreviewBot } from "@/lib/remember-share";
 
 import { SPARK_KEYS } from "@/lib/remember-sparks";
 import { PHOTO_EXT, PHOTO_PATH, checkPhoto } from "@/lib/remember-photo";
@@ -123,7 +126,7 @@ export const getRememberStory = createServerFn({ method: "POST" })
     const db = await admin();
     const { data: row } = await db.from("remember_stories").select("id, spark, story, link_opened_at, photo_path, sender_name, child_name").eq("token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
-    if (!row.link_opened_at) await db.from("remember_stories").update({ link_opened_at: new Date().toISOString() }).eq("id", row.id);
+    if (!row.link_opened_at && !isPreviewBot(getRequest().headers.get("user-agent"))) await db.from("remember_stories").update({ link_opened_at: new Date().toISOString() }).eq("id", row.id);
     const { data: f } = await db.from("remember_followups").select("answer, who").eq("story_id", row.id).order("created_at", { ascending: false }).limit(1);
     let photoUrl: string | null = null;
     if (row.photo_path) {

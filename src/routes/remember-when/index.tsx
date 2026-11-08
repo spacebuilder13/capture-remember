@@ -438,6 +438,7 @@ function RememberWhen() {
         >
           <Mail className="size-5" /> Send it by email
         </a>
+        <p className="mt-3 text-xs text-muted-foreground">Anyone you send this link to, or who it's forwarded to, can see the story and photos and add to them.</p>
         {error && <p role="alert" className="mt-4 text-sm text-primary">{error}</p>}
         {sent && ownerToken && (
           <div className="mt-8 rounded-sm bg-secondary px-5 py-4">

@@ -158,7 +158,7 @@ function OwnerLink() {
       )}
 
       {error && <p role="alert" className="mt-6 text-sm text-primary">{error}</p>}
-      <p className="mt-12 text-center text-sm text-muted-foreground">Only you have this link. Keep it to see what family add.</p>
+      <p className="mt-12 text-center text-sm text-muted-foreground">Keep this link to yourself. It's the only way to check in or delete the story.</p>
       <button
         type="button"
         disabled={busy}
