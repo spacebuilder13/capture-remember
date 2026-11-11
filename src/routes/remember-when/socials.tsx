@@ -65,17 +65,19 @@ function RememberWhenSection() {
 }
 
 const REDDIT_TITLE = "What’s the one story your parents told every single time the album came out?";
-const REDDIT_BODY = `My dad took all the photos in our house and he also kept every album itemized and labelled, he was really good with that.
+const REDDIT_BODY = `Came across this story from a parent about her family’s photo albums:
 
-So whenever the albums came out it was a whole thing. He’d go one photo at a time telling us what was happening, who was there, what were the highlights... then my mother would join and tell me the same story completely differently. Watching the two of them argue over who was remembering it right was the best part of it all honestly.
+Her dad took all the photos in their house and kept every album itemized and labelled. He was really good with that.
 
-He never stopped doing it either. So he took pictures at my office baby shower years later and that went into an album also. It was a small party my office folks threw in the conference room. There’s a whiteboard behind everyone, people are wearing these silly things on their heads, my mother is standing there with a crown on her head for some reason, and me in the middle of it, very pregnant. My son is obsessed with this although it must be a very strange photo for a kid to look at, right?
+So whenever the albums came out it was a whole thing. He’d go one photo at a time telling them what was happening, who was there, what the highlights were... then her mother would join and tell the same story completely differently. She says watching the two of them argue over who was remembering it right was the best part of it all.
 
-He’s been asking what’s going on in it every few months for about three years. It’s not super deep but every time the question is one step ahead of the last one. Started with why is everyone wearing that. Then why do I look so big (because I’m pregnant). Then where was he, and I got to say 'you weren’t born'. Last time it was why don’t we see these people anymore, because half of them moved to Austin.
+He never stopped doing it either. He took pictures at her office baby shower years later and that went into an album too. It was a small party her office folks threw in the conference room. There’s a whiteboard behind everyone, people wearing silly things on their heads, her mother standing there with a crown on her head for some reason, and her in the middle of it, very pregnant. Her son is obsessed with this photo, although it must be a strange one for a kid to look at, right?
 
-And then of course everyone has a different answer for him and we’re right back to the arguing.
+He’s been asking what’s going on in it every few months for about three years. It’s not super deep, but every time the question is one step ahead of the last one. Started with why everyone was wearing those things. Then why she looked so big (because she was pregnant). Then where he was, and she got to say “you weren’t born”. Last time it was why they don’t see these people anymore, because half of them moved to Austin.
 
-What was yours? And has it reached your kids yet or do they have their own by now?`;
+And then of course everyone has a different answer for him and they’re right back to the arguing.
+
+What’s the family story that gets retold every time an old photo album comes out in your house?`;
 
 function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
