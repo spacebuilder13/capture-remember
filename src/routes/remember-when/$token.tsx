@@ -16,13 +16,15 @@ export const Route = createFileRoute("/remember-when/$token")({
   component: FamilyLink,
 });
 
+const openedRefs = new Set<string>(); // one 05 "opened" per page load
+
 function FamilyLink() {
   const { token } = Route.useParams();
   const get = useServerFn(getRememberStory);
   const add = useServerFn(addRememberReply);
   const speech = useSpeech(60);
   const addPhoto = useServerFn(addRememberPhoto);
-  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null; photos: { url: string; addedBy: string | null }[] } | null>(null);
+  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null; photos: { url: string; addedBy: string | null }[]; experiment?: { src: "opt2m"; ref: string } | null } | null>(null);
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoMsg, setPhotoMsg] = useState("");
   const onPhoto = async (f: File) => {
@@ -37,6 +39,7 @@ function FamilyLink() {
       setStory((s) => (s ? { ...s, photos: res.photos } : s));
       setPhotoMsg("Photo added.");
       window.__lovableEvents?.track?.("project.remember_photo_added", { role: "family" });
+      if (story?.experiment) window.__lovableEvents?.track?.("project.opt2m_contribution_saved", { src: "opt2m", ref: story.experiment.ref, kind: "photo" });
     } catch { window.__lovableEvents?.track?.("project.remember_photo_add_failed", {}); setPhotoMsg("We could not save your photo. Please try again."); }
     finally { setPhotoBusy(false); }
   };
@@ -49,7 +52,14 @@ function FamilyLink() {
   useEffect(() => {
     if (isPreviewBot(navigator.userAgent)) return; // preview readers are not visitors
     get({ data: { token } })
-      .then((r) => ("error" in r ? setError(r.error ?? "") : setStory(r)))
+      .then((r) => {
+        if ("error" in r) return setError(r.error ?? "");
+        if (r.experiment && !openedRefs.has(r.experiment.ref)) {
+          openedRefs.add(r.experiment.ref);
+          window.__lovableEvents?.track?.("project.opt2m_invite_opened", { src: r.experiment.src, ref: r.experiment.ref });
+        }
+        setStory(r);
+      })
       .catch(() => setError("This link does not work."));
   }, [token, get]);
 
@@ -60,6 +70,7 @@ function FamilyLink() {
       const res = await add({ data: { token, memory, name: name || undefined } });
       if ("error" in res) return setError(res.error ?? "Please try again.");
       window.__lovableEvents?.track?.("project.remember_reply_added", {});
+      if (story?.experiment) window.__lovableEvents?.track?.("project.opt2m_contribution_saved", { src: "opt2m", ref: story.experiment.ref, kind: "memory" });
       setDone(true);
     } catch { setError("We could not save your memory. Please try again."); }
     finally { setBusy(false); }

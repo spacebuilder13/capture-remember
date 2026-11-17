@@ -124,7 +124,7 @@ export const getRememberStory = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token }).parse(d))
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("id, spark, story, link_opened_at, photo_path, sender_name, child_name").eq("token", data.token).maybeSingle();
+    const { data: row } = await db.from("remember_stories").select("id, spark, story, link_opened_at, photo_path, sender_name, child_name, source").eq("token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
     if (!row.link_opened_at && !isPreviewBot(getRequest().headers.get("user-agent"))) await db.from("remember_stories").update({ link_opened_at: new Date().toISOString() }).eq("id", row.id);
     const { data: f } = await db.from("remember_followups").select("answer, who").eq("story_id", row.id).order("created_at", { ascending: false }).limit(1);
@@ -133,7 +133,7 @@ export const getRememberStory = createServerFn({ method: "POST" })
       const { data: s } = await db.storage.from("remember-photos").createSignedUrl(row.photo_path, 3600);
       photoUrl = s?.signedUrl ?? null;
     }
-    return { spark: row.spark, story: row.story, senderName: row.sender_name, childName: row.child_name, photoUrl, photos: await extraPhotos(db, row.id), last: f?.[0] ?? null };
+    return { spark: row.spark, story: row.story, senderName: row.sender_name, childName: row.child_name, photoUrl, photos: await extraPhotos(db, row.id), last: f?.[0] ?? null, experiment: row.source === "opt2m" ? { src: "opt2m" as const, ref: row.id } : null };
   });
 
 async function signed(db: Awaited<ReturnType<typeof admin>>, path: string | null) {

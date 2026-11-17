@@ -321,6 +321,145 @@
         "additionalProperties": false,
         "properties": {}
       }
+    },
+    "project.opt2m_entry": {
+      "event_schema_version": 1,
+      "description": "A visitor opened Remember When from the One Photo, Two Memories (05) entry.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_created": {
+      "event_schema_version": 1,
+      "description": "A 05-tagged story was saved, creating a family invitation link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_shared": {
+      "event_schema_version": 1,
+      "description": "A 05-tagged invitation was shared.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "channel"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "whatsapp",
+              "email"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_opened": {
+      "event_schema_version": 1,
+      "description": "A person (not a preview bot) opened a 05-tagged family link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "ref"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.opt2m_contribution_saved": {
+      "event_schema_version": 1,
+      "description": "A family member added a memory or photo to a 05-tagged story.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "ref",
+          "kind"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "memory",
+              "photo"
+            ]
+          }
+        }
+      }
     }
   }
 }
