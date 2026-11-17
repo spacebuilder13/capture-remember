@@ -40,11 +40,11 @@ Tonight, pick a photo from a moment you shared, be it about your kids or a picni
 Your loved ones hold the remaining picture. Share your half with them, and start the full experience.`;
 const GRID_HOOKS = ["Simply remove the first line and the caption works as is with CTA changed.", "Your loved ones hold the remaining picture <3", "You were not the only one there, why be the only one reminiscing?"];
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, label = "Copy caption" }: { text: string; label?: string }) {
   const [done, setDone] = useState(false);
   return (
     <Button size="sm" variant="outline" className="rounded-sm shadow-none" onClick={async () => { await navigator.clipboard.writeText(text); setDone(true); setTimeout(() => setDone(false), 1500); }}>
-      {done ? <Check /> : <Copy />} {done ? "Copied" : "Copy caption"}
+      {done ? <Check /> : <Copy />} {done ? "Copied" : label}
     </Button>
   );
 }
@@ -96,7 +96,7 @@ function Block({ n, title, kind, children, caption, run, extra }: { n: number; t
       </div>
       {n === 3 && (
         <div className="mt-6 border border-border bg-card p-6">
-          <div className="flex items-center justify-between gap-3"><h3 className="font-semibold">The link this campaign uses</h3><CopyButton text={EXPERIENCE_URL} /></div>
+          <div className="flex items-center justify-between gap-3"><h3 className="font-semibold">The link this campaign uses</h3><CopyButton text={EXPERIENCE_URL} label="Copy link" /></div>
           <p className="mt-3 break-all font-mono text-sm">{EXPERIENCE_URL}</p>
         </div>
       )}
