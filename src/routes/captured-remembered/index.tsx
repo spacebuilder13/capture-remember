@@ -7,7 +7,7 @@ import incompletePhotographDesktop from "@/assets/incomplete-photograph-title-on
 import incompletePhotographMobile from "@/assets/incomplete-photograph-title-only-mobile.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { submitMemoryContribution } from "@/lib/contributions.functions";
 
 export const Route = createFileRoute("/captured-remembered/")({
   head: () => ({
@@ -95,31 +95,19 @@ function Index() {
     setSubmitting(true);
     setError("");
 
-    const extension = photo.name.split(".").pop()?.toLowerCase() || "jpg";
-    const photoPath = `incoming/${crypto.randomUUID()}.${extension}`;
-    const upload = await supabase.storage.from("memory-contributions").upload(photoPath, photo, {
-      contentType: photo.type,
-      upsert: false,
-    });
-
-    if (upload.error) {
-      setError("Your photo could not be saved. Please try again.");
-      setSubmitting(false);
-      return;
+    const form = new FormData();
+    form.set("photo", photo);
+    form.set("remembers", draft.remembers.trim());
+    form.set("missing", draft.missing.trim());
+    form.set("email", draft.email.trim());
+    let result: { error?: string; ok?: boolean };
+    try {
+      result = await submitMemoryContribution({ data: form });
+    } catch {
+      result = { error: "Your memory could not be saved. Please try again." };
     }
-
-    const insert = await supabase.from("memory_contributions").insert({
-      photo_path: photoPath,
-      happened: null,
-      remembers: draft.remembers.trim() || null,
-      missing: draft.missing.trim() || null,
-      email: draft.email.trim(),
-      status: "requested",
-    });
-
-    if (insert.error) {
-      await supabase.storage.from("memory-contributions").remove([photoPath]);
-      setError("Your memory could not be saved. Please try again.");
+    if (result.error) {
+      setError(result.error);
       setSubmitting(false);
       return;
     }
