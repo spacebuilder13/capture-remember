@@ -71,6 +71,13 @@
       "when": 1794156225774,
       "tag": "0009_remember_photos_and_preview",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794892450934,
+      "tag": "0010_remove_anon_memory_upload",
+      "breakpoints": true
     }
   ]
 }
