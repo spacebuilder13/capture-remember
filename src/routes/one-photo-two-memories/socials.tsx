@@ -91,7 +91,7 @@ function Block({ n, title, kind, children, caption, run, extra }: { n: number; t
       <div className="mt-6 border border-border bg-card p-6">
         <h3 className="font-semibold">Run instructions</h3>
         <ul className="mt-3 space-y-3 leading-relaxed text-foreground/85">
-          {RUN_STEPS[n].map(([k, v]) => <li key={k}><span className="font-semibold text-foreground">{k}:</span> {v}</li>)}
+          {(RUN_STEPS[n] ?? []).map(([k, v]) => <li key={k}><span className="font-semibold text-foreground">{k}:</span> {v}</li>)}
         </ul>
       </div>
       {n === 3 && (
