@@ -460,6 +460,58 @@
           }
         }
       }
+    },
+    "project.opt2m_slide_seen": {
+      "event_schema_version": 1,
+      "description": "A slide of the 05 unblurring story was shown.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "slide"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "slide": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7
+          }
+        }
+      }
+    },
+    "project.opt2m_cta_clicked": {
+      "event_schema_version": 1,
+      "description": "The 05 'Tonight, pick a photo' button was tapped.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
     }
   }
 }
