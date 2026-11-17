@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Check, Copy, Download, Video } from "lucide-react";
+import { Check, Copy, Download, Share2, Video } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -30,14 +30,14 @@ const CAROUSEL_CAPTION = `What is a memory if not an amalgamation of povs?🥹�
 
 I probably would've never realised my daughter loved pockets so much had my wife never joined in the convo. This had me thinking that maybe this could be a regular fun activity for us. So from now on, we discuss memories over pictures & pizzas!
 
-Share this to the one you wanna have more tiny intentional moments with✨`;
+Share this with someone you want to have more intentional moments with✨`;
 const CAROUSEL_RUN = "Even though this is sort of first person pov, this can be posted on memreel IG and boosted. That is because it is much polished and looks like a post rather than a clip from a parent.";
 
 const GRID_CAPTION = `A photo brings back what you remember, but what might your spouse add? You know she was playing with sand, but castle or not may be a mystery… until someone else remembers that part.
 
 Tonight, pick a photo from a moment you shared, be it about your kids or a picnic. Tell your spouse one thing you remember and ask for theirs to see what else comes back.
 
-Comment "memory" for the link to a mystery tool!`;
+Your loved ones hold the remaining picture. Share your half with them, and start the full experience.`;
 const GRID_HOOKS = ["Simply remove the first line and the caption works as is with CTA changed.", "Your loved ones hold the remaining picture <3", "You were not the only one there, why be the only one reminiscing?"];
 
 function CopyButton({ text }: { text: string }) {
@@ -69,6 +69,25 @@ function Block({ n, title, kind, children, caption, run, extra }: { n: number; t
   );
 }
 
+function ShareCarousel() {
+  const [done, setDone] = useState(false);
+  const share = async () => {
+    window.__lovableEvents?.track?.("project.opt2m_carousel_shared", { src: "opt2m" });
+    const url = `${window.location.origin}/one-photo-two-memories/socials`;
+    try {
+      if (navigator.share) await navigator.share({ title: "One Photo, Two Memories", url });
+      else { await navigator.clipboard.writeText(url); setDone(true); setTimeout(() => setDone(false), 1600); }
+    } catch { /* user closed the share sheet */ }
+  };
+  return (
+    <div className="border border-border bg-card p-6">
+      <h3 className="font-semibold">Signal: shares</h3>
+      <p className="mt-3 leading-relaxed text-foreground/85">This carousel does not lead into the flow. We count shares.</p>
+      <Button onClick={share} size="sm" className="mt-4 rounded-sm">{done ? <Check /> : <Share2 />} {done ? "Link copied" : "Share"}</Button>
+    </div>
+  );
+}
+
 function Dl({ href }: { href: string }) {
   return <Button asChild size="sm" variant="outline" className="rounded-sm shadow-none"><a href={href} download><Download /> Download</a></Button>;
 }
@@ -93,9 +112,9 @@ function Socials() {
             {VIDEO_SLOTS.map((v) => (
               <figure key={v.label} className="border border-border bg-card p-3">
                 {v.src ? (
-                  <video src={v.src} controls playsInline className={`w-full ${v.shape === "square" ? "aspect-square" : "aspect-video"} object-cover`} />
+                  <video src={v.src} controls playsInline className={`w-full ${v.shape === "portrait" ? "aspect-[4/5]" : "aspect-[25/18]"} bg-black object-contain`} />
                 ) : (
-                  <div className={`flex w-full flex-col items-center justify-center gap-2 border border-dashed border-border text-muted-foreground ${v.shape === "square" ? "aspect-square" : "aspect-video"}`}>
+                  <div className={`flex w-full flex-col items-center justify-center gap-2 border border-dashed border-border text-muted-foreground ${v.shape === "portrait" ? "aspect-[4/5]" : "aspect-[25/18]"}`}>
                     <Video className="size-7" /><span className="text-sm">Video coming soon</span>
                   </div>
                 )}
@@ -105,8 +124,8 @@ function Socials() {
           </div>
         </Block>
 
-        <Block n={2} title="Unblurring" kind="Carousel, 7 slides" caption={CAROUSEL_CAPTION} run={CAROUSEL_RUN}>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+        <Block n={2} title="Unblurring" kind="Carousel, 6 slides" caption={CAROUSEL_CAPTION} run={CAROUSEL_RUN} extra={<ShareCarousel />}>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
             {UNBLUR_SLIDES.map((src, i) => (
               <figure key={src} className="border border-border bg-card p-2">
                 <img src={src} alt={`Unblurring slide ${i + 1}`} className="h-auto w-full" />

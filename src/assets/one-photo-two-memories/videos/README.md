@@ -1,1 +1,1 @@
-Video files for Block 1 go here (square, wide-together, wide-split).
+Block 1 videos: portrait gif, reel copy together, reel copy split.

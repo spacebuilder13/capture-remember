@@ -461,9 +461,9 @@
         }
       }
     },
-    "project.opt2m_slide_seen": {
+    "project.opt2m_cta_clicked": {
       "event_schema_version": 1,
-      "description": "A slide of the 05 unblurring story was shown.",
+      "description": "The 05 'Tonight, pick a photo' button was tapped.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
@@ -472,8 +472,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "src",
-          "slide"
+          "src"
         ],
         "properties": {
           "src": {
@@ -481,18 +480,13 @@
             "enum": [
               "opt2m"
             ]
-          },
-          "slide": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 7
           }
         }
       }
     },
-    "project.opt2m_cta_clicked": {
+    "project.opt2m_carousel_shared": {
       "event_schema_version": 1,
-      "description": "The 05 'Tonight, pick a photo' button was tapped.",
+      "description": "The 05 unblurring carousel share button was tapped.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
