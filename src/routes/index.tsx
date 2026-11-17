@@ -58,6 +58,16 @@ const EXPERIMENTS = [
     experience: "/remember-when",
     socials: "/remember-when/socials",
   },
+  {
+    number: "05",
+    name: "One Photo, Two Memories",
+    hypothesis:
+      "When a photo resurfaces and two people who were there are together, can there be an exchange worth having, instead of letting the photo pass?",
+    signal: "Both people add something, and something new comes up.",
+    status: "Prototype",
+    experience: "/one-photo-two-memories",
+    socials: "/one-photo-two-memories/socials",
+  },
 ] as const;
 
 function Registry() {

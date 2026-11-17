@@ -80,6 +80,9 @@ async function blurredPreview(blob: Blob): Promise<Blob | null> {
 function RememberWhen() {
   const { src, from } = Route.useSearch();
   const [stage, setStage] = useState<Stage>("open");
+  useEffect(() => {
+    if (src === "opt2m") window.__lovableEvents?.track?.("project.opt2m_entry", { src: "opt2m" });
+  }, [src]);
   const [spark, setSpark] = useState<SparkKey | null>(null);
   const [mode, setMode] = useState<"spoken" | "typed">("spoken");
   const [token, setToken] = useState<string | null>(null);
