@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export const LINK_BADGE = "Private to people with this link";
 
-export function MemHeader({ overPhoto = false, badge = "Private to you" }: { overPhoto?: boolean; badge?: string }) {
+export function MemHeader({ overPhoto = false, badge = "Private to you" }: { overPhoto?: boolean; badge?: string | undefined }) {
   return (
     <header className={`${overPhoto ? "absolute inset-x-0 top-0 z-20 text-primary-foreground [@media(min-aspect-ratio:3/4)]:text-foreground" : "text-foreground"} mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12`}>
       <a href="https://memreel.io/" className="font-display text-2xl drop-shadow-sm" aria-label="MemReel home">
@@ -17,7 +17,7 @@ export function MemHeader({ overPhoto = false, badge = "Private to you" }: { ove
   );
 }
 
-export function RememberShell({ children, step, badge }: { children: ReactNode; step?: number; badge?: string }) {
+export function RememberShell({ children, step, badge }: { children: ReactNode; step?: number; badge?: string | undefined }) {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <MemHeader badge={badge} />
