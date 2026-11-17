@@ -1,3 +1,4 @@
+import { OPT2M_REPLIES_VISIBLE_FROM, visibleReplies } from "./remember-replies";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
@@ -133,7 +134,12 @@ export const getRememberStory = createServerFn({ method: "POST" })
       const { data: s } = await db.storage.from("remember-photos").createSignedUrl(row.photo_path, 3600);
       photoUrl = s?.signedUrl ?? null;
     }
-    return { spark: row.spark, story: row.story, senderName: row.sender_name, childName: row.child_name, photoUrl, photos: await extraPhotos(db, row.id), last: f?.[0] ?? null, experiment: row.source === "opt2m" ? { src: "opt2m" as const, ref: row.id } : null };
+    let replies: { name: string | null; memory: string }[] = [];
+    if (row.source === "opt2m") {
+      const { data: r } = await db.from("remember_replies").select("name, memory, created_at").eq("story_id", row.id).gte("created_at", OPT2M_REPLIES_VISIBLE_FROM).order("created_at");
+      replies = visibleReplies(row.source, r ?? []).map(({ name, memory }) => ({ name, memory }));
+    }
+    return { spark: row.spark, story: row.story, senderName: row.sender_name, childName: row.child_name, photoUrl, photos: await extraPhotos(db, row.id), replies, last: f?.[0] ?? null, experiment: row.source === "opt2m" ? { src: "opt2m" as const, ref: row.id } : null };
   });
 
 async function signed(db: Awaited<ReturnType<typeof admin>>, path: string | null) {

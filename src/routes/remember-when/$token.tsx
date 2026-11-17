@@ -4,7 +4,7 @@ import { Check, Mic } from "lucide-react";
 import { useEffect, useState } from "react";
 import { RememberTextarea } from "@/components/remember-textarea";
 
-import { AddPhotoButton, BigButton, PhotoStrip, RememberShell, Rise, StoryCard, shrinkPhoto } from "@/components/remember-ui";
+import { AddPhotoButton, BigButton, LINK_BADGE, PhotoStrip, RememberShell, Rise, StoryCard, shrinkPhoto } from "@/components/remember-ui";
 import { useSpeech } from "@/hooks/use-speech";
 import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
 import { familyLinkHead, isPreviewBot } from "@/lib/remember-share";
@@ -24,7 +24,7 @@ function FamilyLink() {
   const add = useServerFn(addRememberReply);
   const speech = useSpeech(60);
   const addPhoto = useServerFn(addRememberPhoto);
-  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null; photos: { url: string; addedBy: string | null }[]; experiment?: { src: "opt2m"; ref: string } | null } | null>(null);
+  const [story, setStory] = useState<{ spark: string; story: string; senderName?: string | null; childName?: string | null; photoUrl?: string | null; photos: { url: string; addedBy: string | null }[]; replies?: { name: string | null; memory: string }[]; experiment?: { src: "opt2m"; ref: string } | null } | null>(null);
   const [photoBusy, setPhotoBusy] = useState(false);
   const [photoMsg, setPhotoMsg] = useState("");
   const onPhoto = async (f: File) => {
@@ -71,6 +71,7 @@ function FamilyLink() {
       if ("error" in res) return setError(res.error ?? "Please try again.");
       window.__lovableEvents?.track?.("project.remember_reply_added", {});
       if (story?.experiment) window.__lovableEvents?.track?.("project.opt2m_contribution_saved", { src: "opt2m", ref: story.experiment.ref, kind: "memory" });
+      if (story?.experiment) get({ data: { token } }).then((r) => { if (!("error" in r)) setStory(r); }).catch(() => {});
       setDone(true);
     } catch { setError("We could not save your memory. Please try again."); }
     finally { setBusy(false); }
@@ -83,18 +84,30 @@ function FamilyLink() {
   const kid = story.childName || "your little one";
     const STARTERS = ["I remember when…", "The funny part was…", "What you don't know is…"];
 
+  const o5 = !!story.experiment;
   return (
-    <RememberShell>
+    <RememberShell badge={o5 ? LINK_BADGE : undefined}>
       <p className="mb-4 font-display text-2xl leading-snug">{who} is telling {kid} this story tonight.</p>
       <StoryCard title={title} story={story.story} photoUrl={story.photoUrl} />
       <PhotoStrip photos={story.photos} />
+      {o5 && !!story.replies?.length && (
+        <section className="mt-8 space-y-4" aria-label="The other half">
+          <p className="text-xs font-semibold uppercase text-primary">The other half</p>
+          {story.replies.map((r, i) => (
+            <blockquote key={i} className="border-l-2 border-primary bg-card px-6 py-4">
+              <p className="whitespace-pre-line font-display text-xl leading-snug">“{r.memory}”</p>
+              {r.name && <footer className="mt-2 text-sm text-muted-foreground">— {r.name}</footer>}
+            </blockquote>
+          ))}
+        </section>
+      )}
 
       {done ? (
         <Rise className="mt-10">
           <p className="flex items-center gap-2 font-display text-3xl leading-tight">
             <Check className="size-7 text-primary" /> Added.
           </p>
-          <p className="mt-2 text-lg text-muted-foreground">{name.trim() ? `Thank you, ${name.trim()}. ` : ""}{story.childName || "They"} will hear your part tonight.</p>
+          {o5 ? <p className="mt-2 text-lg text-muted-foreground">{name.trim() ? `Thank you, ${name.trim()}. ` : ""}Anyone with this link can now see your part.</p> : <p className="mt-2 text-lg text-muted-foreground">{name.trim() ? `Thank you, ${name.trim()}. ` : ""}{story.childName || "They"} will hear your part tonight.</p>}
           <Link to="/remember-when" className="mt-8 block rounded-sm border-2 border-primary bg-background px-5 py-4 text-center text-lg font-semibold hover:bg-secondary">
             Share a story of your own
           </Link>

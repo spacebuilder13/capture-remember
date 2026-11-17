@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { RememberTextarea } from "@/components/remember-textarea";
 
-import { BigButton, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink, ownerLink } from "@/components/remember-ui";
+import { BigButton, LINK_BADGE, MemHeader, RememberShell, Rise, SparkCard, StoryCard, emailLink, familyLink, ownerLink } from "@/components/remember-ui";
 import storyImage from "@/assets/one-story-together/remember-when/story.jpg.asset.json";
 import squareImage from "@/assets/one-story-together/remember-when/square.jpg.asset.json";
 import { ANIMALS } from "@/components/remember-animals";
@@ -216,7 +216,7 @@ function RememberWhen() {
 
   if (stage === "photo")
     return (
-      <RememberShell step={2}>
+      <RememberShell step={2} badge={o5 ? LINK_BADGE : undefined}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">{o5 ? "Add a photo you were both in." : "Add the photo."}</h1>
         <p className="mt-3 text-muted-foreground">{spark ? <>Find a photo for: <span className="font-semibold text-foreground">{SPARKS[spark].title}</span></> : "Find the photo they would ask about."}</p>
         {picks.length === 1 ? (
@@ -273,7 +273,7 @@ function RememberWhen() {
 
   if (stage === "spark")
     return (
-      <RememberShell step={1}>
+      <RememberShell step={1} badge={o5 ? LINK_BADGE : undefined}>
         <h1 className="font-display text-4xl leading-tight sm:text-5xl">{o5 ? "What was the moment?" : "Pick a story to tell."}</h1>
         <p className="mt-3 text-muted-foreground">Tap one.</p>
         <div className="mt-8 grid grid-cols-2 gap-3">
@@ -299,7 +299,7 @@ function RememberWhen() {
 
   if (stage === "tell" && spark)
     return (
-      <RememberShell step={3}>
+      <RememberShell step={3} badge={o5 ? LINK_BADGE : undefined}>
         <p className="text-xs font-semibold uppercase text-primary">{SPARKS[spark].title}</p>
         <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">{o5 ? "What's the one thing you remember?" : "Tell it in your own words."}</h1>
         <blockquote className="relative mt-8 px-8 sm:px-10">
@@ -399,7 +399,7 @@ function RememberWhen() {
   };
 
   return (
-    <RememberShell step={4}>
+    <RememberShell step={4} badge={o5 ? LINK_BADGE : undefined}>
       <h1 className="font-display text-4xl leading-tight sm:text-5xl">{o5 ? "Ask them for their side." : "Tell it to them tonight."}</h1>
       <div className="mt-6">{spark && <StoryCard title={SPARKS[spark].title} story={story} photoUrl={photo?.url} />}</div>
       <Rise delay={300} className="mt-10">
