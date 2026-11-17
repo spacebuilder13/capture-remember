@@ -45,7 +45,7 @@ function Socials() {
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {IMAGES.map((img, i) => (
             <figure key={img.url} className="border border-border bg-card p-3">
-              <img src={img.url} alt={`Creative ${i + 1}`} className="aspect-square w-full object-cover" loading="lazy" />
+              <img src={img.url} alt={`Creative ${i + 1}`} className="aspect-square w-full bg-secondary object-contain" />
               <figcaption className="mt-3 flex items-center justify-between text-sm">
                 Creative {i + 1}
                 <Button asChild size="sm" variant="outline" className="rounded-sm shadow-none">
