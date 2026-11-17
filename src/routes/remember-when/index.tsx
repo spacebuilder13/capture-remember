@@ -14,7 +14,7 @@ import { SPARKS, SPARK_KEYS, type SparkKey } from "@/lib/remember-sparks";
 import { saveRememberStory, setRememberNames, uploadRememberPhoto } from "@/lib/remember.functions";
 
 const search = z.object({
-  src: z.enum(["feed", "story"]).optional().catch(undefined),
+  src: z.enum(["feed", "story", "opt2m"]).optional().catch(undefined),
   from: z.enum(["nominee"]).optional().catch(undefined),
 });
 
@@ -155,6 +155,7 @@ function RememberWhen() {
     try {
       const res = await save({ data: { photoPath, spark, story, mode: typedOnly ? "typed" : mode, source: src, nominatedBy: from } });
       if ("error" in res) return setError(res.error ?? "Please try again.");
+      if (src === "opt2m") window.__lovableEvents?.track?.("project.opt2m_invite_created", { src: "opt2m" });
       window.__lovableEvents?.track?.("project.remember_story_saved", { spark, mode: typedOnly ? "typed" : mode, length: story.length });
       setToken(res.token);
       setOwnerToken(res.ownerToken);
@@ -384,6 +385,7 @@ function RememberWhen() {
         if (tab) tab.location.href = url;
         else window.location.href = url;
       } else window.location.href = emailLink(SPARKS[spark].title, names, token);
+      if (src === "opt2m") window.__lovableEvents?.track?.("project.opt2m_invite_shared", { src: "opt2m", channel });
       window.__lovableEvents?.track?.(channel === "whatsapp" ? "project.remember_family_shared" : "project.remember_email_shared", {});
       setSent(true);
     } catch {
