@@ -84,7 +84,7 @@ function FamilyLink() {
   const kid = story.childName || "your little one";
     const STARTERS = ["I remember when…", "The funny part was…", "What you don't know is…"];
 
-  const o5 = !!story.experiment;
+  const o5 = story.experiment?.src === "opt2m";
   return (
     <RememberShell badge={o5 ? LINK_BADGE : undefined}>
       <p className="mb-4 font-display text-2xl leading-snug">{who} is telling {kid} this story tonight.</p>
