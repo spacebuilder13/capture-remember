@@ -54,7 +54,10 @@ function FamilyLink() {
     get({ data: { token } })
       .then((r) => {
         if ("error" in r) return setError(r.error ?? "");
-        if (r.experiment && !openedRefs.has(r.experiment.ref)) openedRefs.add(r.experiment.ref), window.__lovableEvents?.track?.("project.opt2m_invite_opened", { src: r.experiment.src, ref: r.experiment.ref });
+        if (r.experiment && !openedRefs.has(r.experiment.ref)) {
+          openedRefs.add(r.experiment.ref);
+          window.__lovableEvents?.track?.("project.opt2m_invite_opened", { src: r.experiment.src, ref: r.experiment.ref });
+        }
         setStory(r);
       })
       .catch(() => setError("This link does not work."));
