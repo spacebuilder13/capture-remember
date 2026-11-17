@@ -89,7 +89,7 @@ function Socials() {
         </div>
 
         <Block n={1} title="Video" kind="Reel or gif" caption={VIDEO_CAPTION} run={VIDEO_RUN}>
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid items-start gap-6 sm:grid-cols-3">
             {VIDEO_SLOTS.map((v) => (
               <figure key={v.label} className="border border-border bg-card p-3">
                 {v.src ? (
