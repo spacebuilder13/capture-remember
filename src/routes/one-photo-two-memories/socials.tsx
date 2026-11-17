@@ -112,7 +112,7 @@ function Socials() {
             {VIDEO_SLOTS.map((v) => (
               <figure key={v.label} className="border border-border bg-card p-3">
                 {v.src ? (
-                  <video src={v.src} controls playsInline className={`w-full ${v.shape === "portrait" ? "aspect-[4/5]" : "aspect-[25/18]"} bg-black object-contain`} />
+                  <video src={v.src} controls playsInline className={`w-full ${v.shape === "portrait" ? "aspect-[4/5]" : "aspect-[25/18]"} bg-muted object-contain`} />
                 ) : (
                   <div className={`flex w-full flex-col items-center justify-center gap-2 border border-dashed border-border text-muted-foreground ${v.shape === "portrait" ? "aspect-[4/5]" : "aspect-[25/18]"}`}>
                     <Video className="size-7" /><span className="text-sm">Video coming soon</span>
