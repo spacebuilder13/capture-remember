@@ -71,6 +71,7 @@ function FamilyLink() {
       if ("error" in res) return setError(res.error ?? "Please try again.");
       window.__lovableEvents?.track?.("project.remember_reply_added", {});
       if (story?.experiment) window.__lovableEvents?.track?.("project.opt2m_contribution_saved", { src: "opt2m", ref: story.experiment.ref, kind: "memory" });
+      if (story?.experiment) get({ data: { token } }).then((r) => { if (!("error" in r)) setStory(r); }).catch(() => {});
       setDone(true);
     } catch { setError("We could not save your memory. Please try again."); }
     finally { setBusy(false); }

@@ -49,10 +49,33 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+const RUN_STEPS: Record<number, [string, string][]> = {
+  1: [
+    ["Before launch", "pick the final variant (the deck's recommendation is the reel with the copy together in one line; choice not yet confirmed) and use that exported file from this page - the deck screenshots are references, not launch assets. Lock the caption shown above. Set up the dark ad in Meta. Objective, audience, budget, duration, placements, launch date and who approves them are all unresolved - no spend until they are approved."],
+    ["During", "check and reply to the ad's comments using the comment-management controls available for that ad in Meta. Confirm access before launch; don't rely only on profile notifications."],
+    ["After", "report the engagement numbers (comments, tags, shares). Note for reading results: these show the ad's reach and engagement; they do not by themselves show whether couples actually had the private two-person exchange the brief tests."],
+  ],
+  2: [
+    ["Before launch", "use the six exported slide files from this page in order. Lock the caption shown above. The plan is an organic Memreel Instagram brand post; any later boost is a separate decision, not part of the one dark ad. Do not boost unless separately approved. Boost parameters (audience, budget, duration), launch date and who approves them are unresolved - no spend until approved."],
+    ["During", "watch shares and comments on the post; the counted signal for this creative is shares."],
+    ["After", "report the engagement numbers. Note for reading results: shares and comments show reach and engagement; they do not by themselves show whether couples actually had the private two-person exchange the brief tests."],
+  ],
+  3: [
+    ["Before launch", "use the exported grid image from this page. Lock the caption shown above, including the opening-hook choice (the hook options listed here; the choice is still open). The plan is an organic Memreel Instagram brand post; any later boost is a separate decision, not part of the one dark ad. Do not boost unless separately approved. Confirm the 05 experience link (shown under this block) is live and opens the experience. Boost parameters (audience, budget, duration), launch date and who approves them are unresolved - no spend until approved."],
+    ["During", "watch link clicks, shares and comments. Spot-check that the experience link opens correctly."],
+    ["After", "report the engagement numbers, plus the experience funnel for 05-tagged traffic (invitations created, invites opened, contributions saved). Note for reading results: the funnel shows recorded visits and contributions; the brief's strong signal (both people added something, and something new came up) needs actual feedback from people who tried it, not event counts alone. Read both against the brief's kill signals (\"we already do this\"; only one person adds anything)."],
+  ],
+};
+
+const EXPERIENCE_URL = "https://capture-remember.lovable.app/one-photo-two-memories";
+
 function Block({ n, title, kind, children, caption, run, extra }: { n: number; title: string; kind: string; children: ReactNode; caption: string; run?: string; extra?: ReactNode }) {
   return (
     <section className="border-t border-border py-12">
-      <p className="text-xs font-semibold uppercase text-primary">Block {n} · {kind}</p>
+      <div className="flex flex-wrap items-center gap-3">
+        <p className="text-xs font-semibold uppercase text-primary">Block {n} · {kind}</p>
+        <span className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">Draft creative - under review</span>
+      </div>
       <h2 className="mt-2 font-display text-4xl">{title}</h2>
       <div className="mt-8">{children}</div>
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -65,6 +88,18 @@ function Block({ n, title, kind, children, caption, run, extra }: { n: number; t
           {extra}
         </div>
       </div>
+      <div className="mt-6 border border-border bg-card p-6">
+        <h3 className="font-semibold">Run instructions</h3>
+        <ul className="mt-3 space-y-3 leading-relaxed text-foreground/85">
+          {RUN_STEPS[n].map(([k, v]) => <li key={k}><span className="font-semibold text-foreground">{k}:</span> {v}</li>)}
+        </ul>
+      </div>
+      {n === 3 && (
+        <div className="mt-6 border border-border bg-card p-6">
+          <div className="flex items-center justify-between gap-3"><h3 className="font-semibold">The link this campaign uses</h3><CopyButton text={EXPERIENCE_URL} /></div>
+          <p className="mt-3 break-all font-mono text-sm">{EXPERIENCE_URL}</p>
+        </div>
+      )}
     </section>
   );
 }

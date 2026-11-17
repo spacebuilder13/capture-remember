@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 
 import { GRID_IMAGE } from "@/lib/opt2m-creatives";
 
@@ -20,7 +20,10 @@ export const Route = createFileRoute("/one-photo-two-memories/")({
 function GridEntry() {
   return (
     <main className="flex min-h-svh flex-col items-center bg-background px-5 py-6 text-foreground">
-      <Link to="/" className="self-start font-display text-2xl">Mem<span className="font-sans text-base font-semibold">Reel</span></Link>
+      <div className="flex w-full max-w-md items-center justify-between">
+        <Link to="/" className="font-display text-2xl">Mem<span className="font-sans text-base font-semibold">Reel</span></Link>
+        <span className="flex items-center gap-2 text-xs font-medium"><Lock className="size-3.5" /> Private to people with this link</span>
+      </div>
       <div className="mt-4 w-full max-w-md">
         <img src={GRID_IMAGE} alt="What if the photo only brings back half of the memory?" className="h-auto w-full rounded-sm" />
         <p className="mt-6 text-center text-lg leading-relaxed">Your loved ones hold the remaining picture. Share your half with them.</p>
