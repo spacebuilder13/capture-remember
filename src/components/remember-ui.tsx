@@ -2,23 +2,25 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { ImagePlus, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function MemHeader({ overPhoto = false }: { overPhoto?: boolean }) {
+export const LINK_BADGE = "Private to people with this link";
+
+export function MemHeader({ overPhoto = false, badge = "Private to you" }: { overPhoto?: boolean; badge?: string }) {
   return (
     <header className={`${overPhoto ? "absolute inset-x-0 top-0 z-20 text-primary-foreground [@media(min-aspect-ratio:3/4)]:text-foreground" : "text-foreground"} mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12`}>
       <a href="https://memreel.io/" className="font-display text-2xl drop-shadow-sm" aria-label="MemReel home">
         Mem<span className="font-sans text-base font-semibold">Reel</span>
       </a>
       <span className={`flex items-center gap-2 text-xs font-medium drop-shadow-sm `}>
-        <Lock className="size-3.5" /> Private to you
+        <Lock className="size-3.5" /> {badge}
       </span>
     </header>
   );
 }
 
-export function RememberShell({ children, step }: { children: ReactNode; step?: number }) {
+export function RememberShell({ children, step, badge }: { children: ReactNode; step?: number; badge?: string }) {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <MemHeader />
+      <MemHeader badge={badge} />
       <div className="mx-auto max-w-2xl px-5 pb-16 pt-6 sm:px-8 sm:pt-10">
         {step !== undefined && (
           <div className="mb-10 flex items-center justify-between gap-4">
