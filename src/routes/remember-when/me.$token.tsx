@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 
 import { AddPhotoButton, BigButton, PhotoStrip, RememberShell, StoryCard, nomineeLink, shrinkPhoto } from "@/components/remember-ui";
-import { SPARKS, type SparkKey } from "@/lib/remember-sparks";
+import { sparkTitle } from "@/lib/remember-sparks";
 import { addRememberPhoto, answerRememberFollowup, deleteRememberStory, getRememberOwnerStory } from "@/lib/remember.functions";
 
 export const Route = createFileRoute("/remember-when/me/$token")({
@@ -26,7 +26,7 @@ type Who = "partner" | "grandparent" | "child" | "someone_else";
 const WHO: Record<Who, string> = { partner: "Partner", grandparent: "Grandparent", child: "My child", someone_else: "Someone else" };
 const isAnswer = (value: string): value is Answer => ["joined", "just_me", "not_yet"].includes(value);
 const isWho = (value: string): value is Who => Object.hasOwn(WHO, value);
-type Data = { spark: string; story: string; childName: string | null; photoUrl: string | null; photos: { url: string; addedBy: string | null }[]; replies: { name: string | null; memory: string }[] };
+type Data = { spark: string; story: string; childName: string | null; source: string | null; photoUrl: string | null; photos: { url: string; addedBy: string | null }[]; replies: { name: string | null; memory: string }[] };
 
 function OwnerLink() {
   const { token } = Route.useParams();
@@ -96,7 +96,8 @@ function OwnerLink() {
   if (deleted) return <RememberShell><p className="text-lg">Your story is deleted.</p></RememberShell>;
   if (!story) return <RememberShell><p className={error ? "text-lg" : "text-muted-foreground"}>{error || "Loading your story…"}</p></RememberShell>;
 
-  const title = SPARKS[story.spark as SparkKey]?.title ?? "Your story";
+  const title = sparkTitle(story.spark);
+  const isWif = story.source === "wif";
 
   return (
     <RememberShell>
@@ -106,6 +107,8 @@ function OwnerLink() {
       <AddPhotoButton busy={photoBusy} onFile={onPhoto} />
       {photoMsg && <p role="status" className="mt-2 text-sm text-primary">{photoMsg}</p>}
 
+      {!isWif && (
+        <>
       <section className="mt-10">
         <h2 className="font-display text-3xl leading-tight">What your family added</h2>
         {story.replies.length > 0 && <p className="mt-2 text-muted-foreground">Read these to {story.childName || "them"} tonight.</p>}
@@ -156,9 +159,13 @@ function OwnerLink() {
           </div>
         </div>
       )}
+        </>
+      )}
 
       {error && <p role="alert" className="mt-6 text-sm text-primary">{error}</p>}
-      <p className="mt-12 text-center text-sm text-muted-foreground">Keep this link to yourself. It's the only way to check in or delete the story.</p>
+      <p className="mt-12 text-center text-sm text-muted-foreground">
+        {isWif ? "Keep this link to yourself. It's the only way to view or delete your memory." : "Keep this link to yourself. It's the only way to check in or delete the story."}
+      </p>
       <button
         type="button"
         disabled={busy}

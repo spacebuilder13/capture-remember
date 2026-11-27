@@ -1,6 +1,191 @@
 {
   "schema_version": 1,
   "events": {
+    "project.opt2m_carousel_shared": {
+      "event_schema_version": 1,
+      "description": "The 05 unblurring carousel share button was tapped.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_contribution_saved": {
+      "event_schema_version": 1,
+      "description": "A family member added a memory or photo to a 05-tagged story.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "ref",
+          "kind"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "memory",
+              "photo"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_cta_clicked": {
+      "event_schema_version": 1,
+      "description": "The 05 'Tonight, pick a photo' button was tapped.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_entry": {
+      "event_schema_version": 1,
+      "description": "A visitor opened Remember When from the One Photo, Two Memories (05) entry.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_created": {
+      "event_schema_version": 1,
+      "description": "A 05-tagged story was saved, creating a family invitation link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_opened": {
+      "event_schema_version": 1,
+      "description": "A person (not a preview bot) opened a 05-tagged family link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "ref"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.opt2m_invite_shared": {
+      "event_schema_version": 1,
+      "description": "A 05-tagged invitation was shared.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "src",
+          "channel"
+        ],
+        "properties": {
+          "src": {
+            "type": "string",
+            "enum": [
+              "opt2m"
+            ]
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "whatsapp",
+              "email"
+            ]
+          }
+        }
+      }
+    },
     "project.remember_checkin_answered": {
       "event_schema_version": 1,
       "description": "Parent answered Did anyone join in.",
@@ -16,6 +201,19 @@
             "type": "string"
           }
         }
+      }
+    },
+    "project.remember_email_shared": {
+      "event_schema_version": 1,
+      "description": "Parent tapped Send it by email.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
       }
     },
     "project.remember_family_shared": {
@@ -59,6 +257,138 @@
             "type": "string"
           }
         }
+      }
+    },
+    "project.remember_owner_link_copied": {
+      "event_schema_version": 1,
+      "description": "Parent copied their private link.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_add_failed": {
+      "event_schema_version": 1,
+      "description": "Adding a photo to a story failed.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_added": {
+      "event_schema_version": 1,
+      "description": "A photo was added to a story by family or the parent.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project.remember_photo_chosen": {
+      "event_schema_version": 1,
+      "description": "Parent chose one photo from the picked set.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "project.remember_photo_failed": {
+      "event_schema_version": 1,
+      "description": "Photo upload failed.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_picked": {
+      "event_schema_version": 2,
+      "description": "Parent picked photos from the gallery.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "project.remember_photo_replaced": {
+      "event_schema_version": 1,
+      "description": "Parent picked a different photo.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_photo_step_shown": {
+      "event_schema_version": 1,
+      "description": "Photo step opened on Remember When.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.remember_reply_added": {
+      "event_schema_version": 1,
+      "description": "Family member added a memory to a story.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
       }
     },
     "project.remember_spark_picked": {
@@ -177,334 +507,53 @@
         }
       }
     },
-    "project.remember_photo_step_shown": {
+    "project.wif_keep_signup": {
       "event_schema_version": 1,
-      "description": "Photo step opened on Remember When.",
+      "description": "A visitor requested a free Keep tier invite on While It's Fresh.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
       },
       "properties_schema": {
-        "type": "object",
         "additionalProperties": false,
-        "properties": {}
+        "properties": {},
+        "type": "object"
       }
     },
-    "project.remember_photo_picked": {
-      "event_schema_version": 2,
-      "description": "Parent picked photos from the gallery.",
+    "project.wif_story_kept": {
+      "event_schema_version": 1,
+      "description": "A visitor saved a While It's Fresh memory with its photo age in days.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
       },
       "properties_schema": {
-        "type": "object",
         "additionalProperties": false,
         "properties": {
-          "count": {
-            "type": "integer"
+          "photo_age_days": {
+            "type": [
+              "integer",
+              "null"
+            ]
           }
-        }
-      }
-    },
-    "project.remember_photo_chosen": {
-      "event_schema_version": 1,
-      "description": "Parent chose one photo from the picked set.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "position": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          }
-        }
-      }
-    },
-    "project.remember_photo_replaced": {
-      "event_schema_version": 1,
-      "description": "Parent picked a different photo.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.remember_reply_added": {
-      "event_schema_version": 1,
-      "description": "Family member added a memory to a story.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.remember_owner_link_copied": {
-      "event_schema_version": 1,
-      "description": "Parent copied their private link.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.remember_email_shared": {
-      "event_schema_version": 1,
-      "description": "Parent tapped Send it by email.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.remember_photo_failed": {
-      "event_schema_version": 1,
-      "description": "Photo upload failed.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.remember_photo_added": {
-      "event_schema_version": 1,
-      "description": "A photo was added to a story by family or the parent.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "role": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "project.remember_photo_add_failed": {
-      "event_schema_version": 1,
-      "description": "Adding a photo to a story failed.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {}
-      }
-    },
-    "project.opt2m_entry": {
-      "event_schema_version": 1,
-      "description": "A visitor opened Remember When from the One Photo, Two Memories (05) entry.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
+        },
         "required": [
-          "src"
+          "photo_age_days"
         ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          }
-        }
+        "type": "object"
       }
     },
-    "project.opt2m_invite_created": {
+    "project.wif_visit": {
       "event_schema_version": 1,
-      "description": "A 05-tagged story was saved, creating a family invitation link.",
+      "description": "A non-bot visitor opened the While It's Fresh experience page.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
       },
       "properties_schema": {
-        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "src"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          }
-        }
-      }
-    },
-    "project.opt2m_invite_shared": {
-      "event_schema_version": 1,
-      "description": "A 05-tagged invitation was shared.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "src",
-          "channel"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          },
-          "channel": {
-            "type": "string",
-            "enum": [
-              "whatsapp",
-              "email"
-            ]
-          }
-        }
-      }
-    },
-    "project.opt2m_invite_opened": {
-      "event_schema_version": 1,
-      "description": "A person (not a preview bot) opened a 05-tagged family link.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "src",
-          "ref"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          },
-          "ref": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "project.opt2m_contribution_saved": {
-      "event_schema_version": 1,
-      "description": "A family member added a memory or photo to a 05-tagged story.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "src",
-          "ref",
-          "kind"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          },
-          "ref": {
-            "type": "string"
-          },
-          "kind": {
-            "type": "string",
-            "enum": [
-              "memory",
-              "photo"
-            ]
-          }
-        }
-      }
-    },
-    "project.opt2m_cta_clicked": {
-      "event_schema_version": 1,
-      "description": "The 05 'Tonight, pick a photo' button was tapped.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "src"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          }
-        }
-      }
-    },
-    "project.opt2m_carousel_shared": {
-      "event_schema_version": 1,
-      "description": "The 05 unblurring carousel share button was tapped.",
-      "privacy": {
-        "contains_pii": false,
-        "purpose": "product_analytics"
-      },
-      "properties_schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "src"
-        ],
-        "properties": {
-          "src": {
-            "type": "string",
-            "enum": [
-              "opt2m"
-            ]
-          }
-        }
+        "properties": {},
+        "type": "object"
       }
     }
   }

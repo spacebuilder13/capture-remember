@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { isPreviewBot } from "@/lib/remember-share";
 
-import { SPARK_KEYS } from "@/lib/remember-sparks";
+import { isValidSparkForSource } from "@/lib/remember-sparks";
 import { PHOTO_EXT, PHOTO_PATH, checkPhoto } from "@/lib/remember-photo";
 
 // Accepts both the old long codes (40+ chars) and the new short ones (11).
@@ -71,12 +71,14 @@ export const saveRememberStory = createServerFn({ method: "POST" })
     z
       .object({
         photoPath: z.string().regex(PHOTO_PATH),
-        spark: z.enum(SPARK_KEYS),
+        spark: z.string().min(1).max(40),
         story: z.string().trim().min(3).max(400),
         mode: z.enum(["spoken", "typed"]),
         source: tag,
         nominatedBy: tag,
+        photoAgeDays: z.number().int().min(0).max(3650).nullable().optional(),
       })
+      .refine((v) => isValidSparkForSource(v.spark, v.source), { message: "Invalid story choice" })
       .parse(d),
   )
   .handler(async ({ data }) => {
@@ -100,6 +102,7 @@ export const saveRememberStory = createServerFn({ method: "POST" })
       length_chars: data.story.length,
       source: data.source || null,
       nominated_by: data.nominatedBy || null,
+      photo_age_days: data.photoAgeDays ?? null,
     };
     const { error } = await db.from("remember_stories").insert(row);
     if (error) {
@@ -152,11 +155,11 @@ export const getRememberOwnerStory = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token }).parse(d))
   .handler(async ({ data }) => {
     const db = await admin();
-    const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token, child_name").eq("owner_token", data.token).maybeSingle();
+    const { data: row } = await db.from("remember_stories").select("id, spark, story, photo_path, token, child_name, source").eq("owner_token", data.token).maybeSingle();
     if (!row) return { error: "This link does not work. It may have been deleted." };
     const { data: replies } = await db.from("remember_replies").select("name, memory, created_at").eq("story_id", row.id).order("created_at");
     const { data: followups } = await db.from("remember_followups").select("answer, who").eq("story_id", row.id).order("created_at", { ascending: false }).limit(1);
-    return { spark: row.spark, story: row.story, childName: row.child_name, familyToken: row.token, photoUrl: await signed(db, row.photo_path), photos: await extraPhotos(db, row.id), replies: replies ?? [], last: followups?.[0] ?? null };
+    return { spark: row.spark, story: row.story, childName: row.child_name, familyToken: row.token, source: row.source, photoUrl: await signed(db, row.photo_path), photos: await extraPhotos(db, row.id), replies: replies ?? [], last: followups?.[0] ?? null };
   });
 
 export const addRememberReply = createServerFn({ method: "POST" })

@@ -78,6 +78,13 @@
       "when": 1794892450934,
       "tag": "0010_remove_anon_memory_upload",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1795784907922,
+      "tag": "0011_add_wif_photo_age_and_waitlist_source",
+      "breakpoints": true
     }
   ]
 }

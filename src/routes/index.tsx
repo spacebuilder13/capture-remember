@@ -68,6 +68,16 @@ const EXPERIMENTS = [
     experience: "/one-photo-two-memories",
     socials: "/one-photo-two-memories/socials",
   },
+  {
+    number: "06",
+    name: "While It's Fresh",
+    hypothesis:
+      "Parents will keep the story behind a photo from this week while it is still warm, before the chat moves on.",
+    signal: "A recent photo kept with the story behind it, and a Keep invite request.",
+    status: "Prototype",
+    experience: "/while-its-fresh",
+    socials: "/while-its-fresh/socials",
+  },
 ] as const;
 
 function Registry() {

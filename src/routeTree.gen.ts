@@ -27,6 +27,8 @@ import { Route as RTokenRouteImport } from './routes/r.$token'
 import { Route as RememberWhenIndexRouteImport } from './routes/remember-when/index'
 import { Route as RememberWhenTokenRouteImport } from './routes/remember-when/$token'
 import { Route as RememberWhenSocialsRouteImport } from './routes/remember-when/socials'
+import { Route as WhileItsFreshIndexRouteImport } from './routes/while-its-fresh/index'
+import { Route as WhileItsFreshSocialsRouteImport } from './routes/while-its-fresh/socials'
 import { Route as OneStoryTogetherRememberWhenTokenRouteImport } from './routes/one-story-together/remember-when_.$token'
 import { Route as RememberWhenMeTokenRouteImport } from './routes/remember-when/me.$token'
 import { Route as ApiPublicRememberPreviewTokenRouteImport } from './routes/api/public/remember-preview.$token'
@@ -125,6 +127,16 @@ const RememberWhenSocialsRoute = RememberWhenSocialsRouteImport.update({
   path: '/remember-when/socials',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WhileItsFreshIndexRoute = WhileItsFreshIndexRouteImport.update({
+  id: '/while-its-fresh/',
+  path: '/while-its-fresh/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhileItsFreshSocialsRoute = WhileItsFreshSocialsRouteImport.update({
+  id: '/while-its-fresh/socials',
+  path: '/while-its-fresh/socials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OneStoryTogetherRememberWhenTokenRoute =
   OneStoryTogetherRememberWhenTokenRouteImport.update({
     id: '/one-story-together/remember-when_/$token',
@@ -156,12 +168,14 @@ export interface FileRoutesByFullPath {
   '/r/$token': typeof RTokenRoute
   '/remember-when/$token': typeof RememberWhenTokenRoute
   '/remember-when/socials': typeof RememberWhenSocialsRoute
+  '/while-its-fresh/socials': typeof WhileItsFreshSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-photo-two-memories/': typeof OnePhotoTwoMemoriesIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
   '/remember-when/': typeof RememberWhenIndexRoute
+  '/while-its-fresh/': typeof WhileItsFreshIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
   '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
@@ -179,12 +193,14 @@ export interface FileRoutesByTo {
   '/r/$token': typeof RTokenRoute
   '/remember-when/$token': typeof RememberWhenTokenRoute
   '/remember-when/socials': typeof RememberWhenSocialsRoute
+  '/while-its-fresh/socials': typeof WhileItsFreshSocialsRoute
   '/captured-remembered': typeof CapturedRememberedIndexRoute
   '/far-away-moments': typeof FarAwayMomentsIndexRoute
   '/journal': typeof JournalIndexRoute
   '/one-photo-two-memories': typeof OnePhotoTwoMemoriesIndexRoute
   '/one-story-together': typeof OneStoryTogetherIndexRoute
   '/remember-when': typeof RememberWhenIndexRoute
+  '/while-its-fresh': typeof WhileItsFreshIndexRoute
   '/one-story-together/remember-when/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
   '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
@@ -203,12 +219,14 @@ export interface FileRoutesById {
   '/r/$token': typeof RTokenRoute
   '/remember-when/$token': typeof RememberWhenTokenRoute
   '/remember-when/socials': typeof RememberWhenSocialsRoute
+  '/while-its-fresh/socials': typeof WhileItsFreshSocialsRoute
   '/captured-remembered/': typeof CapturedRememberedIndexRoute
   '/far-away-moments/': typeof FarAwayMomentsIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/one-photo-two-memories/': typeof OnePhotoTwoMemoriesIndexRoute
   '/one-story-together/': typeof OneStoryTogetherIndexRoute
   '/remember-when/': typeof RememberWhenIndexRoute
+  '/while-its-fresh/': typeof WhileItsFreshIndexRoute
   '/one-story-together/remember-when_/$token': typeof OneStoryTogetherRememberWhenTokenRoute
   '/remember-when/me/$token': typeof RememberWhenMeTokenRoute
   '/api/public/remember-preview/$token': typeof ApiPublicRememberPreviewTokenRoute
@@ -228,12 +246,14 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/remember-when/$token'
     | '/remember-when/socials'
+    | '/while-its-fresh/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-photo-two-memories/'
     | '/one-story-together/'
     | '/remember-when/'
+    | '/while-its-fresh/'
     | '/one-story-together/remember-when/$token'
     | '/remember-when/me/$token'
     | '/api/public/remember-preview/$token'
@@ -251,12 +271,14 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/remember-when/$token'
     | '/remember-when/socials'
+    | '/while-its-fresh/socials'
     | '/captured-remembered'
     | '/far-away-moments'
     | '/journal'
     | '/one-photo-two-memories'
     | '/one-story-together'
     | '/remember-when'
+    | '/while-its-fresh'
     | '/one-story-together/remember-when/$token'
     | '/remember-when/me/$token'
     | '/api/public/remember-preview/$token'
@@ -274,12 +296,14 @@ export interface FileRouteTypes {
     | '/r/$token'
     | '/remember-when/$token'
     | '/remember-when/socials'
+    | '/while-its-fresh/socials'
     | '/captured-remembered/'
     | '/far-away-moments/'
     | '/journal/'
     | '/one-photo-two-memories/'
     | '/one-story-together/'
     | '/remember-when/'
+    | '/while-its-fresh/'
     | '/one-story-together/remember-when_/$token'
     | '/remember-when/me/$token'
     | '/api/public/remember-preview/$token'
@@ -298,12 +322,14 @@ export interface RootRouteChildren {
   RTokenRoute: typeof RTokenRoute
   RememberWhenTokenRoute: typeof RememberWhenTokenRoute
   RememberWhenSocialsRoute: typeof RememberWhenSocialsRoute
+  WhileItsFreshSocialsRoute: typeof WhileItsFreshSocialsRoute
   CapturedRememberedIndexRoute: typeof CapturedRememberedIndexRoute
   FarAwayMomentsIndexRoute: typeof FarAwayMomentsIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
   OnePhotoTwoMemoriesIndexRoute: typeof OnePhotoTwoMemoriesIndexRoute
   OneStoryTogetherIndexRoute: typeof OneStoryTogetherIndexRoute
   RememberWhenIndexRoute: typeof RememberWhenIndexRoute
+  WhileItsFreshIndexRoute: typeof WhileItsFreshIndexRoute
   OneStoryTogetherRememberWhenTokenRoute: typeof OneStoryTogetherRememberWhenTokenRoute
   RememberWhenMeTokenRoute: typeof RememberWhenMeTokenRoute
   ApiPublicRememberPreviewTokenRoute: typeof ApiPublicRememberPreviewTokenRoute
@@ -437,6 +463,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RememberWhenSocialsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/while-its-fresh/': {
+      id: '/while-its-fresh/'
+      path: '/while-its-fresh'
+      fullPath: '/while-its-fresh/'
+      preLoaderRoute: typeof WhileItsFreshIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/while-its-fresh/socials': {
+      id: '/while-its-fresh/socials'
+      path: '/while-its-fresh/socials'
+      fullPath: '/while-its-fresh/socials'
+      preLoaderRoute: typeof WhileItsFreshSocialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/one-story-together/remember-when_/$token': {
       id: '/one-story-together/remember-when_/$token'
       path: '/one-story-together/remember-when/$token'
@@ -474,12 +514,14 @@ const rootRouteChildren: RootRouteChildren = {
   RTokenRoute: RTokenRoute,
   RememberWhenTokenRoute: RememberWhenTokenRoute,
   RememberWhenSocialsRoute: RememberWhenSocialsRoute,
+  WhileItsFreshSocialsRoute: WhileItsFreshSocialsRoute,
   CapturedRememberedIndexRoute: CapturedRememberedIndexRoute,
   FarAwayMomentsIndexRoute: FarAwayMomentsIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
   OnePhotoTwoMemoriesIndexRoute: OnePhotoTwoMemoriesIndexRoute,
   OneStoryTogetherIndexRoute: OneStoryTogetherIndexRoute,
   RememberWhenIndexRoute: RememberWhenIndexRoute,
+  WhileItsFreshIndexRoute: WhileItsFreshIndexRoute,
   OneStoryTogetherRememberWhenTokenRoute:
     OneStoryTogetherRememberWhenTokenRoute,
   RememberWhenMeTokenRoute: RememberWhenMeTokenRoute,

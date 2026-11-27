@@ -136,16 +136,19 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          source: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
+          source?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          source?: string | null
         }
         Relationships: []
       }
@@ -387,6 +390,7 @@ export type Database = {
           mode: string
           nominated_by: string | null
           owner_token: string | null
+          photo_age_days: number | null
           photo_path: string | null
           preview_path: string | null
           sender_name: string | null
@@ -405,6 +409,7 @@ export type Database = {
           mode: string
           nominated_by?: string | null
           owner_token?: string | null
+          photo_age_days?: number | null
           photo_path?: string | null
           preview_path?: string | null
           sender_name?: string | null
@@ -423,6 +428,7 @@ export type Database = {
           mode?: string
           nominated_by?: string | null
           owner_token?: string | null
+          photo_age_days?: number | null
           photo_path?: string | null
           preview_path?: string | null
           sender_name?: string | null
