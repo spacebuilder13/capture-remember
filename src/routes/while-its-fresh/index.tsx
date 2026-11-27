@@ -4,8 +4,13 @@ import { ArrowRight, Check, Copy, ImagePlus, Mic, Square } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
 
+import parkLandscape from "@/assets/while-its-fresh/stills/park-landscape.jpg.asset.json";
+import parkPortrait from "@/assets/while-its-fresh/stills/park-portrait.jpg.asset.json";
+import rotiLandscape from "@/assets/while-its-fresh/stills/roti-landscape.jpg.asset.json";
+import rotiPortrait from "@/assets/while-its-fresh/stills/roti-portrait.jpg.asset.json";
+import { WIF_SKETCHES } from "@/components/remember-animals";
 import { RememberTextarea } from "@/components/remember-textarea";
-import { BigButton, RememberShell, Rise, StoryCard, ownerLink, shrinkPhoto } from "@/components/remember-ui";
+import { BigButton, RememberShell, Rise, SparkCard, ownerLink, shrinkPhoto } from "@/components/remember-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSpeech } from "@/hooks/use-speech";
@@ -19,9 +24,9 @@ export const Route = createFileRoute("/while-its-fresh/")({
   head: () => ({
     meta: [
       { title: "While It's Fresh | MemReel" },
-      { name: "description", content: "Something happened this week. Keep the why on the photo before the chat moves on." },
+      { name: "description", content: "One day they'll ask what they were like at two. Keep this week's story in your words." },
       { property: "og:title", content: "While It's Fresh | MemReel" },
-      { property: "og:description", content: "Something happened this week. Keep the why on the photo before the chat moves on." },
+      { property: "og:description", content: "One day they'll ask what they were like at two. Keep this week's story in your words." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -87,7 +92,6 @@ function WhileItsFresh() {
       setPhotoUrl(URL.createObjectURL(small));
       setPhotoPath(res.path);
       setAgeDays(detectedAge);
-      go("why");
     } catch {
       setError("We could not save your photo. Please try again.");
     } finally {
@@ -138,17 +142,31 @@ function WhileItsFresh() {
   if (stage === "open") {
     return (
       <RememberShell badge="Private to you">
-        <Rise className="py-10 sm:py-16">
+        <Rise className="py-6 sm:py-10">
+          <div className="mb-8 grid grid-cols-2 gap-4 sm:gap-6">
+            <figure className="rotate-[-2deg] border-[6px] border-background bg-background shadow-md">
+              <picture>
+                <source media="(min-aspect-ratio: 3/4)" srcSet={parkLandscape.url} />
+                <img src={parkPortrait.url} alt="A child laughing on the ground at the park" className="aspect-[4/5] w-full object-cover sm:aspect-[4/3]" />
+              </picture>
+            </figure>
+            <figure className="mt-4 rotate-[2deg] border-[6px] border-background bg-background shadow-md">
+              <picture>
+                <source media="(min-aspect-ratio: 3/4)" srcSet={rotiLandscape.url} />
+                <img src={rotiPortrait.url} alt="A smiling child holding up her first roti" className="aspect-[4/5] w-full object-cover sm:aspect-[4/3]" />
+              </picture>
+            </figure>
+          </div>
           <p className="text-xs font-semibold uppercase text-primary">While it's fresh</p>
           <h1 className="mt-4 font-display text-5xl leading-[1.06] sm:text-6xl">
-            Something happened this week. You can still tell it word for word.
+            One day they'll ask what they were like at two.
           </h1>
           <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted-foreground">
-            Keep the why on the photo before the chat moves on. One photo, a minute, in your own words.
+            This week gave you a story. Keep it in your words, while you still remember every detail.
           </p>
           <div className="mt-9 max-w-sm">
             <BigButton onClick={() => go("moment")}>
-              Keep this moment <ArrowRight className="ml-2 size-5" />
+              Keep this week's story <ArrowRight className="ml-2 size-5" />
             </BigButton>
           </div>
         </Rise>
@@ -160,19 +178,13 @@ function WhileItsFresh() {
     return (
       <RememberShell step={1} badge="Private to you">
         <Rise>
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl">What kind of moment was it?</h1>
-          <p className="mt-3 text-muted-foreground">Pick the one that fits this week's moment.</p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            {WIF_SPARK_KEYS.map((k) => (
-              <button
-                key={k}
-                type="button"
-                onClick={() => { setSpark(k); go("photo"); }}
-                className="flex min-h-20 items-center justify-between rounded-sm border-2 border-border bg-background px-5 py-4 text-left text-lg font-semibold transition hover:border-primary hover:bg-secondary active:scale-[0.99]"
-              >
-                <span>{WIF_SPARKS[k].title}</span>
-                <ArrowRight className="size-4 text-primary" />
-              </button>
+          <h1 className="font-display text-4xl leading-tight sm:text-5xl">What happened this week?</h1>
+          <p className="mt-3 text-muted-foreground">Pick the one that fits.</p>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
+            {WIF_SPARK_KEYS.map((k, i) => (
+              <SparkCard key={k} index={i} art={WIF_SKETCHES[k]()} onClick={() => { setSpark(k); go("photo"); }}>
+                {WIF_SPARKS[k].title}
+              </SparkCard>
             ))}
           </div>
         </Rise>
@@ -184,14 +196,30 @@ function WhileItsFresh() {
     return (
       <RememberShell step={2} badge="Private to you">
         <Rise>
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl">Add the photo from that moment</h1>
-          <p className="mt-3 text-muted-foreground">One photo is enough. It stays private to your link.</p>
-          <label className={`mt-8 flex min-h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-primary/70 bg-secondary/40 px-6 py-10 text-center transition hover:bg-secondary ${busy ? "pointer-events-none opacity-60" : ""}`}>
-            <ImagePlus className="size-8 text-primary" />
-            <span className="text-base font-semibold">{busy ? "Saving your photo…" : "Choose a photo"}</span>
-            <span className="text-xs text-muted-foreground">JPG, PNG, WebP or HEIC, up to 5 MB</span>
-            <input type="file" accept="image/*" className="sr-only" aria-label="Choose a photo" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void onPickPhoto(f); }} />
-          </label>
+          <h1 className="font-display text-4xl leading-tight sm:text-5xl">Add the photo from that moment.</h1>
+          <p className="mt-3 text-muted-foreground">The photo shows what happened. Your words will say why it mattered.</p>
+          {photoUrl ? (
+            <div className="mt-8 space-y-6">
+              <div className="rw-settle flex flex-col items-center bg-secondary/50 p-6">
+                <img src={photoUrl} alt="Your chosen photo" className="max-h-80 w-auto rotate-[-1.5deg] border-[6px] border-background object-contain shadow-md" />
+                <p className="mt-4 font-display text-2xl text-primary">Good one.</p>
+              </div>
+              <BigButton onClick={() => go("why")}>
+                Next: tell the story <ArrowRight className="ml-2 size-5" />
+              </BigButton>
+              <label className={`block cursor-pointer text-center text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground ${busy ? "pointer-events-none opacity-50" : ""}`}>
+                {busy ? "Saving your photo…" : "Choose a different photo"}
+                <input type="file" accept="image/*" className="sr-only" aria-label="Choose a different photo" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void onPickPhoto(f); }} />
+              </label>
+            </div>
+          ) : (
+            <label className={`mt-8 flex min-h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-primary/70 bg-secondary/40 px-6 py-10 text-center transition hover:bg-secondary ${busy ? "pointer-events-none opacity-60" : ""}`}>
+              <ImagePlus className="size-8 text-primary" />
+              <span className="text-base font-semibold">{busy ? "Saving your photo…" : "Choose a photo"}</span>
+              <span className="text-xs text-muted-foreground">JPG, PNG, WebP or HEIC, up to 5 MB</span>
+              <input type="file" accept="image/*" className="sr-only" aria-label="Choose a photo" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void onPickPhoto(f); }} />
+            </label>
+          )}
           {error && <p role="alert" className="mt-4 text-sm text-primary">{error}</p>}
         </Rise>
       </RememberShell>
@@ -201,14 +229,28 @@ function WhileItsFresh() {
   if (stage === "why") {
     const canSpeak = speech.supported !== false && !speech.denied;
     const chars = speech.text.length;
+    const starters = spark ? WIF_SPARKS[spark].starters : WIF_SPARKS.other.starters;
     return (
       <RememberShell step={3} badge="Private to you">
         <Rise>
           {photoUrl && (
             <img src={photoUrl} alt="Your chosen photo" className="mb-6 max-h-56 w-auto rotate-[-1deg] border-[5px] border-background object-contain shadow-md" />
           )}
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl">What was said? What made you laugh? Why did it matter?</h1>
-          <p className="mt-3 text-muted-foreground">In your own words — type it or speak it out loud.</p>
+          <h1 className="font-display text-4xl leading-tight sm:text-5xl">Tell it the way you would tell them one day.</h1>
+          <p className="mt-3 text-muted-foreground">What did they say? What did they do next?</p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {starters.map((line) => (
+              <button
+                key={line}
+                type="button"
+                onClick={() => { setMode("typed"); speech.setText(line.replace(/…$/, " ")); }}
+                className="rounded-sm border border-border bg-secondary/60 px-3 py-1.5 text-left text-xs font-medium text-foreground transition hover:border-primary hover:bg-secondary"
+              >
+                {line}
+              </button>
+            ))}
+          </div>
 
           <div className="mt-6">
             <RememberTextarea
@@ -253,9 +295,15 @@ function WhileItsFresh() {
     <RememberShell step={4} badge="Private to you">
       <Rise>
         <p className="text-xs font-semibold uppercase text-primary">Kept</p>
-        <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">You kept it while it was fresh.</h1>
-        <div className="mt-6">
-          <StoryCard title={spark ? WIF_SPARKS[spark].title : "Your memory"} story={speech.text} photoUrl={photoUrl} />
+        <h1 className="mt-2 font-display text-4xl leading-tight sm:text-5xl">Kept. One day, they'll read this.</h1>
+        <div className="rw-settle mt-6 border-l-2 border-primary bg-secondary px-6 py-5 shadow-lg">
+          {photoUrl && (
+            <img src={photoUrl} alt="The photo this story is about" className="mb-5 max-h-80 w-auto rotate-[-1.5deg] border-[6px] border-background object-contain shadow-md" />
+          )}
+          <Rise delay={180}>
+            <p className="text-xs font-semibold uppercase text-primary">{spark ? WIF_SPARKS[spark].title : "Your memory"}</p>
+            <p className="mt-3 whitespace-pre-line font-display text-2xl leading-snug">“{speech.text}”</p>
+          </Rise>
         </div>
 
         {privateUrl && (
@@ -292,7 +340,7 @@ function WhileItsFresh() {
             </div>
           ) : (
             <form onSubmit={onJoinKeep} className="space-y-4">
-              <h2 className="font-display text-3xl leading-tight">Want a place to keep these every week?</h2>
+              <h2 className="font-display text-3xl leading-tight">Keep one every week?</h2>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 Request an invite to MemReel's free Keep tier. We'll email you when your spot opens — no instant account needed today.
               </p>

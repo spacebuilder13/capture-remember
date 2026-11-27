@@ -18,8 +18,8 @@ describe("experiment 06 While It's Fresh", () => {
   });
 
   it("returns readable titles for both 04/05 and 06 sparks", () => {
-    expect(sparkTitle("outing")).toBe("An outing");
-    expect(sparkTitle("first")).toBe("A first");
+    expect(sparkTitle("outing")).toBe("We went somewhere");
+    expect(sparkTitle("first")).toBe("A first time");
     expect(sparkTitle("born")).toBe("The day they were born");
   });
 

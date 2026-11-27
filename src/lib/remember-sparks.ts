@@ -12,11 +12,39 @@ export const SPARKS: Record<SparkKey, { title: string; starter: string }> = {
 export const WIF_SPARK_KEYS = ["outing", "said", "first", "other"] as const;
 export type WifSparkKey = (typeof WIF_SPARK_KEYS)[number];
 
-export const WIF_SPARKS: Record<WifSparkKey, { title: string }> = {
-  outing: { title: "An outing" },
-  said: { title: "Something they said" },
-  first: { title: "A first" },
-  other: { title: "Something else" },
+export const WIF_SPARKS: Record<WifSparkKey, { title: string; starters: readonly string[] }> = {
+  outing: {
+    title: "We went somewhere",
+    starters: [
+      "The first thing they did when we got there was…",
+      "They refused to leave until…",
+      "We laughed because…",
+    ],
+  },
+  said: {
+    title: "They said something",
+    starters: [
+      "They looked at me and said…",
+      "Out of nowhere, they asked…",
+      "I still laugh at the way they said…",
+    ],
+  },
+  first: {
+    title: "A first time",
+    starters: [
+      "For the first time, they…",
+      "Their face when they did it was…",
+      "They looked so proud when…",
+    ],
+  },
+  other: {
+    title: "Something else",
+    starters: [
+      "This week, out of nowhere…",
+      "What I never want to forget is…",
+      "We laughed because…",
+    ],
+  },
 };
 
 export function isValidSparkForSource(spark: string, source?: string | null): boolean {

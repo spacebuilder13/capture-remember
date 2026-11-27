@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { SparkKey } from "@/lib/remember-sparks";
+import type { SparkKey, WifSparkKey } from "@/lib/remember-sparks";
 
 // Hand-drawn crayon animals. A displacement filter roughens every stroke;
 // each shape is drawn twice with a small offset so it reads like crayon.
@@ -131,4 +131,58 @@ export const ANIMALS: Record<SparkKey, () => ReactNode> = {
   funny: Monkey,
   when_small: Elephants,
   own: Owl,
+};
+
+function ParkSlide() {
+  const id = "wif-outing";
+  return (
+    <Crayon id={id}>
+      <circle cx="92" cy="24" r="10" fill={H(id)} />
+      <path d="M92 8 L92 12 M108 24 L104 24 M104 12 L100 16 M80 12 L84 16" />
+      <path d="M26 96 L26 42 L44 42" />
+      <path d="M26 56 L38 56 M26 70 L38 70 M26 84 L38 84" />
+      <path d="M44 42 Q64 46 78 74 Q88 92 102 94" />
+      <path d="M40 48 Q58 52 72 78 Q82 96 98 98" />
+      <path d="M16 98 Q60 94 108 98" />
+    </Crayon>
+  );
+}
+
+function SpeechBubble() {
+  const id = "wif-said";
+  return (
+    <Crayon id={id}>
+      <path d="M22 30 Q22 18 60 18 Q98 18 98 48 Q98 76 62 76 L42 76 L26 92 L30 74 Q22 68 22 48 Z" fill={H(id)} />
+      <circle cx="48" cy="44" r="2.2" />
+      <circle cx="72" cy="44" r="2.2" />
+      <path d="M46 56 Q60 66 74 56" />
+    </Crayon>
+  );
+}
+
+function FirstStar() {
+  const id = "wif-first";
+  return (
+    <Crayon id={id}>
+      <path d="M60 18 L70 44 L98 46 L76 64 L83 92 L60 76 L37 92 L44 64 L22 46 L50 44 Z" fill={H(id)} />
+      <path d="M22 24 L28 30 M98 22 L92 28 M60 100 L60 108" />
+    </Crayon>
+  );
+}
+
+function KeepsakeHeart() {
+  const id = "wif-other";
+  return (
+    <Crayon id={id}>
+      <path d="M60 92 Q24 68 24 44 Q24 26 42 26 Q54 26 60 38 Q66 26 78 26 Q96 26 96 44 Q96 68 60 92 Z" fill={H(id)} />
+      <path d="M84 82 L104 62 L108 66 L88 86 Z" />
+    </Crayon>
+  );
+}
+
+export const WIF_SKETCHES: Record<WifSparkKey, () => ReactNode> = {
+  outing: ParkSlide,
+  said: SpeechBubble,
+  first: FirstStar,
+  other: KeepsakeHeart,
 };
