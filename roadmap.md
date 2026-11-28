@@ -1,5 +1,7 @@
 # MemReel experiment roadmap
 
+- [x] While It's Fresh creatives: remove launch warning and add direct App Store / Google Play links.
+
 - [x] Remember When: full photo → sharing → family reply → private check-in/delete QA at phone, tablet and laptop; share screenshots and fix issues.
 
 - [x] Ground the brand, brief, and competitor evidence

@@ -1,9 +1,9 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, Check, Copy, Download, ExternalLink } from "lucide-react";
+import { Check, Copy, Download, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { WIF_CREATIVES, WIF_EXPERIENCE_URL, WIF_ORIGINALS_FOLDER, WIF_RUN_STEPS } from "@/lib/wif-creatives";
+import { WIF_APP_STORE_URL, WIF_PLAY_STORE_URL, WIF_CREATIVES, WIF_EXPERIENCE_URL, WIF_ORIGINALS_FOLDER, WIF_RUN_STEPS } from "@/lib/wif-creatives";
 
 export const Route = createFileRoute("/while-its-fresh/socials")({
   head: () => ({
@@ -64,6 +64,12 @@ function WhileItsFreshSocials() {
             <Button asChild size="sm" className="rounded-sm shadow-none">
               <Link to="/while-its-fresh">Open experience</Link>
             </Button>
+            <Button asChild size="sm" variant="outline" className="rounded-sm shadow-none">
+              <a href={WIF_APP_STORE_URL} target="_blank" rel="noopener noreferrer"><ExternalLink /> App Store</a>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="rounded-sm shadow-none">
+              <a href={WIF_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"><ExternalLink /> Google Play</a>
+            </Button>
           </div>
         </div>
 
@@ -71,16 +77,6 @@ function WhileItsFreshSocials() {
           <section key={c.number} className="border-t border-border py-12">
             <p className="text-xs font-semibold uppercase text-primary">Creative {c.number} · {c.kind}</p>
             <h2 className="mt-2 font-display text-4xl">{c.title}</h2>
-
-            {c.launchWarning && (
-              <div role="alert" className="mt-6 flex items-start gap-3 border border-primary/50 bg-secondary px-5 py-4 text-sm">
-                <AlertTriangle className="mt-0.5 size-5 shrink-0 text-primary" />
-                <div>
-                  <p className="font-semibold text-foreground">Do not launch yet</p>
-                  <p className="mt-1 leading-relaxed text-foreground/85">{c.launchWarning}</p>
-                </div>
-              </div>
-            )}
 
             <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
               <figure className="border border-border bg-card p-3">
